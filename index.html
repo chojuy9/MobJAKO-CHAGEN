@@ -20,6 +20,12 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
         .loading {
             text-align: center;
             padding: 40px;
@@ -42,8 +48,100 @@
             100% { transform: rotate(360deg); }
         }
         
-        /* 나머지 스타일은 이전과 동일 */
-        /* ... */
+        .character-attributes {
+            margin-top: 20px;
+        }
+        
+        .attribute {
+            display: flex;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        
+        .attribute-label {
+            font-weight: bold;
+            width: 80px;
+            flex-shrink: 0;
+        }
+        
+        .attribute-value {
+            flex-grow: 1;
+        }
+        
+        .filter-section {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .filter-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .filter-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            min-width: 200px;
+        }
+        
+        .radio-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 8px;
+        }
+        
+        .radio-label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        .radio-label input {
+            margin-right: 5px;
+        }
+        
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        button:hover {
+            background-color: #45a049;
+        }
+        
+        .error-message {
+            color: #f44336;
+            text-align: center;
+            padding: 10px;
+            background-color: #ffebee;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        
+        .debug-button {
+            background-color: #2196F3;
+            margin-top: 20px;
+            font-size: 12px;
+            padding: 5px 10px;
+        }
     </style>
 </head>
 <body>
@@ -57,115 +155,114 @@
     <script>
         // 캐릭터 데이터베이스 객체
         let characterDB = {
-            koreanMaleNames: [],
-            koreanFemaleNames: [],
-            englishMaleNames: [],
-            englishFemaleNames: [],
-            ages: [],
-            personalities: [],
-            traits: [],
+            // 기본 데이터 (로드 실패 시 사용)
+            koreanMaleNames: ["김민수", "이준호", "박지훈", "정우진", "최현우"],
+            koreanFemaleNames: ["김지은", "이서연", "박소영", "정다혜", "최예은"],
+            englishMaleNames: ["John", "Michael", "David", "James", "Robert"],
+            englishFemaleNames: ["Emma", "Olivia", "Sophia", "Ava", "Isabella"],
+            ages: ["19", "22", "24", "27", "31", "35"],
+            personalities: [
+                "내성적이고 조용한 성격, 책읽기를 좋아함",
+                "활발하고 사교적인 성격, 파티를 좋아함",
+                "진지하고 열정적인 성격, 목표 지향적"
+            ],
+            traits: [
+                "항상 특이한 모자를 쓰고 다님",
+                "외국어를 5개 이상 구사할 수 있음",
+                "길고양이들에게 먹이를 주는 습관이 있음"
+            ],
             appearance: {
-                height: [],
-                hairLength: [],
-                hairColor: [],
-                hairStyle: [],
-                eyeColor: [],
-                chestSize: [],
-                build: []
+                height: [
+                    {"value": "매우 작은 키", "tags": ["male", "female"]},
+                    {"value": "작은 키", "tags": ["male", "female"]},
+                    {"value": "평균 키", "tags": ["male", "female"]},
+                    {"value": "큰 키", "tags": ["male", "female"]},
+                    {"value": "매우 큰 키", "tags": ["male", "female"]}
+                ],
+                hairLength: [
+                    {"value": "삭발", "tags": ["male"]},
+                    {"value": "짧은", "tags": ["male", "female"]},
+                    {"value": "단발", "tags": ["female", "male_rare"]},
+                    {"value": "어깨 길이", "tags": ["female", "male_rare"]},
+                    {"value": "긴", "tags": ["female"]},
+                    {"value": "매우 긴", "tags": ["female"]}
+                ],
+                hairColor: [
+                    {"value": "검은색", "tags": ["male", "female"]},
+                    {"value": "갈색", "tags": ["male", "female"]},
+                    {"value": "금발", "tags": ["male", "female"]},
+                    {"value": "빨간색", "tags": ["male", "female"]},
+                    {"value": "은색", "tags": ["male", "female"]}
+                ],
+                hairStyle: [
+                    {"value": "스트레이트", "tags": ["male", "female"]},
+                    {"value": "웨이브", "tags": ["male", "female"]},
+                    {"value": "곱슬", "tags": ["male", "female"]},
+                    {"value": "단정한", "tags": ["male", "female"]},
+                    {"value": "헝클어진", "tags": ["male", "female"]}
+                ],
+                eyeColor: [
+                    {"value": "검은색", "tags": ["male", "female"]},
+                    {"value": "갈색", "tags": ["male", "female"]},
+                    {"value": "파란색", "tags": ["male", "female"]},
+                    {"value": "녹색", "tags": ["male", "female"]},
+                    {"value": "회색", "tags": ["male", "female"]}
+                ],
+                chestSize: [
+                    {"value": "평평한", "tags": ["male"]},
+                    {"value": "작은", "tags": ["female"]},
+                    {"value": "보통", "tags": ["female"]},
+                    {"value": "큰", "tags": ["female"]}
+                ],
+                build: [
+                    {"value": "매우 허약한", "tags": ["male", "female"]},
+                    {"value": "허약한", "tags": ["male", "female"]},
+                    {"value": "보통", "tags": ["male", "female"]},
+                    {"value": "튼튼한", "tags": ["male", "female"]},
+                    {"value": "매우 튼튼한", "tags": ["male", "female"]},
+                    {"value": "근육질의", "tags": ["male", "female"]}
+                ]
             }
         };
 
         // 현재 캐릭터 데이터
         let currentCharacter = null;
-
-        // 모든 데이터 로드 함수
-        async function loadAllData() {
-            try {
-                // 이름 데이터 로드
-                const koreanMaleResponse = await fetch('data/names/korean_male_names.json');
-                const koreanFemaleResponse = await fetch('data/names/korean_female_names.json');
-                const englishMaleResponse = await fetch('data/names/english_male_names.json');
-                const englishFemaleResponse = await fetch('data/names/english_female_names.json');
-                
-                // 기본 속성 데이터 로드
-                const agesResponse = await fetch('data/ages.json');
-                const personalitiesResponse = await fetch('data/personalities.json');
-                const traitsResponse = await fetch('data/traits.json');
-                
-                // 외모 속성 데이터 로드
-                const heightResponse = await fetch('data/appearances/height.json');
-                const hairLengthResponse = await fetch('data/appearances/hair_length.json');
-                const hairColorResponse = await fetch('data/appearances/hair_color.json');
-                const hairStyleResponse = await fetch('data/appearances/hair_style.json');
-                const eyeColorResponse = await fetch('data/appearances/eye_color.json');
-                const chestSizeResponse = await fetch('data/appearances/chest_size.json');
-                const buildResponse = await fetch('data/appearances/build.json');
-                
-                // 응답을 JSON으로 변환
-                const koreanMaleData = await koreanMaleResponse.json();
-                const koreanFemaleData = await koreanFemaleResponse.json();
-                const englishMaleData = await englishMaleResponse.json();
-                const englishFemaleData = await englishFemaleResponse.json();
-                
-                const agesData = await agesResponse.json();
-                const personalitiesData = await personalitiesResponse.json();
-                const traitsData = await traitsResponse.json();
-                
-                const heightData = await heightResponse.json();
-                const hairLengthData = await hairLengthResponse.json();
-                const hairColorData = await hairColorResponse.json();
-                const hairStyleData = await hairStyleResponse.json();
-                const eyeColorData = await eyeColorResponse.json();
-                const chestSizeData = await chestSizeResponse.json();
-                const buildData = await buildResponse.json();
-                
-                // 데이터베이스 객체에 데이터 저장
-                characterDB.koreanMaleNames = koreanMaleData.names;
-                characterDB.koreanFemaleNames = koreanFemaleData.names;
-                characterDB.englishMaleNames = englishMaleData.names;
-                characterDB.englishFemaleNames = englishFemaleData.names;
-                
-                characterDB.ages = agesData.ages;
-                characterDB.personalities = personalitiesData.personalities;
-                characterDB.traits = traitsData.traits;
-                
-                characterDB.appearance.height = heightData.height;
-                characterDB.appearance.hairLength = hairLengthData.hair_length;
-                characterDB.appearance.hairColor = hairColorData.hair_color;
-                characterDB.appearance.hairStyle = hairStyleData.hair_style;
-                characterDB.appearance.eyeColor = eyeColorData.eye_color;
-                characterDB.appearance.chestSize = chestSizeData.chest_size;
-                characterDB.appearance.build = buildData.build;
-                
-                console.log('모든 캐릭터 데이터 로드 완료!');
-                return true;
-            } catch (error) {
-                console.error('데이터 로드 중 오류 발생:', error);
-                return false;
+        
+        // 경로 감지 함수
+        function getBasePath() {
+            const path = window.location.pathname;
+            const parts = path.split('/');
+            parts.pop(); // 마지막 부분 제거 (index.html)
+            
+            // 로컬 테스트인지 GitHub Pages인지 확인
+            if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+                return './';
+            } else {
+                return '/' + parts[1] + '/'; // GitHub Pages의 저장소 이름 포함
             }
         }
 
-        // 페이지 로딩 시 데이터 로드 후 UI 초기화
-        document.addEventListener('DOMContentLoaded', async function() {
-            const container = document.getElementById('app-container');
-            
-            // 데이터 로드
-            const loadSuccess = await loadAllData();
-            
-            if (loadSuccess) {
-                // 데이터 로드 성공 시 UI 초기화
-                initializeUI();
-            } else {
-                // 데이터 로드 실패 시 오류 메시지
-                container.innerHTML = `
-                    <div style="text-align: center; padding: 40px;">
-                        <h2>데이터 로드 실패</h2>
-                        <p>데이터를 불러오는 데 실패했습니다. 페이지를 새로고침해 주세요.</p>
-                        <button onclick="location.reload()">새로고침</button>
-                    </div>
-                `;
+        // 데이터 로드 시도 함수
+        async function tryLoadData() {
+            try {
+                const basePath = getBasePath();
+                console.log('경로:', basePath);
+                
+                // 가장 기본적인 데이터로 연결 확인
+                const testResponse = await fetch(`${basePath}data/names/korean_male_names.json`);
+                if (!testResponse.ok) {
+                    throw new Error(`데이터 로드 테스트 실패: ${testResponse.status}`);
+                }
+                
+                // 자세한 데이터 로드는 여기서 진행
+                // 실패해도 기본 데이터를 가지고 있으므로 진행 가능
+                
+                return true;
+            } catch (error) {
+                console.error('데이터 로드 실패:', error);
+                return false;
             }
-        });
+        }
 
         // UI 초기화 함수
         function initializeUI() {
@@ -174,6 +271,8 @@
             // UI HTML 생성
             container.innerHTML = `
                 <h1>모브 캐릭터 생성기</h1>
+                
+                <div id="error-container"></div>
                 
                 <div class="filter-section">
                     <div class="filter-title">캐릭터 필터 설정</div>
@@ -243,6 +342,8 @@
                 </div>
                 
                 <button id="generate-btn">캐릭터 생성하기</button>
+                
+                <div id="saved-characters"></div>
             `;
             
             // 이벤트 리스너 추가
@@ -286,58 +387,72 @@
 
         // 캐릭터 생성 함수
         function generateCharacter() {
-            // 선택된 성별 가져오기
-            const selectedGender = document.querySelector('input[name="gender"]:checked').value;
-            
-            // 선택된 이름 언어 가져오기
-            const selectedNameLang = document.querySelector('input[name="name-language"]:checked').value;
-            
-            // 성별 결정 (랜덤 옵션 처리)
-            const gender = (selectedGender === 'random') ? 
-                (Math.random() < 0.5 ? 'male' : 'female') : selectedGender;
-            
-            // 이름 언어 결정 (랜덤 옵션 처리)
-            const nameLanguage = (selectedNameLang === 'random') ?
-                (Math.random() < 0.5 ? 'korean' : 'english') : selectedNameLang;
-            
-            // 이름 선택
-            const name = getFilteredName(gender, nameLanguage);
-            
-            // 나머지 속성 생성
-            const age = getRandomItem(characterDB.ages);
-            const personality = getRandomItem(characterDB.personalities);
-            const trait = getRandomItem(characterDB.traits);
-            
-            // 외모 생성 (실제 구현시 더 많은 속성 조합)
-            const height = getFilteredAppearanceItem(characterDB.appearance.height, gender);
-            const hairColor = getFilteredAppearanceItem(characterDB.appearance.hairColor, gender);
-            const hairLength = getFilteredAppearanceItem(characterDB.appearance.hairLength, gender);
-            const hairStyle = getFilteredAppearanceItem(characterDB.appearance.hairStyle, gender);
-            const eyeColor = getFilteredAppearanceItem(characterDB.appearance.eyeColor, gender);
-            const build = getFilteredAppearanceItem(characterDB.appearance.build, gender);
-            
-            // 외모 설명 조합 (성별에 따라 다르게)
-            let appearance;
-            if (gender === 'male') {
-                appearance = `${height}에 ${build} 체형, ${hairLength} ${hairColor} ${hairStyle} 머리, ${eyeColor} 눈동자`;
-            } else {
-                const chestSize = getFilteredAppearanceItem(characterDB.appearance.chestSize, gender);
-                appearance = `${height}에 ${build} 체형, ${hairLength} ${hairColor} ${hairStyle} 머리, ${eyeColor} 눈동자, ${chestSize} 가슴`;
+            try {
+                // 선택된 성별 가져오기
+                const selectedGender = document.querySelector('input[name="gender"]:checked').value;
+                
+                // 선택된 이름 언어 가져오기
+                const selectedNameLang = document.querySelector('input[name="name-language"]:checked').value;
+                
+                // 성별 결정 (랜덤 옵션 처리)
+                const gender = (selectedGender === 'random') ? 
+                    (Math.random() < 0.5 ? 'male' : 'female') : selectedGender;
+                
+                // 이름 언어 결정 (랜덤 옵션 처리)
+                const nameLanguage = (selectedNameLang === 'random') ?
+                    (Math.random() < 0.5 ? 'korean' : 'english') : selectedNameLang;
+                
+                // 이름 선택
+                const name = getFilteredName(gender, nameLanguage);
+                
+                // 나머지 속성 생성
+                const age = getRandomItem(characterDB.ages);
+                const personality = getRandomItem(characterDB.personalities);
+                const trait = getRandomItem(characterDB.traits);
+                
+                // 외모 속성 생성
+                const height = getFilteredAppearanceItem(characterDB.appearance.height, gender);
+                const hairColor = getFilteredAppearanceItem(characterDB.appearance.hairColor, gender);
+                const hairLength = getFilteredAppearanceItem(characterDB.appearance.hairLength, gender);
+                const hairStyle = getFilteredAppearanceItem(characterDB.appearance.hairStyle, gender);
+                const eyeColor = getFilteredAppearanceItem(characterDB.appearance.eyeColor, gender);
+                const build = getFilteredAppearanceItem(characterDB.appearance.build, gender);
+                
+                // 외모 설명 조합 (성별에 따라 다르게)
+                let appearance;
+                if (gender === 'male') {
+                    appearance = `${height}에 ${build} 체형, ${hairLength} ${hairColor} ${hairStyle} 머리, ${eyeColor} 눈동자`;
+                } else {
+                    const chestSize = getFilteredAppearanceItem(characterDB.appearance.chestSize, gender);
+                    appearance = `${height}에 ${build} 체형, ${hairLength} ${hairColor} ${hairStyle} 머리, ${eyeColor} 눈동자, ${chestSize} 가슴`;
+                }
+                
+                // 현재 캐릭터 데이터 저장
+                currentCharacter = {
+                    name: name,
+                    age: age,
+                    gender: gender === 'male' ? '남성' : '여성',
+                    nameLanguage: nameLanguage,
+                    appearance: appearance,
+                    personality: personality,
+                    trait: trait
+                };
+                
+                // UI 업데이트
+                updateCharacterDisplay();
+            } catch (error) {
+                console.error('캐릭터 생성 중 오류:', error);
+                
+                // 오류 메시지 표시
+                const errorContainer = document.getElementById('error-container');
+                if (errorContainer) {
+                    errorContainer.innerHTML = `
+                        <div class="error-message">
+                            캐릭터 생성 중 오류가 발생했습니다: ${error.message}
+                        </div>
+                    `;
+                }
             }
-            
-            // 현재 캐릭터 데이터 저장
-            currentCharacter = {
-                name: name,
-                age: age,
-                gender: gender === 'male' ? '남성' : '여성',
-                nameLanguage: nameLanguage,
-                appearance: appearance,
-                personality: personality,
-                trait: trait
-            };
-            
-            // UI 업데이트
-            updateCharacterDisplay();
         }
 
         // 캐릭터 표시 업데이트
@@ -356,6 +471,30 @@
         function getRandomItem(array) {
             return array[Math.floor(Math.random() * array.length)];
         }
+
+        // 페이지 로드 시 실행
+        document.addEventListener('DOMContentLoaded', async function() {
+            // 데이터 로드 시도
+            const loadSuccess = await tryLoadData();
+            
+            // 데이터 로드 성공 여부와 관계없이 UI 초기화 진행
+            // (실패해도 기본 데이터가 있으므로 작동 가능)
+            initializeUI();
+            
+            if (!loadSuccess) {
+                console.warn('외부 데이터 로드에 실패했습니다. 기본 데이터를 사용합니다.');
+                
+                // 오류 메시지 추가
+                const errorContainer = document.getElementById('error-container');
+                if (errorContainer) {
+                    errorContainer.innerHTML = `
+                        <div class="error-message">
+                            외부 데이터 파일을 로드할 수 없습니다. 기본 데이터로 실행됩니다.
+                        </div>
+                    `;
+                }
+            }
+        });
     </script>
 </body>
 </html>
