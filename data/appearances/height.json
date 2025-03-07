@@ -1,0 +1,19 @@
+{
+  "height": [
+    {"value": "140cm 미만", "tags": ["male", "female"]},
+    {"value": "140cm대", "tags": ["male", "female"]},
+    {"value": "150cm대", "tags": ["male", "female"]},
+    {"value": "160cm 초반", "tags": ["male", "female"]},
+    {"value": "160cm 중반", "tags": ["male", "female"]},
+    {"value": "160cm 후반", "tags": ["male", "female"]},
+    {"value": "170cm 초반", "tags": ["male", "female"]},
+    {"value": "170cm 중반", "tags": ["male", "female"]},
+    {"value": "170cm 후반", "tags": ["male", "female"]},
+    {"value": "180cm 초반", "tags": ["male", "female"]},
+    {"value": "180cm 중반", "tags": ["male", "female"]},
+    {"value": "180cm 후반", "tags": ["male", "female"]},
+    {"value": "190cm 이상", "tags": ["male"]},
+    {"value": "2m 이상", "tags":["male"]}
+
+  ]
+}

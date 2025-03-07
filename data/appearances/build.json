@@ -1,0 +1,18 @@
+{
+  "build": [
+    {"value": "극도로 마름(뼈만 앙상함)", "tags": ["male", "female"]},
+    {"value": "매우 마름", "tags": ["male", "female"]},
+    {"value": "마른 편", "tags": ["male", "female"]},
+    {"value": "슬림함", "tags": ["male", "female"]},
+    {"value": "탄탄한 슬림", "tags": ["male", "female"]},
+    {"value": "보통 체격", "tags": ["male", "female"]},
+    {"value": "약간 근육질", "tags": ["male", "female"]},
+    {"value": "근육질", "tags": ["male", "female"]},
+    {"value": "탄탄하고 건장함", "tags": ["male", "female"]},
+     {"value": "다부짐", "tags":["male","female"]},
+    {"value": "약간 통통함", "tags": ["male", "female"]},
+    {"value": "통통함", "tags": ["male", "female"]},
+    {"value": "뚱뚱함", "tags": ["male", "female"]},
+    {"value": "고도 비만", "tags": ["male", "female"]}
+  ]
+}

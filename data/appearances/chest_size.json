@@ -1,0 +1,15 @@
+{
+  "chest_size": [
+    {"value": "AA컵", "tags": ["female"]},
+    {"value": "A컵", "tags": ["female"]},
+    {"value": "B컵", "tags": ["female"]},
+    {"value": "C컵", "tags": ["female"]},
+    {"value": "D컵", "tags": ["female"]},
+    {"value": "E컵 이상", "tags": ["female"]},
+    {"value": "평평함", "tags": ["male"]},
+    {"value": "약간 근육질", "tags": ["male"]},
+    {"value": "근육질", "tags": ["male"]},
+    {"value": "매우 근육질", "tags": ["male"]},
+     {"value": "갑바가 넓음", "tags": ["male"]}
+  ]
+}

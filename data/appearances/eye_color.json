@@ -1,0 +1,15 @@
+{
+  "eye_color": [
+    {"value": "검은색", "tags": ["male", "female"]},
+    {"value": "짙은 갈색", "tags": ["male", "female"]},
+    {"value": "갈색", "tags": ["male", "female"]},
+    {"value": "밝은 갈색", "tags": ["male", "female"]},
+    {"value": "호박색", "tags": ["male", "female"]},
+    {"value": "초록색", "tags": ["male", "female"]},
+    {"value": "파란색", "tags": ["male", "female"]},
+    {"value": "회색", "tags": ["male", "female"]},
+    {"value": "오드아이 (색상 조합)", "tags": ["male", "female"]},
+    {"value": "헤이즐", "tags":["male","female"]},
+     {"value": "빨간색 (알비노)", "tags":["male", "female"]}
+  ]
+}

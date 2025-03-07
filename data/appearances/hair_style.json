@@ -1,0 +1,32 @@
+{
+  "hair_style": [
+    {"value": "생머리", "tags": ["male", "female"]},
+    {"value": "곱슬머리", "tags": ["male", "female"]},
+    {"value": "반곱슬", "tags": ["male", "female"]},
+    {"value": "파마머리", "tags": ["male", "female"]},
+    {"value": "가르마펌", "tags": ["male", "female"]},
+    {"value": "포마드", "tags": ["male"]},
+    {"value": "리젠트컷", "tags": ["male"]},
+    {"value": "투블럭", "tags": ["male"]},
+    {"value": "크롭컷", "tags": ["male"]},
+    {"value": "슬릭백 언더컷", "tags": ["male"]},
+    {"value": "뱅헤어", "tags": ["male", "female"]},
+    {"value": "시스루뱅", "tags": ["female", "male_rare"]},
+    {"value": "처피뱅", "tags": ["female", "male_rare"]},
+    {"value": "C컬펌", "tags": ["female"]},
+    {"value": "S컬펌", "tags": ["female"]},
+    {"value": "히피펌", "tags": ["female"]},
+    {"value": "젤리펌", "tags": ["female"]},
+    {"value": "레이어드컷", "tags": ["female"]},
+    {"value": "허쉬컷", "tags": ["female", "male_rare"]},
+    {"value": "샤기컷", "tags": ["female", "male_rare"]},
+    {"value": "울프컷", "tags": ["male", "female"]},
+    {"value": "묶음 머리", "tags": ["female"]},
+    {"value": "포니테일", "tags": ["female"]},
+    {"value": "땋은 머리", "tags": ["female"]},
+    {"value": "반묶음", "tags": ["female"]},
+    {"value": "올림머리(똥머리)", "tags": ["female"]},
+    {"value": "단발머리", "tags": ["female", "male_rare"]},
+    {"value": "숏컷", "tags": ["female", "male_rare"]}
+  ]
+}

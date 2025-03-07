@@ -1,0 +1,23 @@
+{
+  "hair_length": [
+    {"value": "삭발", "tags": ["male"]},
+    {"value": "짧은", "tags": ["male", "female"]},
+    {"value": "단발", "tags": ["female", "male_rare"]},
+    {"value": "어깨 길이", "tags": ["female", "male_rare"]},
+    {"value": "긴", "tags": ["female"]},
+    {"value": "매우 긴", "tags": ["female"]},
+
+    {"value": "귀밑 3cm", "tags": ["female", "male_rare"]},
+    {"value": "턱선 길이", "tags": ["female", "male_rare"]},
+    {"value": "목덜미를 덮는 길이", "tags": ["male", "female"]},
+    {"value": "어깨에 닿을락 말락", "tags":["female", "male_rare"]},
+    {"value": "쇄골 길이", "tags": ["female"]},
+    {"value": "가슴 윗선", "tags": ["female"]},
+    {"value": "가슴선", "tags": ["female"]},
+    {"value": "허리선", "tags": ["female"]},
+    {"value": "골반 길이", "tags": ["female"]},
+	{"value": "엉덩이를 덮는 길이", "tags":["female"]},
+	{"value": "무릎 위 길이", "tags":["female_rare"]}
+
+  ]
+}

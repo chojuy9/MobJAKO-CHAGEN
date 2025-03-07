@@ -1,0 +1,25 @@
+{
+  "hair_color": [
+    {"value": "검은색", "tags": ["male", "female"]},
+    {"value": "짙은 갈색", "tags": ["male", "female"]},
+    {"value": "갈색", "tags": ["male", "female"]},
+    {"value": "밝은 갈색", "tags": ["male", "female"]},
+    {"value": "금발", "tags": ["male", "female"]},
+    {"value": "붉은색", "tags": ["female", "male_rare"]},
+    {"value": "주황색", "tags": ["female", "male_rare"]},
+    {"value": "분홍색", "tags": ["female", "male_rare"]},
+    {"value": "보라색", "tags": ["female", "male_rare"]},
+    {"value": "파란색", "tags": ["female", "male_rare"]},
+    {"value": "초록색", "tags": ["female", "male_rare"]},
+    {"value": "회색", "tags": ["male", "female"]},
+    {"value": "흰색", "tags": ["male", "female"]},
+    {"value": "애쉬 브라운", "tags": ["male", "female"]},
+    {"value": "애쉬 그레이", "tags": ["male", "female"]},
+    {"value": "카키 브라운", "tags": ["female", "male_rare"]},
+    {"value": "매트 브라운", "tags": ["female", "male_rare"]},
+    {"value": "코토리 베이지", "tags": ["female", "male_rare"]},
+    {"value": "투톤 (색상 조합)", "tags": ["female", "male_rare"]},
+    {"value": "옴브레 (색상 조합)", "tags": ["female", "male_rare"]},
+    {"value": "솜브레 (색상 조합)", "tags": ["female", "male_rare"]}
+  ]
+}
