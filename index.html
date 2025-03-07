@@ -243,26 +243,81 @@
         }
 
         // 데이터 로드 시도 함수
-        async function tryLoadData() {
-            try {
-                const basePath = getBasePath();
-                console.log('경로:', basePath);
-                
-                // 가장 기본적인 데이터로 연결 확인
-                const testResponse = await fetch(`${basePath}data/names/korean_male_names.json`);
-                if (!testResponse.ok) {
-                    throw new Error(`데이터 로드 테스트 실패: ${testResponse.status}`);
-                }
-                
-                // 자세한 데이터 로드는 여기서 진행
-                // 실패해도 기본 데이터를 가지고 있으므로 진행 가능
-                
-                return true;
-            } catch (error) {
-                console.error('데이터 로드 실패:', error);
-                return false;
-            }
+async function tryLoadData() {
+    try {
+        const basePath = getBasePath();
+        console.log('경로:', basePath);
+        
+        // 연결 테스트
+        const testResponse = await fetch(`${basePath}data/names/korean_male_names.json`);
+        if (!testResponse.ok) {
+            throw new Error(`데이터 로드 테스트 실패: ${testResponse.status}`);
         }
+        
+        // 실제 데이터 로드
+        // 이름 데이터 로드
+        const koreanMaleResponse = await fetch(`${basePath}data/names/korean_male_names.json`);
+        const koreanFemaleResponse = await fetch(`${basePath}data/names/korean_female_names.json`);
+        const englishMaleResponse = await fetch(`${basePath}data/names/english_male_names.json`);
+        const englishFemaleResponse = await fetch(`${basePath}data/names/english_female_names.json`);
+        
+        // 기본 속성 데이터 로드
+        const agesResponse = await fetch(`${basePath}data/ages.json`);
+        const personalitiesResponse = await fetch(`${basePath}data/personalities.json`);
+        const traitsResponse = await fetch(`${basePath}data/traits.json`);
+        
+        // 외모 속성 데이터 로드
+        const heightResponse = await fetch(`${basePath}data/appearances/height.json`);
+        const hairLengthResponse = await fetch(`${basePath}data/appearances/hair_length.json`);
+        const hairColorResponse = await fetch(`${basePath}data/appearances/hair_color.json`);
+        const hairStyleResponse = await fetch(`${basePath}data/appearances/hair_style.json`);
+        const eyeColorResponse = await fetch(`${basePath}data/appearances/eye_color.json`);
+        const chestSizeResponse = await fetch(`${basePath}data/appearances/chest_size.json`);
+        const buildResponse = await fetch(`${basePath}data/appearances/build.json`);
+        
+        // 응답을 JSON으로 변환
+        const koreanMaleData = await koreanMaleResponse.json();
+        const koreanFemaleData = await koreanFemaleResponse.json();
+        const englishMaleData = await englishMaleResponse.json();
+        const englishFemaleData = await englishFemaleResponse.json();
+        
+        const agesData = await agesResponse.json();
+        const personalitiesData = await personalitiesResponse.json();
+        const traitsData = await traitsResponse.json();
+        
+        const heightData = await heightResponse.json();
+        const hairLengthData = await hairLengthResponse.json();
+        const hairColorData = await hairColorResponse.json();
+        const hairStyleData = await hairStyleResponse.json();
+        const eyeColorData = await eyeColorResponse.json();
+        const chestSizeData = await chestSizeResponse.json();
+        const buildData = await buildResponse.json();
+        
+        // 데이터 저장
+        characterDB.koreanMaleNames = koreanMaleData.names;
+        characterDB.koreanFemaleNames = koreanFemaleData.names;
+        characterDB.englishMaleNames = englishMaleData.names;
+        characterDB.englishFemaleNames = englishFemaleData.names;
+        
+        characterDB.ages = agesData.ages;
+        characterDB.personalities = personalitiesData.personalities;
+        characterDB.traits = traitsData.traits;
+        
+        characterDB.appearance.height = heightData.height;
+        characterDB.appearance.hairLength = hairLengthData.hair_length;
+        characterDB.appearance.hairColor = hairColorData.hair_color;
+        characterDB.appearance.hairStyle = hairStyleData.hair_style;
+        characterDB.appearance.eyeColor = eyeColorData.eye_color;
+        characterDB.appearance.chestSize = chestSizeData.chest_size;
+        characterDB.appearance.build = buildData.build;
+        
+        console.log('모든 데이터 로드 완료!');
+        return true;
+    } catch (error) {
+        console.error('데이터 로드 실패:', error);
+        return false;
+    }
+}
 
         // UI 초기화 함수
         function initializeUI() {
