@@ -1,0 +1,142 @@
+/* ==================== 네비게이션 메뉴 스타일 ==================== */
+/* 네비게이션 메뉴 컨테이너 */
+.nav-container {
+    position: fixed;          /* 스크롤해도 상단에 고정 */
+    top: 0;                   /* 화면 최상단에 배치 */
+    left: 0;                  /* 화면 왼쪽에 배치 */
+    width: 100%;              /* 전체 너비 사용 */
+    height: var(--header-height); /* 높이 설정 */
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); /* 그라데이션 배경 */
+    box-shadow: 0 3px 12px rgba(173, 111, 255, 0.2); /* 보라색 그림자 효과 */
+    z-index: 1000;            /* 다른 요소보다 위에 표시 */
+    display: flex;            /* 플렉스 레이아웃 사용 */
+    align-items: center;      /* 세로 중앙 정렬 */
+    justify-content: center;  /* 가로 중앙 정렬 */
+    padding: 0 20px;          /* 좌우 패딩 */
+}
+
+/* 네비게이션 메뉴 내부 컨테이너 (최대 너비 제한) */
+.nav-inner {
+    width: 100%;              /* 전체 너비 사용 */
+    max-width: 1200px;        /* 최대 너비 제한 */
+    display: flex;            /* 플렉스 레이아웃 사용 */
+    justify-content: space-between; /* 요소 사이 공간 균등 배분 */
+    align-items: center;      /* 세로 중앙 정렬 */
+}
+
+/* 로고 스타일 */
+.nav-logo {
+    font-family: 'Jua', sans-serif;
+    font-size: 1.7rem;       /* 글꼴 크기 */
+    font-weight: 700;        /* 굵기 */
+    color: white;            /* 색상 */
+    text-decoration: none;   /* 밑줄 제거 */
+    display: flex;           /* 플렉스 레이아웃 사용 */
+    align-items: center;     /* 세로 중앙 정렬 */
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    letter-spacing: 1px;
+}
+
+/* 로고 아이콘 스타일 */
+.nav-logo i {
+    margin-right: 8px;      /* 오른쪽 여백 */
+    font-size: 1.8rem;      /* 아이콘 크기 */
+}
+
+/* 메뉴 링크 컨테이너 */
+.nav-links {
+    display: flex;          /* 플렉스 레이아웃 사용 */
+    list-style: none;       /* 리스트 스타일 제거 */
+    font-family: 'Jua', sans-serif;
+}
+
+/* 메뉴 링크 아이템 */
+.nav-links li {
+    margin: 0 5px;          /* 여백 설정 */
+}
+
+/* 메뉴 링크 스타일 */
+.nav-links a {
+    color: white;           /* 텍스트 색상 */
+    text-decoration: none;  /* 밑줄 제거 */
+    padding: 8px 15px;      /* 패딩 */
+    border-radius: 20px;    /* 둥근 모서리 */
+    transition: var(--transition); /* 애니메이션 효과 */
+    font-weight: 500;       /* 글꼴 굵기 */
+    font-size: 1.1rem;      /* 글꼴 크기 */
+}
+
+/* 링크 호버 효과 */
+.nav-links a:hover {
+    background-color: rgba(255, 255, 255, 0.3); /* 반투명 배경 */
+    transform: translateY(-3px);
+}
+
+/* 현재 활성화된 페이지 링크 스타일 */
+.nav-links a.active {
+    background-color: rgba(255, 255, 255, 0.3); /* 더 진한 반투명 배경 */
+    font-weight: 700;       /* 더 두꺼운 글꼴 */
+}
+
+/* 모바일 메뉴 토글 버튼 */
+.menu-toggle {
+    display: none;          /* 기본적으로 숨김 */
+    cursor: pointer;        /* 포인터 커서 */
+    flex-direction: column; /* 세로 방향 정렬 */
+    justify-content: space-between; /* 사이 공간 균등 배분 */
+    width: 30px;           /* 너비 */
+    height: 21px;          /* 높이 */
+}
+
+/* 햄버거 아이콘 줄 */
+.menu-toggle span {
+    display: block;        /* 블록 요소로 표시 */
+    height: 3px;           /* 높이 */
+    width: 100%;           /* 너비 */
+    background-color: white; /* 배경색 */
+    border-radius: 3px;    /* 둥근 모서리 */
+    transition: var(--transition); /* 애니메이션 효과 */
+}
+
+/* ==================== 반응형 디자인 (모바일 메뉴) ==================== */
+@media (max-width: 768px) {
+    /* 메뉴 토글 버튼 표시 */
+    .menu-toggle {
+        display: flex;     /* 모바일에서는 표시 */
+    }
+    
+    /* 메뉴 링크 숨김 및 위치 조정 */
+    .nav-links {
+        position: absolute; /* 절대 위치 */
+        top: var(--header-height); /* 헤더 아래에 위치 */
+        left: 0;            /* 왼쪽 정렬 */
+        width: 100%;        /* 전체 너비 */
+        flex-direction: column; /* 세로 방향 정렬 */
+        background: linear-gradient(180deg, var(--primary-color), var(--primary-dark)); /* 배경 */
+        padding: 10px 0;    /* 패딩 */
+        box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1); /* 그림자 */
+        transform: translateY(-150%); /* 기본적으로 위로 숨김 */
+        transition: transform 0.4s ease; /* 애니메이션 효과 */
+        align-items: center; /* 가운데 정렬 */
+    }
+    
+    /* 활성화된 메뉴 표시 */
+    .nav-links.active {
+        transform: translateY(0); /* 화면에 표시 */
+    }
+    
+    /* 모바일에서 메뉴 링크 스타일 조정 */
+    .nav-links li {
+        width: 100%;       /* 전체 너비 */
+        text-align: center; /* 가운데 정렬 */
+        margin: 0;         /* 여백 제거 */
+    }
+    
+    /* 모바일에서 링크 패딩 조정 */
+    .nav-links a {
+        padding: 12px 15px; /* 패딩 증가 */
+        display: block;     /* 블록 요소로 표시 */
+        width: 100%;        /* 전체 너비 */
+        border-radius: 0;   /* 모서리 둥글기 제거 */
+    }
+}

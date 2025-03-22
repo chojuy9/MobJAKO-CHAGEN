@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NPC 생성기 - 판타지 툴킷</title>
+    <!-- 기본 스타일시트 로드 -->
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <style>
+        /* 준비 중 페이지 전용 스타일 */
+        .coming-soon {
+            text-align: center;
+            padding: 60px 30px;
+            margin: 40px 0;
+            background: linear-gradient(135deg, rgba(173, 111, 255, 0.1), rgba(255, 111, 215, 0.1));
+            border-radius: var(--border-radius);
+            position: relative;
+            overflow: hidden;
+            border: 2px dashed var(--primary-light);
+        }
+        
+        .coming-soon-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            display: inline-block;
+            animation: bounce 2s infinite;
+        }
+        
+        .coming-soon-title {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-family: 'Jua', sans-serif;
+        }
+        
+        .coming-soon-text {
+            font-size: 1.2rem;
+            color: var(--text-color);
+            max-width: 600px;
+            margin: 0 auto 30px;
+            line-height: 1.6;
+        }
+        
+        .coming-soon::before {
+            content: "🌟";
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 24px;
+            animation: bounce 2s infinite;
+            animation-delay: 0.3s;
+        }
+        
+        .coming-soon::after {
+            content: "💫";
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            font-size: 24px;
+            animation: bounce 2s infinite;
+            animation-delay: 0.6s;
+        }
+        
+        .feature-list {
+            text-align: left;
+            max-width: 500px;
+            margin: 0 auto 30px;
+            background-color: white;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+        
+        .feature-list h3 {
+            color: var(--primary-dark);
+            font-family: 'Jua', sans-serif;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .feature-list ul {
+            padding-left: 20px;
+        }
+        
+        .feature-list li {
+            margin-bottom: 10px;
+            position: relative;
+            padding-left: 25px;
+        }
+        
+        .feature-list li::before {
+            content: "✨";
+            position: absolute;
+            left: 0;
+            color: var(--primary-color);
+        }
+        
+        .back-button {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            text-decoration: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-weight: 500;
+            transition: var(--transition);
+            font-family: 'Jua', sans-serif;
+            margin-top: 20px;
+        }
+        
+        .back-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(173, 111, 255, 0.4);
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            border-top: 1px dashed var(--primary-light);
+            margin-top: 30px;
+        }
+        
+        .footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+        
+        .footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <!-- ==================== 네비게이션 메뉴 ==================== -->
+    <nav class="nav-container">
+        <div class="nav-inner">
+            <!-- 로고 및 사이트 제목 -->
+            <a href="/" class="nav-logo">
+                <i class="fas fa-dice-d20"></i>
+                ✨ 판타지 툴킷 ✨
+            </a>
+            
+            <!-- 햄버거 메뉴 토글 버튼 (모바일 전용) -->
+            <div class="menu-toggle" id="mobile-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            
+            <!-- 메뉴 링크 목록 -->
+            <ul class="nav-links" id="nav-menu">
+                <li><a href="/">홈</a></li>
+                <li><a href="/tools/mob-generator/">모브 생성기</a></li>
+                <li><a href="/tools/world-generator/">세계 생성기</a></li>
+                <li><a href="/tools/dungeon-generator/">던전 생성기</a></li>
+                <li><a href="/about.html">소개</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- 메인 콘텐츠 -->
+    <div class="container">
+        <h1>세계 생성기</h1>
+        
+        <div class="coming-soon">
+            <div class="coming-soon-icon">🧙‍♂️</div>
+            <h2 class="coming-soon-title">열심히 개발 중입니다!</h2>
+            <p class="coming-soon-text">
+                더 강력하고 멋진 세계 생성기를 위해 마법사들이 밤낮으로 코딩하고 있어요.
+                조금만 기다려주세요!
+            </p>
+            
+            <div class="feature-list">
+                <h3>예정된 기능들</h3>
+                <ul>
+                    <li>오도해병식 마라톤 회의를 기반으로 세계 생성</li>
+                    <li>노동자고 자본자고 평등하게 갈아대는 자본주의 이식</li>
+                    <li>이윤 내려고 안전장치 제거하고 이윤 최대화</li>
+                    <li>노동조합 탄압하기 (구사대 무료 제공)</li>
+                    <li>캐릭터 이미지 생성 (안될 가능성 100%)</li>
+                </ul>
+            </div>
+            
+            <a href="/" class="back-button">홈으로 돌아가기</a>
+        </div>
+        
+        <!-- 푸터 -->
+        <footer class="footer">
+            <p>© 2025 판타지 툴킷. 모든 권리 보유.</p>
+            <p style="margin-top: 10px;">
+                <a href="/privacy.html">개인정보 처리방침</a> | 
+                <a href="/terms.html">이용약관</a> | 
+                <a href="/contact.html">문의하기</a>
+            </p>
+            <p style="margin-top: 15px;">
+                Made with 💜 by Fantasy Toolkit Team
+            </p>
+        </footer>
+    </div>
+
+    <!-- 공통 자바스크립트 로드 -->
+    <script src="../../assets/js/common.js"></script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+/* ==================== 애니메이션 효과 ==================== */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+
+.attribute {
+    animation: fadeIn 0.5s ease forwards;
+}
+
+.attribute:nth-child(1) { animation-delay: 0.1s; }
+.attribute:nth-child(2) { animation-delay: 0.2s; }
+.attribute:nth-child(3) { animation-delay: 0.3s; }
+.attribute:nth-child(4) { animation-delay: 0.4s; }
+.attribute:nth-child(5) { animation-delay: 0.5s; }
+.attribute:nth-child(6) { animation-delay: 0.6s; }
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .filter-options {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .filter-group {
+        width: 100%;
+    }
+    
+    .attribute {
+        flex-direction: column;
+    }
+    
+    .attribute-label {
+        width: 100%;
+        margin-bottom: 5px;
+    }
+}

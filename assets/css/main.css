@@ -1,0 +1,18 @@
+/* 
+ * main.css - 판타지 툴킷의 메인 스타일시트
+ * 모든 CSS 모듈을 불러오는 파일입니다
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Jua&family=Gaegu:wght@300;400;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+
+/* 기본 변수 및 스타일 */
+@import url('../css/variables.css');
+@import url('../css/reset.css');
+
+/* 컴포넌트 및 레이아웃 */
+@import url('../css/navigation.css');
+@import url('../css/components.css');
+@import url('../css/animations.css');
+
+/* 추가 스타일 - 이 아래에 새로운 스타일시트를 import 할 수 있습니다 */

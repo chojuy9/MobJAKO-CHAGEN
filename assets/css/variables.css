@@ -1,0 +1,17 @@
+/* ==================== 기본 스타일 변수 정의 ==================== */
+/* 여기에서 색상이나 크기 등의 기본 변수를 수정하면 전체 사이트에 적용됩니다 */
+:root {
+    --primary-color: #ad6fff;    /* 주 색상 - 귀여운 보라색 */
+    --primary-light: #d7b6ff;    /* 매우 연한 보라색 */
+    --primary-dark: #8347c1;     /* 진한 보라색 */
+    --secondary-color: #ff6fd7;  /* 보조 색상 - 핑크색 */
+    --accent-color: #6fddff;     /* 포인트 색상 - 하늘색 */
+    --text-color: #6e5d79;       /* 기본 텍스트 색상 - 부드러운 퍼플 */
+    --text-light: #9c8aa8;       /* 밝은 텍스트 색상 */
+    --background: #f8f2ff;       /* 배경 색상 - 매우 연한 보라색 */
+    --card-background: #ffffff;  /* 카드 배경 색상 */
+    --border-radius: 20px;       /* 모서리 둥글기 - 더 둥글게 */
+    --shadow: 0 6px 16px rgba(173, 111, 255, 0.15);  /* 그림자 효과 - 보라색 조명 */
+    --transition: all 0.3s ease; /* 애니메이션 속도 */
+    --header-height: 70px;       /* 헤더 높이 */
+}
