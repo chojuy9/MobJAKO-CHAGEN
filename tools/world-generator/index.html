@@ -700,6 +700,91 @@
             
             // 필터 초기화 실행
             initializeFilters();
+		// 아래 코드를 스크립트 내에 추가해주세요! (generateButton 이벤트 리스너 아래에)
+
+async function generateWorld(options) {
+    const loadingIndicator = showLoading('✨ 마법의 세계를 창조하는 중... ✨');
+    
+    try {
+        // 세계 데이터 불러오기
+        const worldData = await fetchWorldData();
+        
+        // 랜덤 이름 생성
+        const prefix = getRandomElement(worldData.names.prefixes);
+        const suffix = getRandomElement(worldData.names.suffixes);
+        const name = prefix + suffix;
+        
+        // 선택된 옵션들에서 값 가져오기 (랜덤이면 랜덤 선택)
+        let atmosphere, geography, technology, magic;
+        
+        // 분위기 선택
+        if (options.atmosphere === 'random') {
+            const allAtmospheres = [...Object.keys(worldData.atmospheres).filter(k => k !== 'random')];
+            const randomKey = getRandomElement(allAtmospheres);
+            atmosphere = worldData.atmospheres[randomKey].name;
+        } else {
+            atmosphere = worldData.atmospheres[options.atmosphere].name;
+        }
+        
+        // 지리 선택
+        if (options.geography === 'random') {
+            const allGeographies = [...Object.keys(worldData.geographies).filter(k => k !== 'random')];
+            const randomKey = getRandomElement(allGeographies);
+            geography = worldData.geographies[randomKey].name;
+        } else {
+            geography = worldData.geographies[options.geography].name;
+        }
+        
+        // 기술 선택
+        if (options.technology === 'random') {
+            const allTechnologies = [...Object.keys(worldData.technologies).filter(k => k !== 'random')];
+            const randomKey = getRandomElement(allTechnologies);
+            technology = worldData.technologies[randomKey].name;
+        } else {
+            technology = worldData.technologies[options.technology].name;
+        }
+        
+        // 마법 선택
+        if (options.magic === 'random') {
+            const allMagics = [...Object.keys(worldData.magics).filter(k => k !== 'random')];
+            const randomKey = getRandomElement(allMagics);
+            magic = worldData.magics[randomKey].name;
+        } else {
+            magic = worldData.magics[options.magic].name;
+        }
+        
+        // 종족 선택 (선택되지 않았다면 랜덤 3개)
+        let races;
+        if (options.races.length === 0) {
+            races = getRandomElements(worldData.races, 3).map(r => r.name);
+        } else {
+            races = options.races;
+        }
+        
+        // 자원 선택 (선택되지 않았다면 랜덤 3개)
+        let resources;
+        if (options.resources.length === 0) {
+            resources = getRandomElements(worldData.resources, 3).map(r => r.name);
+        } else {
+            resources = options.resources;
+        }
+        
+        // 세계 설명 생성
+        const description = generateWorldDescription(
+            name, atmosphere, geography, technology, magic, 
+            races, resources, worldData.templates
+        );
+        
+        // 결과 표시
+        displayWorldResult(name, atmosphere, geography, technology, magic, races, resources, description);
+        
+    } catch (error) {
+        console.error('세계 생성 중 오류:', error);
+        alert('세계를 생성하는 데 문제가 발생했어요. 다시 시도해주세요!');
+    } finally {
+        hideLoading(loadingIndicator);
+    }
+}
             
             // 세계 생성 버튼 이벤트 리스너
             const generateButton = document.getElementById('generateWorld');
