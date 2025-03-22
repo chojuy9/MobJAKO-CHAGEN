@@ -1,36 +1,36 @@
 {
   "bright": {
     "name": "밝고 희망적인",
-    "description": "항상 밝은 빛이 비추고 희망이 넘치는",
+    "description": "항상 밝은 빛이 비추고 희망이 넘치는"
   },
   "dark": {
     "name": "어둡고 음울한",
-    "description": "그림자가 드리워진 음울한 분위기의",
+    "description": "그림자가 드리워진 음울한 분위기의"
   },
   "mysterious": {
     "name": "신비롭고 초자연적인",
-    "description": "비밀과 수수께끼로 가득한 초자연적인",
+    "description": "비밀과 수수께끼로 가득한 초자연적인"
   },
   "magical": {
     "name": "마법이 넘치는",
-    "description": "마법의 기운이 공기 중에 흐르는",
+    "description": "마법의 기운이 공기 중에 흐르는"
   },
   "steampunk": {
     "name": "증기와 기계가 공존하는",
-    "description": "증기 기관과 톱니바퀴가 작동하는",
+    "description": "증기 기관과 톱니바퀴가 작동하는"
   },
   "random": [
     {
       "name": "평화로운",
-      "description": "평화와 안정이 깃든",
+      "description": "평화와 안정이 깃든"
     },
     {
       "name": "혼돈스러운",
-      "description": "끊임없이 변화하고 예측할 수 없는",
+      "description": "끊임없이 변화하고 예측할 수 없는"
     },
     {
       "name": "우주적인",
-      "description": "별들과 우주의 신비로 가득한",
+      "description": "별들과 우주의 신비로 가득한"
     }
   ]
 }
