@@ -1,22 +1,22 @@
 {
   "primitive": {
     "name": "원시적인",
-    "description": "돌과 나무로 만든 도구를 사용하는",
+    "description": "돌과 나무로 만든 도구를 사용하는"
   },
   "medieval": {
     "name": "중세 수준의",
-    "description": "철제 무기와 갑옷을 다루는 기술을 가진",
+    "description": "철제 무기와 갑옷을 다루는 기술을 가진"
   },
   "renaissance": {
     "name": "르네상스 시대의",
-    "description": "예술과 과학이 발달하기 시작한",
+    "description": "예술과 과학이 발달하기 시작한"
   },
   "industrial": {
     "name": "산업혁명 시기의",
-    "description": "증기 기관과 공장이 등장한",
+    "description": "증기 기관과 공장이 등장한"
   },
   "futuristic": {
     "name": "미래적인",
-    "description": "고도로 발달된 과학 기술을 가진",
+    "description": "고도로 발달된 과학 기술을 가진"
   }
 }
