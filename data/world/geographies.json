@@ -1,22 +1,22 @@
 {
   "island": {
     "name": "거대한 섬",
-    "description": "사방이 바다로 둘러싸인 거대한 섬으로 이루어진",
+    "description": "사방이 바다로 둘러싸인 거대한 섬으로 이루어진"
   },
   "continent": {
     "name": "광활한 대륙",
-    "description": "끝없이 펼쳐진 광활한 대륙으로 이루어진",
+    "description": "끝없이 펼쳐진 광활한 대륙으로 이루어진"
   },
   "archipelago": {
     "name": "수많은 섬으로 이루어진 군도",
-    "description": "크고 작은 수백 개의 섬으로 구성된",
+    "description": "크고 작은 수백 개의 섬으로 구성된"
   },
   "floating": {
     "name": "하늘에 떠 있는 땅",
-    "description": "구름 위에 떠 있는 신비로운 땅으로 구성된",
+    "description": "구름 위에 떠 있는 신비로운 땅으로 구성된"
   },
   "underground": {
     "name": "깊고 넓은 지하 세계",
-    "description": "지표면 아래 깊숙이 펼쳐진 거대한 동굴 네트워크로 이루어진",
+    "description": "지표면 아래 깊숙이 펼쳐진 거대한 동굴 네트워크로 이루어진"
   }
 }
