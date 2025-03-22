@@ -3,45 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NPC 생성기 - 판타지 툴킷</title>
+    <title>세계 생성기 - 판타지 툴킷</title>
     <!-- 기본 스타일시트 로드 -->
     <link rel="stylesheet" href="../../assets/css/main.css">
     <style>
-        /* 준비 중 페이지 전용 스타일 */
-        .coming-soon {
-            text-align: center;
-            padding: 60px 30px;
-            margin: 40px 0;
+        .world-generator-container {
             background: linear-gradient(135deg, rgba(173, 111, 255, 0.1), rgba(255, 111, 215, 0.1));
             border-radius: var(--border-radius);
+            padding: 30px;
+            margin: 40px 0;
+            box-shadow: var(--shadow);
             position: relative;
             overflow: hidden;
-            border: 2px dashed var(--primary-light);
         }
-        
-        .coming-soon-icon {
-            font-size: 80px;
-            margin-bottom: 20px;
-            display: inline-block;
-            animation: bounce 2s infinite;
-        }
-        
-        .coming-soon-title {
-            font-size: 2.5rem;
-            color: var(--primary-color);
-            margin-bottom: 20px;
-            font-family: 'Jua', sans-serif;
-        }
-        
-        .coming-soon-text {
-            font-size: 1.2rem;
-            color: var(--text-color);
-            max-width: 600px;
-            margin: 0 auto 30px;
-            line-height: 1.6;
-        }
-        
-        .coming-soon::before {
+
+        .world-generator-container::before {
             content: "🌟";
             position: absolute;
             top: 20px;
@@ -50,8 +26,8 @@
             animation: bounce 2s infinite;
             animation-delay: 0.3s;
         }
-        
-        .coming-soon::after {
+
+        .world-generator-container::after {
             content: "💫";
             position: absolute;
             bottom: 20px;
@@ -61,74 +37,297 @@
             animation-delay: 0.6s;
         }
         
-        .feature-list {
-            text-align: left;
-            max-width: 500px;
-            margin: 0 auto 30px;
-            background-color: white;
-            padding: 20px;
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-        }
-        
-        .feature-list h3 {
-            color: var(--primary-dark);
-            font-family: 'Jua', sans-serif;
-            margin-bottom: 15px;
-            text-align: center;
-        }
-        
-        .feature-list ul {
-            padding-left: 20px;
-        }
-        
-        .feature-list li {
-            margin-bottom: 10px;
-            position: relative;
-            padding-left: 25px;
-        }
-        
-        .feature-list li::before {
-            content: "✨";
-            position: absolute;
+        /* 로딩 인디케이터 스타일 */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
             left: 0;
-            color: var(--primary-color);
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            color: white;
+            font-family: 'Jua', sans-serif;
         }
         
-        .back-button {
-            display: inline-block;
+        .loading-spinner {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 6px solid rgba(255, 255, 255, 0.3);
+            border-top-color: var(--primary-color);
+            animation: spin 1s infinite linear;
+            margin-bottom: 20px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .generator-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .generator-title {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            font-family: 'Jua', sans-serif;
+            margin-bottom: 10px;
+        }
+
+        .generator-description {
+            color: var(--text-color);
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .generator-controls {
+            background-color: white;
+            padding: 25px;
+            border-radius: var(--border-radius);
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .option-group {
+            margin-bottom: 20px;
+        }
+
+        .option-title {
+            font-family: 'Jua', sans-serif;
+            color: var(--primary-dark);
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .options-flex {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .option-button {
+            padding: 8px 16px;
+            background-color: #f0f0f0;
+            border: 2px solid transparent;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .option-button:hover {
+            background-color: #e5e5e5;
+        }
+
+        .option-button.selected {
+            background-color: var(--primary-light);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        /* 필터 스타일 */
+        .filter-container {
+            margin-top: 10px;
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 10px;
+        }
+        
+        .world-filter {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            background-color: white;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .world-filter:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 5px rgba(173, 111, 255, 0.3);
+            outline: none;
+        }
+        
+        .world-filter[multiple] {
+            height: 120px;
+        }
+        
+        .filter-description {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: white;
+            border-left: 3px solid var(--primary-light);
+            border-radius: 4px;
+            font-size: 0.9rem;
+            color: #666;
+            min-height: 40px;
+        }
+        
+        .filter-note {
+            margin-top: 5px;
+            font-size: 0.8rem;
+            color: #888;
+        }
+        
+        /* 고급 옵션 토글 */
+        .advanced-options-toggle {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .advanced-options-toggle button {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            font-size: 1rem;
+            cursor: pointer;
+            padding: 8px 15px;
+            border-radius: 20px;
+            transition: all 0.3s;
+        }
+        
+        .advanced-options-toggle button:hover {
+            background-color: rgba(173, 111, 255, 0.1);
+        }
+        
+        .advanced-options {
+            border-top: 1px dashed #ddd;
+            padding-top: 20px;
+            margin-top: 10px;
+        }
+
+        .generate-button {
+            display: block;
+            width: 100%;
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
-            text-decoration: none;
-            padding: 12px 25px;
+            border: none;
+            padding: 15px;
             border-radius: 30px;
-            font-weight: 500;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
             transition: var(--transition);
             font-family: 'Jua', sans-serif;
-            margin-top: 20px;
+            margin-top: 10px;
         }
-        
-        .back-button:hover {
+
+        .generate-button:hover {
             transform: translateY(-3px);
             box-shadow: 0 8px 20px rgba(173, 111, 255, 0.4);
         }
-        
-        .footer {
-            text-align: center;
+
+        .world-result {
+            background-color: white;
             padding: 30px;
-            color: var(--text-light);
-            font-size: 0.9rem;
-            border-top: 1px dashed var(--primary-light);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
             margin-top: 30px;
+            display: none;
         }
-        
-        .footer a {
+
+        .world-result.visible {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 2px dashed var(--primary-light);
+            padding-bottom: 15px;
+        }
+
+        .world-name {
+            font-size: 2rem;
+            color: var(--primary-dark);
+            font-family: 'Jua', sans-serif;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-button {
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: var(--transition);
+        }
+
+        .save-button {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .copy-button {
+            background-color: #2196F3;
+            color: white;
+        }
+
+        .world-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .detail-card {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .detail-title {
+            font-weight: 600;
             color: var(--primary-color);
-            text-decoration: none;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
-        
-        .footer a:hover {
-            text-decoration: underline;
+
+        .detail-content {
+            line-height: 1.5;
+        }
+
+        .world-description {
+            margin-top: 20px;
+            line-height: 1.7;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        /* 모바일 반응형 */
+        @media (max-width: 768px) {
+            .world-details {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* 애니메이션 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
     </style>
 </head>
@@ -153,7 +352,7 @@
             <ul class="nav-links" id="nav-menu">
                 <li><a href="/MobJAKO-CHAGEN">홈</a></li>
                 <li><a href="/MobJAKO-CHAGEN/tools/mob-generator/">모브 생성기</a></li>
-                <li><a href="/MobJAKO-CHAGEN/tools/world-generator/">세계 생성기</a></li>
+                <li><a href="/MobJAKO-CHAGEN/tools/world-generator/" class="active">세계 생성기</a></li>
                 <li><a href="/MobJAKO-CHAGEN/tools/dungeon-generator/">던전 생성기</a></li>
                 <li><a href="/MobJAKO-CHAGEN/about.html">소개</a></li>
             </ul>
@@ -164,43 +363,656 @@
     <div class="container">
         <h1>세계 생성기</h1>
         
-        <div class="coming-soon">
-            <div class="coming-soon-icon">🧙‍♂️</div>
-            <h2 class="coming-soon-title">열심히 개발 중입니다!</h2>
-            <p class="coming-soon-text">
-                더 강력하고 멋진 세계 생성기를 위해 마법사들이 밤낮으로 코딩하고 있어요.
-                조금만 기다려주세요!
-            </p>
-            
-            <div class="feature-list">
-                <h3>예정된 기능들</h3>
-                <ul>
-                    <li>오도해병식 마라톤 회의를 기반으로 세계 생성</li>
-                    <li>노동자고 자본자고 평등하게 갈아대는 자본주의 이식</li>
-                    <li>이윤 내려고 안전장치 제거하고 이윤 최대화</li>
-                    <li>노동조합 탄압하기 (구사대 무료 제공)</li>
-                    <li>캐릭터 이미지 생성 (안될 가능성 100%)</li>
-                </ul>
+        <div class="world-generator-container">
+            <div class="generator-header">
+                <h2 class="generator-title">당신만의 판타지 세계를 만들어보세요!</h2>
+                <p class="generator-description">
+                    원하는 세계의 특성을 선택하고 '세계 생성' 버튼을 누르면, 독특하고 매력적인 판타지 세계가 생성됩니다.
+                    생성된 세계는 게임 배경, 창작 글쓰기, 롤플레잉 등 다양한 용도로 활용할 수 있습니다.
+                </p>
             </div>
             
-            <a href="/" class="back-button">홈으로 돌아가기</a>
+            <div class="generator-controls">
+                <div class="option-group">
+                    <h3 class="option-title">세계의 분위기</h3>
+                    <div class="filter-container">
+                        <select id="atmosphereFilter" class="world-filter" data-type="atmosphere">
+                            <option value="random">랜덤 선택</option>
+                            <!-- 자동으로 채워질 옵션들 -->
+                        </select>
+                        <div class="filter-description" id="atmosphereDescription">
+                            분위기를 선택하면 설명이 여기에 표시됩니다.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="option-group">
+                    <h3 class="option-title">지리적 특성</h3>
+                    <div class="filter-container">
+                        <select id="geographyFilter" class="world-filter" data-type="geography">
+                            <option value="random">랜덤 선택</option>
+                            <!-- 자동으로 채워질 옵션들 -->
+                        </select>
+                        <div class="filter-description" id="geographyDescription">
+                            지리를 선택하면 설명이 여기에 표시됩니다.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="option-group">
+                    <h3 class="option-title">기술 수준</h3>
+                    <div class="filter-container">
+                        <select id="technologyFilter" class="world-filter" data-type="technology">
+                            <option value="random">랜덤 선택</option>
+                            <!-- 자동으로 채워질 옵션들 -->
+                        </select>
+                        <div class="filter-description" id="technologyDescription">
+                            기술 수준을 선택하면 설명이 여기에 표시됩니다.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="option-group">
+                    <h3 class="option-title">마법 수준</h3>
+                    <div class="filter-container">
+                        <select id="magicFilter" class="world-filter" data-type="magic">
+                            <option value="random">랜덤 선택</option>
+                            <!-- 자동으로 채워질 옵션들 -->
+                        </select>
+                        <div class="filter-description" id="magicDescription">
+                            마법 수준을 선택하면 설명이 여기에 표시됩니다.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="advanced-options-toggle">
+                    <button id="advancedToggle">고급 옵션 ▼</button>
+                </div>
+                
+                <div class="advanced-options" id="advancedOptions" style="display: none;">
+                    <div class="option-group">
+                        <h3 class="option-title">종족 선호도</h3>
+                        <div class="filter-container">
+                            <select id="racesFilter" class="world-filter" data-type="races" multiple>
+                                <!-- 자동으로 채워질 옵션들 -->
+                            </select>
+                            <div class="filter-note">
+                                여러 종족을 선택하려면 Ctrl 키(Mac에서는 Cmd 키)를 누른 상태에서 클릭하세요.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="option-group">
+                        <h3 class="option-title">자원 선호도</h3>
+                        <div class="filter-container">
+                            <select id="resourcesFilter" class="world-filter" data-type="resources" multiple>
+                                <!-- 자동으로 채워질 옵션들 -->
+                            </select>
+                            <div class="filter-note">
+                                여러 자원을 선택하려면 Ctrl 키(Mac에서는 Cmd 키)를 누른 상태에서 클릭하세요.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="generate-button" id="generateWorld">
+                    🌍 세계 생성하기
+                </button>
+            </div>
+            
+            <div class="world-result" id="worldResult">
+                <div class="result-header">
+                    <h3 class="world-name" id="worldName">아리아나: 마법의 땅</h3>
+                    <div class="action-buttons">
+                        <button class="action-button copy-button">
+                            <span>복사</span>
+                        </button>
+                        <button class="action-button save-button">
+                            <span>저장</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="world-details">
+                    <div class="detail-card">
+                        <div class="detail-title">
+                            <span>분위기</span>
+                        </div>
+                        <div class="detail-content" id="atmosphereResult">신비롭고 초자연적</div>
+                    </div>
+                    
+                    <div class="detail-card">
+                        <div class="detail-title">
+                            <span>지리</span>
+                        </div>
+                        <div class="detail-content" id="geographyResult">군도 세계</div>
+                    </div>
+                    
+                    <div class="detail-card">
+                        <div class="detail-title">
+                            <span>기술 수준</span>
+                        </div>
+                        <div class="detail-content" id="technologyResult">르네상스</div>
+                    </div>
+                    
+                    <div class="detail-card">
+                        <div class="detail-title">
+                            <span>마법 수준</span>
+                        </div>
+                        <div class="detail-content" id="magicResult">일반적</div>
+                    </div>
+                    
+                    <div class="detail-card">
+                        <div class="detail-title">
+                            <span>주요 종족</span>
+                        </div>
+                        <div class="detail-content" id="racesResult">인간, 엘프, 드워프, 요정</div>
+                    </div>
+                    
+                    <div class="detail-card">
+                        <div class="detail-title">
+                            <span>자원</span>
+                        </div>
+                        <div class="detail-content" id="resourcesResult">마나 크리스탈, 월광 금속, 하늘나무</div>
+                    </div>
+                </div>
+                
+                <div class="world-description" id="worldDescription">
+                    아리아나는 수백 개의 작은 섬들로 이루어진 신비로운 군도 세계입니다. 
+                    르네상스에 맞먹는 기술력을 지녔지만, 이 세계에서는 과학만큼 마법도 일상에 녹아있습니다. 
+                    인간, 엘프, 드워프, 요정들이 각자의 섬에서 그들만의 문화를 발전시켰으며, 
+                    마나 크리스탈과 월광 금속, 하늘나무와 같은 특별한 자원들을 활용해 
+                    독특한 문명을 이루었습니다. 각 섬마다 고유한 마법 흐름이 있어, 
+                    섬마다 다른 종류의 마법이 강화되는 특성이 있습니다.
+                </div>
+            </div>
         </div>
-        
-        <!-- 푸터 -->
+
+        <!-- Footer
         <footer class="footer">
             <p>© 2025 판타지 툴킷. 모든 권리 보유.</p>
             <p style="margin-top: 10px;">
-                <a href="/MobJAKO-CHAGEN/privacy.html">개인정보 처리방침</a> | 
-                <a href="/MobJAKO-CHAGEN/terms.html">이용약관</a> | 
-                <a href="/MobJAKO-CHAGEN/contact.html">문의하기</a>
+                <a href="/privacy.html">개인정보 처리방침</a> | 
+                <a href="/terms.html">이용약관</a> | 
+                <a href="/contact.html">문의하기</a>
             </p>
             <p style="margin-top: 15px;">
                 Made by 홍삼정에브리타임 💜
             </p>
-        </footer>
+        </footer> -->
     </div>
 
     <!-- 공통 자바스크립트 로드 -->
     <script src="../../assets/js/common.js"></script>
+    
+    <!-- 세계 생성기 전용 스크립트 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 로딩 상태 표시 함수
+            function showLoading(message) {
+                const loadingEl = document.createElement('div');
+                loadingEl.className = 'loading-overlay';
+                loadingEl.innerHTML = `
+                    <div class="loading-spinner"></div>
+                    <p>${message}</p>
+                `;
+                document.body.appendChild(loadingEl);
+                return loadingEl;
+            }
+            
+            function hideLoading(loadingEl) {
+                if (loadingEl) {
+                    document.body.removeChild(loadingEl);
+                }
+            }
+            
+            // 선택된 옵션들을 저장할 객체
+            const selectedOptions = {
+                atmosphere: "random",
+                geography: "random",
+                technology: "random",
+                magic: "random",
+                races: [],
+                resources: []
+            };
+            
+            // 고급 옵션 토글
+            const advancedToggle = document.getElementById('advancedToggle');
+            const advancedOptions = document.getElementById('advancedOptions');
+            
+            advancedToggle.addEventListener('click', function() {
+                if (advancedOptions.style.display === 'none') {
+                    advancedOptions.style.display = 'block';
+                    advancedToggle.textContent = '고급 옵션 ▲';
+                } else {
+                    advancedOptions.style.display = 'none';
+                    advancedToggle.textContent = '고급 옵션 ▼';
+                }
+            });
+            
+            // 필터 데이터 로드 및 설정
+            async function initializeFilters() {
+                const loadingIndicator = showLoading('마법의 필터를 준비하는 중...');
+                
+                try {
+                    // 데이터 가져오기
+                    const worldData = await fetchWorldData();
+                    
+                    // 각 필터 초기화
+                    initializeFilter('atmosphere', worldData.atmospheres, atmosphereCallback);
+                    initializeFilter('geography', worldData.geographies, geographyCallback);
+                    initializeFilter('technology', worldData.technologies, technologyCallback);
+                    initializeFilter('magic', worldData.magics, magicCallback);
+                    
+                    // 종족 멀티 셀렉트 초기화
+                    initializeMultiSelect('races', worldData.races);
+                    
+                    // 자원 멀티 셀렉트 초기화
+                    initializeMultiSelect('resources', worldData.resources);
+                    
+                } catch (error) {
+                    console.error('필터 초기화 중 오류 발생:', error);
+                } finally {
+                    hideLoading(loadingIndicator);
+                }
+            }
+            
+            // 일반 필터 초기화 함수
+            function initializeFilter(type, data, callback) {
+                const filter = document.getElementById(`${type}Filter`);
+                const description = document.getElementById(`${type}Description`);
+                
+                // 기본 옵션 (랜덤) 유지
+                
+                // 각 필터 옵션 추가 (random 키는 건너뜀)
+                Object.keys(data).forEach(key => {
+                    if (key !== 'random') {
+                        const option = document.createElement('option');
+                        option.value = key;
+                        option.textContent = data[key].name || data[key];
+                        filter.appendChild(option);
+                    }
+                });
+                
+                // 이벤트 리스너 추가
+                filter.addEventListener('change', function() {
+                    const value = this.value;
+                    selectedOptions[type] = value;
+                    
+                    // 콜백 함수 실행 (설명 업데이트)
+                    if (callback) {
+                        callback(value, data, description);
+                    }
+                });
+            }
+            
+            // 멀티 셀렉트 초기화 함수
+            function initializeMultiSelect(type, items) {
+                const filter = document.getElementById(`${type}Filter`);
+                
+                // 각 항목 추가
+                items.forEach(item => {
+                    const option = document.createElement('option');
+                    option.value = item.name;
+                    option.textContent = item.name;
+                    filter.appendChild(option);
+                });
+                
+                // 이벤트 리스너 추가
+                filter.addEventListener('change', function() {
+                    const selectedValues = Array.from(this.selectedOptions).map(option => option.value);
+                    selectedOptions[type] = selectedValues;
+                });
+            }
+            
+            // 콜백 함수들 - 필터 설명 업데이트
+            function atmosphereCallback(value, data, descriptionElement) {
+                if (value === 'random') {
+                    descriptionElement.textContent = '분위기를 랜덤으로 선택합니다.';
+                } else {
+                    descriptionElement.textContent = data[value].description || '선택한 분위기에 대한 설명이 없습니다.';
+                }
+            }
+            
+            function geographyCallback(value, data, descriptionElement) {
+                if (value === 'random') {
+                    descriptionElement.textContent = '지리적 특성을 랜덤으로 선택합니다.';
+                } else {
+                    descriptionElement.textContent = data[value].description || '선택한 지리에 대한 설명이 없습니다.';
+                }
+            }
+            
+            function technologyCallback(value, data, descriptionElement) {
+                if (value === 'random') {
+                    descriptionElement.textContent = '기술 수준을 랜덤으로 선택합니다.';
+                } else {
+                    descriptionElement.textContent = data[value].description || '선택한 기술 수준에 대한 설명이 없습니다.';
+                }
+            }
+            
+            function magicCallback(value, data, descriptionElement) {
+                if (value === 'random') {
+                    descriptionElement.textContent = '마법 수준을 랜덤으로 선택합니다.';
+                } else {
+                    descriptionElement.textContent = data[value].description || '선택한 마법 수준에 대한 설명이 없습니다.';
+                }
+            }
+            
+            // 필터 초기화 실행
+            initializeFilters();
+            
+            // 세계 생성 버튼 이벤트 리스너
+            const generateButton = document.getElementById('generateWorld');
+            generateButton.addEventListener('click', function() {
+                generateWorld(selectedOptions);
+            });
+            
+            // 세계 생성 함수
+            async function generateWorld(options) {
+                const loadingIndicator = showLoading('마법의 세계를 생성하는 중...');
+                try {
+                    // 로딩 상태 표시
+                    generateButton.textContent = '생성 중...';
+                    generateButton.disabled = true;
+                    
+                    // 데이터를 불러와 세계 생성
+                    const worldData = await fetchWorldData();
+                    
+                    // 세계 이름 생성
+                    const prefix = getRandomElement(worldData.names.prefixes);
+                    const suffix = getRandomElement(worldData.names.suffixes);
+                    const worldName = prefix + suffix;
+                    
+                    // 선택된 옵션에 맞는 요소 선택 - 더 직관적인 방식으로 변경
+                    let atmosphere, geography, technology, magic;
+                    let selectedRaces = [], selectedResources = [];
+                    
+                    // 분위기 결정
+                    if (options.atmosphere === 'random') {
+                        // 랜덤 분위기 선택 - random 배열에서 선택하거나 다른 키에서 선택
+                        const randomChance = Math.random();
+                        if (randomChance > 0.7 && worldData.atmospheres.random && worldData.atmospheres.random.length) {
+                            const randomAtmosphere = getRandomElement(worldData.atmospheres.random);
+                            atmosphere = randomAtmosphere.name;
+                        } else {
+                            const atmKeys = Object.keys(worldData.atmospheres).filter(key => key !== 'random');
+                            const randomAtmKey = getRandomElement(atmKeys);
+                            atmosphere = worldData.atmospheres[randomAtmKey].name;
+                        }
+                    } else {
+                        atmosphere = worldData.atmospheres[options.atmosphere].name;
+                    }
+                    
+                    // 지리 결정
+                    if (options.geography === 'random') {
+                        const geoKeys = Object.keys(worldData.geographies).filter(key => key !== 'random');
+                        const randomGeoKey = getRandomElement(geoKeys);
+                        geography = worldData.geographies[randomGeoKey].name;
+                    } else {
+                        geography = worldData.geographies[options.geography].name;
+                    }
+                    
+                    // 기술 수준 결정
+                    if (options.technology === 'random') {
+                        const techKeys = Object.keys(worldData.technologies).filter(key => key !== 'random');
+                        const randomTechKey = getRandomElement(techKeys);
+                        technology = worldData.technologies[randomTechKey].name;
+                    } else {
+                        technology = worldData.technologies[options.technology].name;
+                    }
+                    
+                    // 마법 수준 결정
+                    if (options.magic === 'random') {
+                        const magicKeys = Object.keys(worldData.magics).filter(key => key !== 'random');
+                        const randomMagicKey = getRandomElement(magicKeys);
+                        magic = worldData.magics[randomMagicKey].name;
+                    } else {
+                        magic = worldData.magics[options.magic].name;
+                    }
+                    
+                    // 종족 선택 - 사용자가 선택했다면 그것을 사용, 아니면 랜덤
+                    if (options.races && options.races.length > 0) {
+                        selectedRaces = options.races;
+                    } else {
+                        const raceCount = Math.floor(Math.random() * 3) + 2; // 2~4개 선택
+                        selectedRaces = getRandomElements(worldData.races, raceCount).map(race => race.name);
+                    }
+                    
+                    // 자원 선택 - 사용자가 선택했다면 그것을 사용, 아니면 랜덤
+                    if (options.resources && options.resources.length > 0) {
+                        selectedResources = options.resources;
+                    } else {
+                        const resourceCount = Math.floor(Math.random() * 3) + 2; // 2~4개 선택
+                        selectedResources = getRandomElements(worldData.resources, resourceCount).map(resource => resource.name);
+                    }
+                    
+                    // 세계 설명 생성
+                    const description = generateWorldDescription(
+                        worldName, atmosphere, geography, technology, magic, 
+                        selectedRaces, selectedResources, worldData.templates
+                    );
+                    
+                    // 결과 표시
+                    displayWorldResult(
+                        worldName, atmosphere, geography, technology, magic, 
+                        selectedRaces, selectedResources, description
+                    );
+                    
+                } catch (error) {
+                    console.error('세계 생성 중 오류 발생:', error);
+                    alert('세계 생성 중 오류가 발생했습니다. 다시 시도해주세요.');
+                } finally {
+                    // 버튼 상태 복원
+                    generateButton.textContent = '🌍 세계 생성하기';
+                    generateButton.disabled = false;
+                    hideLoading(loadingIndicator);
+                }
+            }
+            
+            // 세계 데이터 불러오기 함수
+            async function fetchWorldData() {
+                try {
+                    // 각 JSON 파일 불러오기
+                    const namesResponse = await fetch('/data/world/world_names.json');
+                    const atmospheresResponse = await fetch('/data/world/atmospheres.json');
+                    const geographiesResponse = await fetch('/data/world/geographies.json');
+                    const technologiesResponse = await fetch('/data/world/technologies.json');
+                    const magicsResponse = await fetch('/data/world/magics.json');
+                    const racesResponse = await fetch('/data/world/races.json');
+                    const resourcesResponse = await fetch('/data/world/resources.json');
+                    const templatesResponse = await fetch('/data/world/world_templates.json');
+                    
+                    // JSON으로 변환
+                    const names = await namesResponse.json();
+                    const atmospheres = await atmospheresResponse.json();
+                    const geographies = await geographiesResponse.json();
+                    const technologies = await technologiesResponse.json();
+                    const magics = await magicsResponse.json();
+                    const races = await racesResponse.json();
+                    const resources = await resourcesResponse.json();
+                    const templates = await templatesResponse.json();
+                    
+                    // 모든 데이터를 하나의 객체로 결합
+                    return {
+                        names,
+                        atmospheres,
+                        geographies,
+                        technologies,
+                        magics,
+                        races: races.races,
+                        resources: resources.resources,
+                        templates: templates.templates
+                    };
+                } catch (error) {
+                    console.error('데이터 로딩 중 오류 발생:', error);
+                    
+                    // 오류 발생 시 대체 데이터 반환 (로컬 개발용)
+                    return {
+                        names: {
+                            prefixes: ['아리', '엘', '테', '크로', '감', '드라', '실', '루', '미', '발'],
+                            suffixes: ['아나', '리아', '론', '니스', '도르', '가드', '타니아', '헤임', '란', '리온']
+                        },
+                        atmospheres: {
+                            bright: { name: '밝고 희망적인', description: '항상 밝은 빛이 비추고 희망이 넘치는' },
+                            dark: { name: '어둡고 음울한', description: '그림자가 드리워진 음울한 분위기의' },
+                            mysterious: { name: '신비롭고 초자연적인', description: '비밀과 수수께끼로 가득한 초자연적인' },
+                            magical: { name: '마법이 넘치는', description: '마법의 기운이 공기 중에 흐르는' },
+                            steampunk: { name: '증기와 기계가 공존하는', description: '증기 기관과 톱니바퀴가 작동하는' },
+                            random: [
+                                { name: '평화로운', description: '평화와 안정이 깃든' },
+                                { name: '혼돈스러운', description: '끊임없이 변화하고 예측할 수 없는' },
+                                { name: '우주적인', description: '별들과 우주의 신비로 가득한' }
+                            ]
+                        },
+                        geographies: {
+                            island: { name: '거대한 섬', description: '사방이 바다로 둘러싸인 거대한 섬으로 이루어진' },
+                            continent: { name: '광활한 대륙', description: '끝없이 펼쳐진 광활한 대륙으로 이루어진' },
+                            archipelago: { name: '수많은 섬으로 이루어진 군도', description: '크고 작은 수백 개의 섬으로 구성된' },
+                            floating: { name: '하늘에 떠 있는 땅', description: '구름 위에 떠 있는 신비로운 땅으로 구성된' },
+                            underground: { name: '깊고 넓은 지하 세계', description: '지표면 아래 깊숙이 펼쳐진 거대한 동굴 네트워크로 이루어진' }
+                        },
+                        technologies: {
+                            primitive: { name: '원시적인', description: '돌과 나무로 만든 도구를 사용하는' },
+                            medieval: { name: '중세 수준의', description: '철제 무기와 갑옷을 다루는 기술을 가진' },
+                            renaissance: { name: '르네상스 시대의', description: '예술과 과학이 발달하기 시작한' },
+                            industrial: { name: '산업혁명 시기의', description: '증기 기관과 공장이 등장한' },
+                            futuristic: { name: '미래적인', description: '고도로 발달된 과학 기술을 가진' }
+                        },
+                        magics: {
+                            none: { name: '마법이 존재하지 않는', description: '초자연적인 힘이 없이 과학과 논리만이 지배하는' },
+                            rare: { name: '마법이 희귀한', description: '소수의 선택받은 사람들만이 마법을 다룰 수 있는' },
+                            common: { name: '마법이 일상적인', description: '많은 사람들이 일상 생활에서 마법을 사용하는' },
+                            abundant: { name: '마법이 필수적인', description: '마법 없이는 사회가 기능할 수 없을 정도로 마법이 깊게 뿌리내린' },
+                            technological: { name: '마법과 기술이 융합된', description: '과학과 마법이 하나로 결합되어 발전한' }
+                        },
+                        races: [
+                            { name: '인간', description: '적응력이 뛰어나고 창의적인 종족' },
+                            { name: '엘프', description: '자연과 조화를 이루며 오래 사는 종족' },
+                            { name: '드워프', description: '산과 지하에 거주하며 장인 정신이 강한 종족' },
+                            { name: '오크', description: '강인한 체력과 전사의 기질을 가진 종족' },
+                            { name: '요정', description: '작고 날개를 가진 마법에 능한 종족' },
+                            { name: '고블린', description: '꾀가 많고 장난을 좋아하는 녹색 피부의 종족' },
+                            { name: '언데드', description: '죽음을 초월한 영혼을 가진 종족' }
+                        ],
+                        resources: [
+                            { name: '마나 크리스탈', description: '마법 에너지를 저장하고 변환할 수 있는 희귀한 광물' },
+                            { name: '월광 금속', description: '달빛을 받으면 빛나며 강해지는 특이한 금속' },
+                            { name: '하늘나무', description: '구름처럼 가볍지만 강철보다 단단한 희귀한 나무' },
+                            { name: '용의 비늘', description: '극도로 내열성이 강하고 빛을 반사하는 재료' },
+                            { name: '정령석', description: '자연의 정령이 깃든 신비로운 보석' }
+                        ],
+                        templates: [
+                            "{name}은(는) {geography} 세계입니다. {technology} 기술 수준을 가진 이곳은 {atmosphere} 분위기가 특징이며, {magic} 마법이 존재합니다. {races}이(가) 주요 종족으로 살고 있으며, {resources}와(과) 같은 귀중한 자원이 발견됩니다. 각 지역마다 독특한 문화와 역사가 있어 모험가들에게 무한한 탐험의 기회를 제공합니다.",
+                            
+                            "{atmosphere} 분위기의 {name} 세계는 {geography} 특성을 지니고 있습니다. 이곳의 주민들은 {technology} 기술을 발전시켰으며, {magic} 마법을 다룹니다. {races} 종족들이 이 세계의 주인이며, {resources} 같은 특별한 자원들을 활용해 문명을 발전시켰습니다. 이곳의 역사는 깊고 풍부하며, 아직 밝혀지지 않은 비밀이 많습니다.",
+                            
+                            "{name}의 세계는 {geography}로 구성되어 있으며, {atmosphere} 분위기가 항상 감돌고 있습니다. {races} 종족들은 {technology} 기술과 {magic} 마법을 결합하여 독특한 문화를 이루었습니다. 이 세계에서는 {resources}와(과) 같은 자원이 문명의 발전에 중요한 역할을 합니다. 여행자들은 이 세계의 경이로움에 압도되곤 합니다."
+                        ]
+                    };
+                }
+            }
+            
+            // 배열에서 랜덤 요소 하나 선택
+            function getRandomElement(array) {
+                return array[Math.floor(Math.random() * array.length)];
+            }
+            
+            // 배열에서 여러 개의 랜덤 요소 선택
+            function getRandomElements(array, count) {
+                const shuffled = [...array].sort(() => 0.5 - Math.random());
+                return shuffled.slice(0, count);
+            }
+            
+            // 세계 설명 생성
+            function generateWorldDescription(name, atmosphere, geography, technology, magic, races, resources, templates) {
+                const racesText = races.length > 1 
+                    ? races.slice(0, -1).join(', ') + '와(과) ' + races[races.length - 1]
+                    : races[0];
+                
+                const resourcesText = resources.length > 1 
+                    ? resources.slice(0, -1).join(', ') + '와(과) ' + resources[resources.length - 1]
+                    : resources[0];
+                
+                // 랜덤 템플릿 선택
+                const template = getRandomElement(templates);
+                
+                // 템플릿에 값 채우기
+                return template
+                    .replace('{name}', name)
+                    .replace('{atmosphere}', atmosphere)
+                    .replace('{geography}', geography)
+                    .replace('{technology}', technology)
+                    .replace('{magic}', magic)
+                    .replace('{races}', racesText)
+                    .replace('{resources}', resourcesText);
+            }
+            
+            // 결과 표시 함수
+            function displayWorldResult(name, atmosphere, geography, technology, magic, races, resources, description) {
+                document.getElementById('worldName').textContent = name;
+                document.getElementById('atmosphereResult').textContent = atmosphere;
+                document.getElementById('geographyResult').textContent = geography;
+                document.getElementById('technologyResult').textContent = technology;
+                document.getElementById('magicResult').textContent = magic;
+                document.getElementById('racesResult').textContent = races.join(', ');
+                document.getElementById('resourcesResult').textContent = resources.join(', ');
+                document.getElementById('worldDescription').textContent = description;
+                
+                // 결과 영역 표시
+                const resultElement = document.getElementById('worldResult');
+                resultElement.classList.add('visible');
+                resultElement.scrollIntoView({ behavior: 'smooth' });
+                
+                // 이전 이벤트 리스너 제거 (중복 방지)
+                const copyButton = document.querySelector('.copy-button');
+                const saveButton = document.querySelector('.save-button');
+                
+                copyButton.replaceWith(copyButton.cloneNode(true));
+                saveButton.replaceWith(saveButton.cloneNode(true));
+                
+                // 새 이벤트 리스너 등록
+                document.querySelector('.copy-button').addEventListener('click', function() {
+                    const textToCopy = `${name}\n\n` +
+                        `분위기: ${atmosphere}\n` +
+                        `지리: ${geography}\n` +
+                        `기술 수준: ${technology}\n` +
+                        `마법 수준: ${magic}\n` +
+                        `주요 종족: ${races.join(', ')}\n` +
+                        `자원: ${resources.join(', ')}\n\n` +
+                        `설명:\n${description}`;
+                    
+                    navigator.clipboard.writeText(textToCopy)
+                        .then(() => alert('세계 정보가 클립보드에 복사되었습니다!'))
+                        .catch(err => console.error('클립보드에 복사하는 데 실패했습니다:', err));
+                });
+                
+                // 저장 버튼 - 로컬 스토리지에 저장
+                document.querySelector('.save-button').addEventListener('click', function() {
+                    const worldData = {
+                        name,
+                        atmosphere,
+                        geography,
+                        technology, 
+                        magic,
+                        races,
+                        resources,
+                        description,
+                        created: new Date().toISOString()
+                    };
+                    
+                    // 기존 저장된 세계들 불러오기
+                    let savedWorlds = JSON.parse(localStorage.getItem('fantasyWorlds') || '[]');
+                    
+                    // 새 세계 추가
+                    savedWorlds.push(worldData);
+                    
+                    // 저장
+                    localStorage.setItem('fantasyWorlds', JSON.stringify(savedWorlds));
+                    
+                    alert('세계가 저장되었습니다!');
+                });
+            }
+        });
+    </script>
 </body>
 </html>
