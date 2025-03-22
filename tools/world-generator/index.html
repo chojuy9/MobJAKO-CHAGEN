@@ -707,146 +707,60 @@
                 generateWorld(selectedOptions);
             });
             
-            // 세계 생성 함수
-            async function generateWorld(options) {
-                const loadingIndicator = showLoading('마법의 세계를 생성하는 중...');
-                try {
-                    // 로딩 상태 표시
-                    generateButton.textContent = '생성 중...';
-                    generateButton.disabled = true;
-                    
-                    // 데이터를 불러와 세계 생성
-                    const worldData = await fetchWorldData();
-                    
-                    // 세계 이름 생성
-                    const prefix = getRandomElement(worldData.names.prefixes);
-                    const suffix = getRandomElement(worldData.names.suffixes);
-                    const worldName = prefix + suffix;
-                    
-                    // 선택된 옵션에 맞는 요소 선택 - 더 직관적인 방식으로 변경
-                    let atmosphere, geography, technology, magic;
-                    let selectedRaces = [], selectedResources = [];
-                    
-                    // 분위기 결정
-                    if (options.atmosphere === 'random') {
-                        // 랜덤 분위기 선택 - random 배열에서 선택하거나 다른 키에서 선택
-                        const randomChance = Math.random();
-                        if (randomChance > 0.7 && worldData.atmospheres.random && worldData.atmospheres.random.length) {
-                            const randomAtmosphere = getRandomElement(worldData.atmospheres.random);
-                            atmosphere = randomAtmosphere.name;
-                        } else {
-                            const atmKeys = Object.keys(worldData.atmospheres).filter(key => key !== 'random');
-                            const randomAtmKey = getRandomElement(atmKeys);
-                            atmosphere = worldData.atmospheres[randomAtmKey].name;
-                        }
-                    } else {
-                        atmosphere = worldData.atmospheres[options.atmosphere].name;
-                    }
-                    
-                    // 지리 결정
-                    if (options.geography === 'random') {
-                        const geoKeys = Object.keys(worldData.geographies).filter(key => key !== 'random');
-                        const randomGeoKey = getRandomElement(geoKeys);
-                        geography = worldData.geographies[randomGeoKey].name;
-                    } else {
-                        geography = worldData.geographies[options.geography].name;
-                    }
-                    
-                    // 기술 수준 결정
-                    if (options.technology === 'random') {
-                        const techKeys = Object.keys(worldData.technologies).filter(key => key !== 'random');
-                        const randomTechKey = getRandomElement(techKeys);
-                        technology = worldData.technologies[randomTechKey].name;
-                    } else {
-                        technology = worldData.technologies[options.technology].name;
-                    }
-                    
-                    // 마법 수준 결정
-                    if (options.magic === 'random') {
-                        const magicKeys = Object.keys(worldData.magics).filter(key => key !== 'random');
-                        const randomMagicKey = getRandomElement(magicKeys);
-                        magic = worldData.magics[randomMagicKey].name;
-                    } else {
-                        magic = worldData.magics[options.magic].name;
-                    }
-                    
-                    // 종족 선택 - 사용자가 선택했다면 그것을 사용, 아니면 랜덤
-                    if (options.races && options.races.length > 0) {
-                        selectedRaces = options.races;
-                    } else {
-                        const raceCount = Math.floor(Math.random() * 3) + 2; // 2~4개 선택
-                        selectedRaces = getRandomElements(worldData.races, raceCount).map(race => race.name);
-                    }
-                    
-                    // 자원 선택 - 사용자가 선택했다면 그것을 사용, 아니면 랜덤
-                    if (options.resources && options.resources.length > 0) {
-                        selectedResources = options.resources;
-                    } else {
-                        const resourceCount = Math.floor(Math.random() * 3) + 2; // 2~4개 선택
-                        selectedResources = getRandomElements(worldData.resources, resourceCount).map(resource => resource.name);
-                    }
-                    
-                    // 세계 설명 생성
-                    const description = generateWorldDescription(
-                        worldName, atmosphere, geography, technology, magic, 
-                        selectedRaces, selectedResources, worldData.templates
-                    );
-                    
-                    // 결과 표시
-                    displayWorldResult(
-                        worldName, atmosphere, geography, technology, magic, 
-                        selectedRaces, selectedResources, description
-                    );
-                    
-                } catch (error) {
-                    console.error('세계 생성 중 오류 발생:', error);
-                    alert('세계 생성 중 오류가 발생했습니다. 다시 시도해주세요.');
-                } finally {
-                    // 버튼 상태 복원
-                    generateButton.textContent = '🌍 세계 생성하기';
-                    generateButton.disabled = false;
-                    hideLoading(loadingIndicator);
-                }
-            }
-            
             // 세계 데이터 불러오기 함수
-            async function fetchWorldData() {
-                try {
-                    // 각 JSON 파일 불러오기
-                    const namesResponse = await fetch('${basePath}data/world/world_names.json');
-                    const atmospheresResponse = await fetch('${basePath}data/world/atmospheres.json');
-                    const geographiesResponse = await fetch('${basePath}data/world/geographies.json');
-                    const technologiesResponse = await fetch('${basePath}data/world/technologies.json');
-                    const magicsResponse = await fetch('${basePath}data/world/magics.json');
-                    const racesResponse = await fetch('${basePath}data/world/races.json');
-                    const resourcesResponse = await fetch('${basePath}data/world/resources.json');
-                    const templatesResponse = await fetch('${basePath}data/world/world_templates.json');
-                    
-                    // JSON으로 변환
-                    const names = await namesResponse.json();
-                    const atmospheres = await atmospheresResponse.json();
-                    const geographies = await geographiesResponse.json();
-                    const technologies = await technologiesResponse.json();
-                    const magics = await magicsResponse.json();
-                    const races = await racesResponse.json();
-                    const resources = await resourcesResponse.json();
-                    const templates = await templatesResponse.json();
-                    
-                    // 모든 데이터를 하나의 객체로 결합
-                    return {
-                        names,
-                        atmospheres,
-                        geographies,
-                        technologies,
-                        magics,
-                        races: races.races,
-                        resources: resources.resources,
-                        templates: templates.templates
-                    };
-                } catch (error) {
-                    console.error('데이터 로딩 중 오류 발생:', error);
-                    
-                    // 오류 발생 시 대체 데이터 반환 (로컬 개발용)
+			async function fetchWorldData() {
+				try {
+				// 기본 경로 설정 (두 번째 코드의 getBasePath 함수 활용)
+				const basePath = getBasePath();
+				console.log('데이터 경로:', basePath);
+        
+				// 각 JSON 파일 불러오기
+				const namesResponse = await fetch(`${basePath}data/world/world_names.json`);
+				const atmospheresResponse = await fetch(`${basePath}data/world/atmospheres.json`);
+				const geographiesResponse = await fetch(`${basePath}data/world/geographies.json`);
+				const technologiesResponse = await fetch(`${basePath}data/world/technologies.json`);
+				const magicsResponse = await fetch(`${basePath}data/world/magics.json`);
+				const racesResponse = await fetch(`${basePath}data/world/races.json`);
+				const resourcesResponse = await fetch(`${basePath}data/world/resources.json`);
+				const templatesResponse = await fetch(`${basePath}data/world/world_templates.json`);
+				
+			// 응답 상태 확인
+				if (!namesResponse.ok || !atmospheresResponse.ok || !geographiesResponse.ok || 
+					!technologiesResponse.ok || !magicsResponse.ok || !racesResponse.ok || 
+					!resourcesResponse.ok || !templatesResponse.ok) {
+					throw new Error('일부 데이터 파일을 불러오는데 실패했습니다.');
+				}
+        
+				// JSON으로 변환
+				const names = await namesResponse.json();
+				const atmospheres = await atmospheresResponse.json();
+				const geographies = await geographiesResponse.json();
+				const technologies = await technologiesResponse.json();
+				const magics = await magicsResponse.json();
+				const races = await racesResponse.json();
+				const resources = await resourcesResponse.json();
+				const templates = await templatesResponse.json();
+        
+				console.log('모든 세계 데이터 로드 완료!');
+        
+				// 모든 데이터를 하나의 객체로 결합
+				return {
+					names,
+					atmospheres,
+					geographies,
+					technologies,
+					magics,
+					races: races.races,
+					resources: resources.resources,
+					templates: templates.templates
+				};
+			} catch (error) {
+				console.error('데이터 로딩 중 오류 발생:', error);
+        
+				// 오류 발생 시에도 알림을 표시하도록 추가
+				alert('데이터를 불러오는 중 오류가 발생했습니다. 페이지를 새로고침하거나 나중에 다시 시도해주세요.');
+        
+				// 대체 데이터는 그대로 유지 (로컬 개발용)
                     return {
                         names: {
                             prefixes: ['아리', '엘', '테', '크로', '감', '드라', '실', '루', '미', '발'],
@@ -911,6 +825,23 @@
                     };
                 }
             }
+
+		// getBasePath 함수 추가 (두 번째 코드에서 참조)
+		function getBasePath() {
+			const pathParts = window.location.pathname.split('/');
+			let basePath = '/';
+    
+			// MobJAKO-CHAGEN이 경로에 있는지 확인
+			const repoIndex = pathParts.indexOf('MobJAKO-CHAGEN');
+			
+			if (repoIndex !== -1) {
+				// 경로에 MobJAKO-CHAGEN이 있는 경우, 해당 부분까지의 경로 사용
+				basePath = '/' + pathParts.slice(1, repoIndex + 1).join('/') + '/';
+			}
+    
+			console.log('계산된 기본 경로:', basePath);
+			return basePath;
+		}
             
             // 배열에서 랜덤 요소 하나 선택
             function getRandomElement(array) {
