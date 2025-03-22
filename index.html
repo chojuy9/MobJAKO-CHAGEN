@@ -5,22 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>모브 캐릭터 생성기</title>
     <style>
+<style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
         
+        /* ==================== 기본 스타일 변수 정의 ==================== */
+        /* 여기에서 색상이나 크기 등의 기본 변수를 수정하면 전체 사이트에 적용됩니다 */
         :root {
-            --primary-color: #6200ea;
-            --primary-light: #9d46ff;
-            --primary-dark: #3700b3;
-            --secondary-color: #03dac6;
-            --text-color: #333333;
-            --text-light: #666666;
-            --background: #f8f9fa;
-            --card-background: #ffffff;
-            --border-radius: 12px;
-            --shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-            --transition: all 0.3s ease;
+            --primary-color: #6200ea;    /* 주 색상 - 보라색 */
+            --primary-light: #9d46ff;    /* 밝은 보라색 */
+            --primary-dark: #3700b3;     /* 어두운 보라색 */
+            --secondary-color: #03dac6;  /* 보조 색상 - 청록색 */
+            --text-color: #333333;       /* 기본 텍스트 색상 */
+            --text-light: #666666;       /* 밝은 텍스트 색상 */
+            --background: #f8f9fa;       /* 배경 색상 */
+            --card-background: #ffffff;  /* 카드 배경 색상 */
+            --border-radius: 12px;       /* 모서리 둥글기 */
+            --shadow: 0 8px 16px rgba(0, 0, 0, 0.1);  /* 그림자 효과 */
+            --transition: all 0.3s ease; /* 애니메이션 속도 */
+            --header-height: 70px;       /* 헤더 높이 */
         }
         
+        /* ==================== 기본 리셋 및 글꼴 설정 ==================== */
         * {
             margin: 0;
             padding: 0;
@@ -35,7 +40,148 @@
             background-color: var(--background);
             color: var(--text-color);
             line-height: 1.6;
+            /* 상단 메뉴바 높이만큼 패딩 추가 */
+            padding-top: calc(var(--header-height) + 30px);
         }
+        
+        /* ==================== 네비게이션 메뉴 스타일 ==================== */
+        /* 네비게이션 메뉴 컨테이너 */
+        .nav-container {
+            position: fixed;          /* 스크롤해도 상단에 고정 */
+            top: 0;                   /* 화면 최상단에 배치 */
+            left: 0;                  /* 화면 왼쪽에 배치 */
+            width: 100%;              /* 전체 너비 사용 */
+            height: var(--header-height); /* 높이 설정 */
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); /* 그라데이션 배경 */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+            z-index: 1000;            /* 다른 요소보다 위에 표시 */
+            display: flex;            /* 플렉스 레이아웃 사용 */
+            align-items: center;      /* 세로 중앙 정렬 */
+            justify-content: center;  /* 가로 중앙 정렬 */
+            padding: 0 20px;          /* 좌우 패딩 */
+        }
+        
+        /* 네비게이션 메뉴 내부 컨테이너 (최대 너비 제한) */
+        .nav-inner {
+            width: 100%;              /* 전체 너비 사용 */
+            max-width: 1200px;        /* 최대 너비 제한 */
+            display: flex;            /* 플렉스 레이아웃 사용 */
+            justify-content: space-between; /* 요소 사이 공간 균등 배분 */
+            align-items: center;      /* 세로 중앙 정렬 */
+        }
+        
+        /* 로고 스타일 */
+        .nav-logo {
+            font-size: 1.5rem;       /* 글꼴 크기 */
+            font-weight: 700;        /* 굵기 */
+            color: white;            /* 색상 */
+            text-decoration: none;   /* 밑줄 제거 */
+            display: flex;           /* 플렉스 레이아웃 사용 */
+            align-items: center;     /* 세로 중앙 정렬 */
+        }
+        
+        /* 로고 아이콘 스타일 */
+        .nav-logo i {
+            margin-right: 8px;      /* 오른쪽 여백 */
+            font-size: 1.8rem;      /* 아이콘 크기 */
+        }
+        
+        /* 메뉴 링크 컨테이너 */
+        .nav-links {
+            display: flex;          /* 플렉스 레이아웃 사용 */
+            list-style: none;       /* 리스트 스타일 제거 */
+        }
+        
+        /* 메뉴 링크 아이템 */
+        .nav-links li {
+            margin: 0 5px;          /* 여백 설정 */
+        }
+        
+        /* 메뉴 링크 스타일 */
+        .nav-links a {
+            color: white;           /* 텍스트 색상 */
+            text-decoration: none;  /* 밑줄 제거 */
+            padding: 8px 15px;      /* 패딩 */
+            border-radius: 20px;    /* 둥근 모서리 */
+            transition: var(--transition); /* 애니메이션 효과 */
+            font-weight: 500;       /* 글꼴 굵기 */
+        }
+        
+        /* 링크 호버 효과 */
+        .nav-links a:hover {
+            background-color: rgba(255, 255, 255, 0.2); /* 반투명 배경 */
+        }
+        
+        /* 현재 활성화된 페이지 링크 스타일 */
+        .nav-links a.active {
+            background-color: rgba(255, 255, 255, 0.3); /* 더 진한 반투명 배경 */
+            font-weight: 700;       /* 더 두꺼운 글꼴 */
+        }
+        
+        /* 모바일 메뉴 토글 버튼 */
+        .menu-toggle {
+            display: none;          /* 기본적으로 숨김 */
+            cursor: pointer;        /* 포인터 커서 */
+            flex-direction: column; /* 세로 방향 정렬 */
+            justify-content: space-between; /* 사이 공간 균등 배분 */
+            width: 30px;           /* 너비 */
+            height: 21px;          /* 높이 */
+        }
+        
+        /* 햄버거 아이콘 줄 */
+        .menu-toggle span {
+            display: block;        /* 블록 요소로 표시 */
+            height: 3px;           /* 높이 */
+            width: 100%;           /* 너비 */
+            background-color: white; /* 배경색 */
+            border-radius: 3px;    /* 둥근 모서리 */
+            transition: var(--transition); /* 애니메이션 효과 */
+        }
+        
+        /* ==================== 반응형 디자인 (모바일 메뉴) ==================== */
+        @media (max-width: 768px) {
+            /* 메뉴 토글 버튼 표시 */
+            .menu-toggle {
+                display: flex;     /* 모바일에서는 표시 */
+            }
+            
+            /* 메뉴 링크 숨김 및 위치 조정 */
+            .nav-links {
+                position: absolute; /* 절대 위치 */
+                top: var(--header-height); /* 헤더 아래에 위치 */
+                left: 0;            /* 왼쪽 정렬 */
+                width: 100%;        /* 전체 너비 */
+                flex-direction: column; /* 세로 방향 정렬 */
+                background: linear-gradient(180deg, var(--primary-color), var(--primary-dark)); /* 배경 */
+                padding: 10px 0;    /* 패딩 */
+                box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1); /* 그림자 */
+                transform: translateY(-150%); /* 기본적으로 위로 숨김 */
+                transition: transform 0.4s ease; /* 애니메이션 효과 */
+                align-items: center; /* 가운데 정렬 */
+            }
+            
+            /* 활성화된 메뉴 표시 */
+            .nav-links.active {
+                transform: translateY(0); /* 화면에 표시 */
+            }
+            
+            /* 모바일에서 메뉴 링크 스타일 조정 */
+            .nav-links li {
+                width: 100%;       /* 전체 너비 */
+                text-align: center; /* 가운데 정렬 */
+                margin: 0;         /* 여백 제거 */
+            }
+            
+            /* 모바일에서 링크 패딩 조정 */
+            .nav-links a {
+                padding: 12px 15px; /* 패딩 증가 */
+                display: block;     /* 블록 요소로 표시 */
+                width: 100%;        /* 전체 너비 */
+                border-radius: 0;   /* 모서리 둥글기 제거 */
+            }
+        }
+        
+        /* ==================== 기존 스타일 계속... ==================== */
         
         .container {
             background-color: var(--card-background);
@@ -291,8 +437,93 @@
             데이터를 불러오는 중입니다...
         </div>
     </div>
+    
+    <!-- ==================== 네비게이션 메뉴 (여기서 메뉴를 수정할 수 있습니다) ==================== -->
+    <nav class="nav-container">
+        <div class="nav-inner">
+            <!-- 로고 및 사이트 제목 (href는 홈페이지 URL로 변경하세요) -->
+            <a href="/index.html" class="nav-logo">
+                <i class="fas fa-dice-d20"></i> <!-- 아이콘은 Font Awesome에서 선택할 수 있습니다 -->
+                판타지 툴킷
+            </a>
+            
+            <!-- 햄버거 메뉴 토글 버튼 (모바일 전용) -->
+            <div class="menu-toggle" id="mobile-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            
+            <!-- 메뉴 링크 목록 -->
+            <ul class="nav-links" id="nav-menu">
+                <!-- 각 메뉴 항목: href 속성을 실제 페이지 URL로 변경하세요 -->
+                <li><a href="/index.html">홈</a></li>
+                <li><a href="/tools/mob-generator/index.html" class="active">모브 생성기</a></li>
+                <li><a href="/tools/npc-generator/index.html">NPC 생성기</a></li>
+                <li><a href="/tools/dungeon-generator/index.html">던전 생성기</a></li>
+                <li><a href="/about.html">소개</a></li>
+            </ul>
+        </div>
+    </nav>
 
     <script>
+        // ==================== 네비게이션 메뉴 관련 JavaScript ==================== //
+        document.addEventListener('DOMContentLoaded', function() {
+            // 모바일 메뉴 토글 버튼 클릭 이벤트
+            const mobileMenu = document.getElementById('mobile-menu');
+            const navMenu = document.getElementById('nav-menu');
+            
+            // 햄버거 메뉴 클릭 시 메뉴 표시/숨김 전환
+            mobileMenu.addEventListener('click', function() {
+                navMenu.classList.toggle('active');
+                
+                // 햄버거 아이콘을 X 아이콘으로 애니메이션 (나중에 추가할 수 있음)
+                // 여기에 햄버거 아이콘 애니메이션 코드를 추가할 수 있습니다
+            });
+            
+            // 현재 활성화된 메뉴 항목 표시하기
+            highlightCurrentPage();
+            
+            // 창 크기 변경 시 모바일 메뉴 상태 초기화 (선택사항)
+            window.addEventListener('resize', function() {
+                if (window.innerWidth > 768) {
+                    navMenu.classList.remove('active');
+                }
+            });
+        });
+        
+        /**
+         * 현재 페이지 URL을 확인하여 해당하는 메뉴 항목을 강조 표시합니다.
+         * 이 함수는 URL 경로를 확인하고 일치하는 메뉴 링크에 'active' 클래스를 추가합니다.
+         */
+        function highlightCurrentPage() {
+            // 현재 페이지 경로 가져오기
+            const currentPath = window.location.pathname;
+            
+            // 모든 메뉴 링크 요소 가져오기
+            const navLinks = document.querySelectorAll('.nav-links a');
+            
+            // 모든 링크에서 'active' 클래스 제거
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                
+                // 링크 경로와 현재 경로 비교
+                if (link.getAttribute('href') === currentPath || 
+                    currentPath.includes(link.getAttribute('href')) && 
+                    link.getAttribute('href') !== '/index.html') {
+                    // 일치하는 링크에 'active' 클래스 추가
+                    link.classList.add('active');
+                }
+            });
+            
+            // 홈 페이지 특별 처리 (정확히 일치할 경우에만)
+            if (currentPath === '/' || currentPath === '/index.html') {
+                const homeLink = document.querySelector('.nav-links a[href="/index.html"]');
+                if (homeLink) homeLink.classList.add('active');
+            }
+        }
+        
+        // ==================== 캐릭터 생성기 관련 JavaScript ==================== //
         // 캐릭터 데이터베이스 객체
         let characterDB = {
             // 기본 데이터 (로드 실패 시 사용)
@@ -382,38 +613,35 @@
         
         // 경로 감지 함수
         function getBasePath() {
-            // 현재 호스트 가져오기
+            // 현재 URL 정보 가져오기
             const currentHost = window.location.hostname;
             const currentPath = window.location.pathname;
             
-            // 기본 경로 설정 - 현재 디렉토리를 기본으로 사용
-            let basePath = './';
+            console.log('현재 호스트:', currentHost);
+            console.log('현재 경로:', currentPath);
             
-            // 경로에서 파일명 제거하기 위한 처리
-            if (currentPath.includes('.')) {
-                // 마지막 '/' 이후의 내용을 제거
-                const pathParts = currentPath.split('/');
-                pathParts.pop(); // 파일명 제거
-                basePath = pathParts.join('/');
-                
-                // 경로가 비어있지 않으면 끝에 '/' 추가
-                if (basePath && !basePath.endsWith('/')) {
-                    basePath += '/';
-                }
-            }
-            
-            // GitHub Pages인 경우 특별 처리
+            // GitHub Pages인 경우 특별 처리 (username.github.io/reponame 형태)
             if (currentHost.includes('github.io')) {
-                const repoName = currentHost.split('.')[0];
-                // GitHub Pages에서는 저장소 이름이 경로의 일부가 됨
-                if (currentPath.includes('/' + repoName + '/')) {
-                    return currentPath.substring(0, currentPath.lastIndexOf('/') + 1);
+                // GitHub Pages 주소 형식 처리
+                const pathParts = currentPath.split('/').filter(part => part); // 빈 문자열 제거
+                
+                // 저장소 이름이 포함된 경로 구성
+                if (pathParts.length > 0) {
+                    const repoName = pathParts[0]; // 첫 번째 경로 부분이 저장소 이름
+                    console.log('감지된 저장소 이름:', repoName);
+                    return `/${repoName}/`;
                 }
-                return '/' + repoName + '/';
+                
+                return '/'; // 루트 경로
             }
             
-            console.log('감지된 기본 경로:', basePath);
-            return basePath;
+            // 로컬 환경이나 다른 웹 서버인 경우
+            if (currentHost === 'localhost' || currentHost === '127.0.0.1') {
+                return './'; // 로컬 테스트용 상대 경로
+            }
+            
+            // 그 외 일반 웹 서버 경우 상대 경로 사용
+            return './';
         }
 
         // 데이터 로드 시도 함수
