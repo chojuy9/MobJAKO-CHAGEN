@@ -4,6 +4,6 @@
     
     "{atmosphere} 분위기의 {name} 세계는 {geography} 특성을 지니고 있습니다. 이곳의 주민들은 {technology} 기술을 발전시켰으며, {magic} 세계입니다. {races} 종족들이 이 세계의 주인이며, {resources} 같은 특별한 자원들을 활용해 문명을 발전시켰습니다.",
     
-    "{name}의 세계는 {geography}로 구성되어 있으며, {atmosphere} 분위기가 항상 감돌고 있습니다. {races} 종족들은 {technology} 기술과 {magic} 마법을 결합하여 독특한 문화를 이루었습니다. 이 세계에서는 {resources}와(과) 같은 자원이 문명의 발전에 중요한 역할을 합니다."
+    "{name}의 세계는 {geography}로 구성되어 있으며, {atmosphere} 분위기가 항상 감돌고 있습니다. {races} 종족들은 {technology} 기술과 {magic} 을 결합하여 독특한 문화를 이루었습니다. 이 세계에서는 {resources}와(과) 같은 자원이 문명의 발전에 중요한 역할을 합니다."
   ]
 }
