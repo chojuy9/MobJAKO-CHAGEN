@@ -7,128 +7,62 @@
     <!-- 기본 스타일시트 로드 -->
     <link rel="stylesheet" href="../../assets/css/main.css">
     <style>
-        /* 준비 중 페이지 전용 스타일 */
-        .coming-soon {
-            text-align: center;
-            padding: 60px 30px;
-            margin: 40px 0;
-            background: linear-gradient(135deg, rgba(173, 111, 255, 0.1), rgba(255, 111, 215, 0.1));
-            border-radius: var(--border-radius);
-            position: relative;
-            overflow: hidden;
-            border: 2px dashed var(--primary-light);
+        /* 로딩 스피너 스타일 추가 */
+        .loading-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 20px;
         }
         
-        .coming-soon-icon {
-            font-size: 80px;
-            margin-bottom: 20px;
-            display: inline-block;
-            animation: bounce 2s infinite;
-        }
-        
-        .coming-soon-title {
-            font-size: 2.5rem;
+        .loading-text {
+            margin-top: 15px;
             color: var(--primary-color);
-            margin-bottom: 20px;
-            font-family: 'Jua', sans-serif;
-        }
-        
-        .coming-soon-text {
-            font-size: 1.2rem;
-            color: var(--text-color);
-            max-width: 600px;
-            margin: 0 auto 30px;
-            line-height: 1.6;
-        }
-        
-        .coming-soon::before {
-            content: "🔮";
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            font-size: 24px;
-            animation: bounce 2s infinite;
-            animation-delay: 0.3s;
-        }
-        
-        .coming-soon::after {
-            content: "✨";
-            position: absolute;
-            bottom: 20px;
-            right: 20px;
-            font-size: 24px;
-            animation: bounce 2s infinite;
-            animation-delay: 0.6s;
-        }
-        
-        .feature-list {
-            text-align: left;
-            max-width: 500px;
-            margin: 0 auto 30px;
-            background-color: white;
-            padding: 20px;
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-        }
-        
-        .feature-list h3 {
-            color: var(--primary-dark);
-            font-family: 'Jua', sans-serif;
-            margin-bottom: 15px;
-            text-align: center;
-        }
-        
-        .feature-list ul {
-            padding-left: 20px;
-        }
-        
-        .feature-list li {
-            margin-bottom: 10px;
-            position: relative;
-            padding-left: 25px;
-        }
-        
-        .feature-list li::before {
-            content: "💜";
-            position: absolute;
-            left: 0;
-            color: var(--primary-color);
-        }
-        
-        .back-button {
-            display: inline-block;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            text-decoration: none;
-            padding: 12px 25px;
-            border-radius: 30px;
             font-weight: 500;
-            transition: var(--transition);
-            font-family: 'Jua', sans-serif;
+        }
+        
+        /* 던전 생성기 스타일 조정 */
+        .result-output {
+            margin-top: 30px;
+            border-top: 1px dashed var(--primary-light);
+            padding-top: 20px;
+        }
+        
+        .result-textarea {
+            width: 100%;
+            min-height: 200px;
+            padding: 15px;
+            border: 2px solid var(--primary-light);
+            border-radius: var(--border-radius);
+            background-color: white;
+            font-family: monospace;
+            resize: vertical;
+            margin-bottom: 15px;
+        }
+        
+        /* 오류 컨테이너 스타일 */
+        .error-container {
+            text-align: center;
+            padding: 30px;
+            background-color: rgba(229, 57, 53, 0.1);
+            border-radius: var(--border-radius);
+            border-left: 4px solid #e53935;
+            margin: 20px 0;
+        }
+        
+        .error-icon {
+            font-size: 32px;
+            margin-bottom: 15px;
+        }
+        
+        .retry-btn {
+            background: linear-gradient(135deg, #e53935, #ff5252);
             margin-top: 20px;
         }
         
-        .back-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(173, 111, 255, 0.4);
-        }
-        
-        .footer {
-            text-align: center;
-            padding: 30px;
-            color: var(--text-light);
-            font-size: 0.9rem;
-            border-top: 1px dashed var(--primary-light);
-            margin-top: 30px;
-        }
-        
-        .footer a {
-            color: var(--primary-color);
-            text-decoration: none;
-        }
-        
-        .footer a:hover {
-            text-decoration: underline;
+        .retry-btn:hover {
+            background: linear-gradient(135deg, #ff5252, #e53935);
         }
     </style>
 </head>
@@ -137,9 +71,8 @@
     <nav class="nav-container">
         <div class="nav-inner">
             <!-- 로고 및 사이트 제목 -->
-            <a href="/" class="nav-logo">
-                <i class="fas fa-dice-d20"></i>
-                ✨ 판타지 툴킷 ✨
+            <a href="/MobJAKO-CHAGEN" class="nav-logo">
+                <i class="fas fa-magic"></i> 판타지 툴킷
             </a>
             
             <!-- 햄버거 메뉴 토글 버튼 (모바일 전용) -->
@@ -154,7 +87,7 @@
                 <li><a href="/MobJAKO-CHAGEN">홈</a></li>
                 <li><a href="/MobJAKO-CHAGEN/tools/mob-generator/">모브 생성기</a></li>
                 <li><a href="/MobJAKO-CHAGEN/tools/world-generator/">세계 생성기</a></li>
-                <li><a href="/MobJAKO-CHAGEN/tools/dungeon-generator/">던전 생성기</a></li>
+                <li><a href="/MobJAKO-CHAGEN/tools/dungeon-generator/" class="active">던전 생성기</a></li>
                 <li><a href="/MobJAKO-CHAGEN/about.html">소개</a></li>
             </ul>
         </div>
@@ -164,26 +97,71 @@
     <div class="container">
         <h1>던전 생성기</h1>
         
-        <div class="coming-soon">
-            <div class="coming-soon-icon">🏰</div>
-            <h2 class="coming-soon-title">던전 건설 중!</h2>
-            <p class="coming-soon-text">
-                더 깊고 신비로운 던전을 만들기 위해 건축가들이 열심히 일하고 있어요.
-                곧 모험을 떠날 수 있을 거예요!
-            </p>
-            
-            <div class="feature-list">
-                <h3>예정된 기능들</h3>
-                <ul>
-                    <li>맵 자동 생성 및 시각화</li>
-                    <li>방, 복도, 함정 등 다양한 요소</li>
-                    <li>던전 테마 및 분위기 설정</li>
-                    <li>몬스터 및 보물 배치</li>
-                    <li>던전 지도 내보내기 기능</li>
-                </ul>
+        <div class="dungeon-generator" id="dungeon-generator">
+            <!-- 로딩 상태 표시 -->
+            <div class="loading-container" id="loading-container">
+                <div class="loading-spinner"></div>
+                <p class="loading-text">데이터를 불러오는 중입니다...</p>
             </div>
             
-            <a href="/MobJAKO-CHAGEN" class="back-button">홈으로 돌아가기</a>
+            <!-- 오류 표시 -->
+            <div class="error-container" id="error-container" style="display: none;">
+                <div class="error-icon">⚠️</div>
+                <h3>데이터 로드 오류</h3>
+                <p>던전 데이터를 불러오는 중 문제가 발생했습니다.</p>
+                <button class="retry-btn" id="retry-btn">다시 시도</button>
+            </div>
+            
+            <!-- 던전 생성 폼 -->
+            <form id="dungeon-form" style="display: none;" class="filter-section">
+                <h3 class="filter-title">던전 설정</h3>
+                <div class="filter-options">
+                    <div class="filter-group">
+                        <label for="dungeon-floors">던전 층수</label>
+                        <select class="form-control" id="dungeon-floors"></select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="dungeon-structure">던전 구조</label>
+                        <select class="form-control" id="dungeon-structure"></select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="dungeon-atmosphere">던전 분위기</label>
+                        <select class="form-control" id="dungeon-atmosphere"></select>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn" id="generate-btn">던전 생성하기</button>
+            </form>
+            
+            <!-- 결과 표시 영역 -->
+            <div class="result-container" id="result-container" style="display: none;">
+                <div class="result-header">
+                    <h2 class="result-title">던전 생성 결과</h2>
+                    <button class="copy-btn" id="copy-btn">결과 생성하기</button>
+                </div>
+                
+                <div class="character-attributes" id="dungeon-info">
+                    <!-- 여기에 던전 정보가 표시됩니다 -->
+                </div>
+                
+                <div class="available-monsters">
+                    <h3>선택 가능한 몬스터</h3>
+                    <div class="monsters-grid" id="available-monsters-grid">
+                        <!-- 여기에 선택 가능한 몬스터 목록이 표시됩니다 -->
+                    </div>
+                </div>
+                
+                <div class="monster-list" id="selected-monsters">
+                    <h3>배치된 몬스터</h3>
+                    <div class="monster-list-container">
+                        <ul id="selected-monsters-list">
+                            <!-- 여기에 선택된 몬스터 목록이 표시됩니다 -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
         
         <!-- 푸터 -->
@@ -200,7 +178,8 @@
         </footer>
     </div>
 
-    <!-- 공통 자바스크립트 로드 -->
+    <!-- 자바스크립트 -->
     <script src="../../assets/js/common.js"></script>
+    <script src="../../tools/js/dungeon-generator.js"></script>
 </body>
 </html>
