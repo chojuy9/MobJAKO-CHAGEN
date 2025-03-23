@@ -87,8 +87,30 @@ async function initializeApp() {
         console.log("앱 초기화 시작");
         showLoading(true);
         
-        // 기본 던전 데이터 로드
-        await loadDungeonData();
+        // 데이터를 3번까지 시도
+        let attemptsLeft = 3;
+        let success = false;
+        
+        while (attemptsLeft > 0 && !success) {
+            try {
+                console.log(`데이터 로드 시도 (남은 시도: ${attemptsLeft})`);
+                // 기본 던전 데이터 로드
+                await loadDungeonData();
+                success = true;
+            } catch (error) {
+                attemptsLeft--;
+                console.error(`데이터 로드 실패 (남은 시도: ${attemptsLeft})`, error);
+                
+                if (attemptsLeft > 0) {
+                    // 1초 대기 후 재시도
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                }
+            }
+        }
+        
+        if (!success) {
+            throw new Error("최대 시도 횟수 초과: 데이터를 로드할 수 없습니다.");
+        }
         
         // 폼 초기화
         initializeForm();
@@ -100,7 +122,8 @@ async function initializeApp() {
         console.log("앱 초기화 완료");
     } catch (error) {
         console.error("앱 초기화 중 오류 발생:", error);
-        showError(true);
+        const errorDetails = `${error.message}<br>현재 경로: ${getBasePath()}<br>호스트: ${window.location.hostname}`;
+        showError(true, errorDetails);
     }
 }
 
@@ -110,9 +133,35 @@ function showLoading(show) {
 }
 
 // 오류 화면 표시/숨김 함수
-function showError(show) {
-    document.getElementById('error-container').style.display = show ? 'block' : 'none';
-    document.getElementById('dungeon-form').style.display = show ? 'none' : 'block';
+function showError(show, errorMessage) {
+    const errorContainer = document.getElementById('error-container');
+    const dungenForm = document.getElementById('dungeon-form');
+    const loadingContainer = document.getElementById('loading-container');
+    
+    // 에러 컨테이너 내용 업데이트
+    if (show && errorMessage) {
+        const errorText = document.createElement('div');
+        errorText.className = 'error-details';
+        errorText.innerHTML = `
+            <p><strong>오류 상세:</strong></p>
+            <code>${errorMessage}</code>
+            <p style="margin-top: 15px;">개발자 도구(F12)를 열어 콘솔 로그를 확인하면 더 자세한 정보를 볼 수 있습니다.</p>
+        `;
+        
+        // 기존 오류 상세 정보가 있으면 제거
+        const existingDetails = errorContainer.querySelector('.error-details');
+        if (existingDetails) {
+            existingDetails.remove();
+        }
+        
+        // 새 오류 정보 추가
+        document.querySelector('#error-container h3').after(errorText);
+    }
+    
+    // 컨테이너 표시/숨김 설정
+    errorContainer.style.display = show ? 'block' : 'none';
+    dungenForm.style.display = show ? 'none' : 'block';
+    loadingContainer.style.display = 'none';
     
     // 재시도 버튼 이벤트 리스너 추가
     if (show) {
@@ -134,9 +183,10 @@ async function loadJSON(url) {
         
         const response = await fetch(fullUrl);
         if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+            throw new Error(`HTTP error! Status: ${response.status} - ${fullUrl}`);
         }
-        return await response.json();
+        const data = await response.json();
+        return data;
     } catch (error) {
         console.error(`${url} 로드 중 오류 발생:`, error);
         throw error;
@@ -147,14 +197,27 @@ async function loadJSON(url) {
 async function loadDungeonData() {
     try {
         console.log("던전 데이터 로드 시작");
+        const basePath = getBasePath();
+        
+        // 연결 테스트
+        console.log("연결 테스트 진행 중...");
+        const testResponse = await fetch(`${basePath}data/dungeon/floors.json`);
+        if (!testResponse.ok) {
+            throw new Error(`데이터 로드 테스트 실패: ${testResponse.status}`);
+        }
+        console.log("연결 테스트 성공!");
         
         // 기본 던전 데이터 로드
-        const [floors, structures, atmospheres] = await Promise.all([
-            loadJSON('data/dungeon/floors.json'),
-            loadJSON('data/dungeon/structures.json'),
-            loadJSON('data/dungeon/atmospheres.json')
-        ]);
+        const floorsResponse = await fetch(`${basePath}data/dungeon/floors.json`);
+        const structuresResponse = await fetch(`${basePath}data/dungeon/structures.json`);
+        const atmospheresResponse = await fetch(`${basePath}data/dungeon/atmospheres.json`);
         
+        // 응답을 JSON으로 변환
+        const floors = await floorsResponse.json();
+        const structures = await structuresResponse.json();
+        const atmospheres = await atmospheresResponse.json();
+        
+        // 데이터 저장
         dungeon.floors = floors;
         dungeon.structures = structures;
         dungeon.atmospheres = atmospheres;
@@ -178,7 +241,16 @@ async function loadMonsterData(type) {
         }
         
         console.log(`${type} 몬스터 데이터 로드 시작`);
-        monsters[type] = await loadJSON(`data/dungeon/monster/${type}.json`);
+        const basePath = getBasePath();
+        
+        // 몬스터 데이터 로드
+        const monsterResponse = await fetch(`${basePath}data/dungeon/monster/${type}.json`);
+        if (!monsterResponse.ok) {
+            throw new Error(`몬스터 데이터 로드 실패: ${monsterResponse.status}`);
+        }
+        
+        // 응답을 JSON으로 변환
+        monsters[type] = await monsterResponse.json();
         console.log(`${type} 몬스터 데이터 로드 완료:`, monsters[type]);
         
         return monsters[type];
