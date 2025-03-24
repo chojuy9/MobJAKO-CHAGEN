@@ -25,8 +25,32 @@ function initializeNavigation() {
         });
     }
     
+    // 네비게이션 링크 경로 업데이트
+    updateNavigationLinks();
+    
     // 현재 활성화된 메뉴 항목 표시하기
     highlightCurrentPage();
+}
+
+/**
+ * 네비게이션 링크 경로를 현재 환경에 맞게 업데이트합니다.
+ */
+function updateNavigationLinks() {
+    const basePath = getBasePath();
+    const navLinks = document.querySelectorAll('.nav-links a');
+    
+    navLinks.forEach(link => {
+        const href = link.getAttribute('href');
+        // 이미 절대 URL인 경우 무시
+        if (href.startsWith('http') || href.startsWith('https')) return;
+        
+        // '/MobJAKO-CHAGEN' 접두사를 제거하고 basePath 추가
+        let newHref = href.replace(/^\/MobJAKO-CHAGEN/, '');
+        // 맨 앞의 슬래시 제거
+        newHref = newHref.replace(/^\//, '');
+        // 새 경로 설정
+        link.setAttribute('href', basePath + newHref);
+    });
 }
 
 /**
