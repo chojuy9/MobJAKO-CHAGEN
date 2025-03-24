@@ -64,6 +64,6 @@ Contributions from external partners are welcome through the following channels:
 ---
 
 <div align="center">
-<h3>MANUFACTURED BY 홍삼정에브리타임™ 💜</h3>
-<p><i>Maximizing Fantasy. Optimizing Creation. Generating Profit.</i></p>
+<h3>MANUFACTURED BY 홍삼정에브리타임 💜</h3>
+<p><i>Maximizing Fantasy. Optimizing Creation. CAPITALISM HO!</i></p>
 </div>
