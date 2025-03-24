@@ -87,6 +87,10 @@ async function initializeApp() {
         console.log("앱 초기화 시작");
         showLoading(true);
         
+        const basePath = getBasePath();
+        console.log("기본 경로:", basePath);
+        console.log("예상 데이터 경로:", basePath + "data/dungeon/floors.json");
+        
         // 데이터를 3번까지 시도
         let attemptsLeft = 3;
         let success = false;
