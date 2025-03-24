@@ -217,14 +217,14 @@ async function loadDungeonData() {
         const atmospheresResponse = await fetch(`${basePath}data/dungeon/atmospheres.json`);
         
         // 응답을 JSON으로 변환
-        const floors = await floorsResponse.json();
-        const structures = await structuresResponse.json();
-        const atmospheres = await atmospheresResponse.json();
+        const floorsData = await floorsResponse.json();
+        const structuresData = await structuresResponse.json();
+        const atmospheresData = await atmospheresResponse.json();
         
-        // 데이터 저장
-        dungeon.floors = floors;
-        dungeon.structures = structures;
-        dungeon.atmospheres = atmospheres;
+        // 데이터 저장 (구조에 맞게 처리)
+        dungeon.floors = floorsData.floors || floorsData;
+        dungeon.structures = structuresData.structures || structuresData;
+        dungeon.atmospheres = atmospheresData.atmospheres || atmospheresData;
         
         console.log("기본 던전 데이터 로드 완료:", dungeon);
         
@@ -254,7 +254,16 @@ async function loadMonsterData(type) {
         }
         
         // 응답을 JSON으로 변환
-        monsters[type] = await monsterResponse.json();
+        const monsterData = await monsterResponse.json();
+        
+        // element 필드 검증 (선택 사항)
+        if (monsterData.element && monsterData.element !== type) {
+            console.warn(`경고: ${type}.json의 element 값(${monsterData.element})이 파일명과 일치하지 않습니다.`);
+        }
+        
+        // 몬스터 데이터가 monsters 속성에 있는지 확인
+        monsters[type] = monsterData.monsters || monsterData;
+        
         console.log(`${type} 몬스터 데이터 로드 완료:`, monsters[type]);
         
         return monsters[type];
@@ -268,9 +277,16 @@ async function loadMonsterData(type) {
 function initializeForm() {
     console.log("폼 초기화 시작");
     
+    console.log("던전 데이터 확인:", dungeon);
+    
     // 층수 옵션 초기화
     const floorsSelect = document.getElementById('dungeon-floors');
     floorsSelect.innerHTML = '';
+    
+    if (!Array.isArray(dungeon.floors)) {
+        console.error("dungeon.floors가 배열이 아닙니다:", dungeon.floors);
+        return;
+    }
     
     dungeon.floors.forEach(floor => {
         const option = document.createElement('option');
@@ -283,6 +299,11 @@ function initializeForm() {
     const structureSelect = document.getElementById('dungeon-structure');
     structureSelect.innerHTML = '';
     
+    if (!Array.isArray(dungeon.structures)) {
+        console.error("dungeon.structures가 배열이 아닙니다:", dungeon.structures);
+        return;
+    }
+    
     dungeon.structures.forEach(structure => {
         const option = document.createElement('option');
         option.value = structure.id;
@@ -293,6 +314,11 @@ function initializeForm() {
     // 분위기 옵션 초기화
     const atmosphereSelect = document.getElementById('dungeon-atmosphere');
     atmosphereSelect.innerHTML = '';
+    
+    if (!Array.isArray(dungeon.atmospheres)) {
+        console.error("dungeon.atmospheres가 배열이 아닙니다:", dungeon.atmospheres);
+        return;
+    }
     
     dungeon.atmospheres.forEach(atmosphere => {
         const option = document.createElement('option');
