@@ -99,6 +99,70 @@
         .retry-btn:hover {
             background: linear-gradient(135deg, #ff5252, #e53935);
         }
+        /* 결과 영역 스타일 개선 */
+.result-textarea {
+    width: 100%;
+    min-height: 200px;
+    padding: 15px;
+    border: 2px solid var(--primary-light);
+    border-radius: var(--border-radius);
+    background-color: white;
+    font-family: 'Gaegu', monospace;
+    font-size: 1.1rem;
+    resize: vertical;
+    margin-bottom: 15px;
+    white-space: pre-wrap;
+    line-height: 1.5;
+    color: var(--text-color);
+}
+
+/* 복사 버튼 스타일 개선 */
+.copy-btn {
+    background: linear-gradient(135deg, var(--accent-color), var(--primary-color));
+    color: white;
+    padding: 10px 20px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-family: 'Jua', sans-serif;
+    box-shadow: 0 4px 8px rgba(173, 111, 255, 0.2);
+    transition: all 0.3s ease;
+    border: none;
+    display: inline-block;
+    margin-top: 0;
+}
+
+.copy-btn:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 6px 12px rgba(173, 111, 255, 0.3);
+}
+
+/* 결과 컨테이너 스타일 */
+#result-output {
+    margin-top: 30px;
+    background: linear-gradient(to right, rgba(173, 111, 255, 0.05), rgba(255, 111, 215, 0.05));
+    padding: 25px;
+    border-radius: var(--border-radius);
+    border: 1px solid rgba(173, 111, 255, 0.1);
+    position: relative;
+}
+
+#result-output h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: var(--primary-color);
+    font-family: 'Jua', sans-serif;
+    font-size: 1.3rem;
+}
+
+/* 애니메이션 효과 */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+#result-output {
+    animation: fadeIn 0.5s ease forwards;
+}
     </style>
 </head>
 <body>
@@ -147,57 +211,55 @@
                 <button class="retry-btn" id="retry-btn">다시 시도</button>
             </div>
             
-            <!-- 던전 생성 폼 -->
-            <form id="dungeon-form" style="display: none;" class="filter-section">
-                <h3 class="filter-title">던전 설정</h3>
-                <div class="filter-options">
-                    <div class="filter-group">
-                        <label for="dungeon-floors">던전 층수</label>
-                        <select class="form-control" id="dungeon-floors"></select>
-                    </div>
-                    
-                    <div class="filter-group">
-                        <label for="dungeon-structure">던전 구조</label>
-                        <select class="form-control" id="dungeon-structure"></select>
-                    </div>
-                    
-                    <div class="filter-group">
-                        <label for="dungeon-atmosphere">던전 분위기</label>
-                        <select class="form-control" id="dungeon-atmosphere"></select>
-                    </div>
-                </div>
-                
-                <button type="submit" class="btn" id="generate-btn">던전 생성하기</button>
-            </form>
-            
-            <!-- 결과 표시 영역 -->
-            <div class="result-container" id="result-container" style="display: none;">
-                <div class="result-header">
-                    <h2 class="result-title">던전 생성 결과</h2>
-                    <button class="copy-btn" id="copy-btn">결과 생성하기</button>
-                </div>
-                
-                <div class="character-attributes" id="dungeon-info">
-                    <!-- 여기에 던전 정보가 표시됩니다 -->
-                </div>
-                
-                <div class="available-monsters">
-                    <h3>선택 가능한 몬스터</h3>
-                    <div class="monsters-grid" id="available-monsters-grid">
-                        <!-- 여기에 선택 가능한 몬스터 목록이 표시됩니다 -->
-                    </div>
-                </div>
-                
-                <div class="monster-list" id="selected-monsters">
-                    <h3>배치된 몬스터</h3>
-                    <div class="monster-list-container">
-                        <ul id="selected-monsters-list">
-                            <!-- 여기에 선택된 몬스터 목록이 표시됩니다 -->
-                        </ul>
-                    </div>
-                </div>
-            </div>
+            <!-- 던전 생성 폼 부분 수정 -->
+<form id="dungeon-form" style="display: none;" class="filter-section">
+    <h3 class="filter-title">던전 설정</h3>
+    <div class="filter-options">
+        <div class="filter-group">
+            <label for="dungeon-floors">던전 층수</label>
+            <select class="form-control" id="dungeon-floors"></select>
         </div>
+        
+        <div class="filter-group">
+            <label for="dungeon-structure">던전 구조</label>
+            <select class="form-control" id="dungeon-structure"></select>
+        </div>
+        
+        <div class="filter-group">
+            <label for="dungeon-atmosphere">던전 분위기</label>
+            <select class="form-control" id="dungeon-atmosphere"></select>
+        </div>
+    </div>
+    
+    <button type="submit" class="btn" id="generate-btn">✨ 던전 생성하기 ✨</button>
+</form>
+
+<!-- 결과 표시 영역 -->
+<div class="result-container" id="result-container" style="display: none;">
+    <div class="character-attributes" id="dungeon-info">
+        <!-- 여기에 던전 정보가 표시됩니다 -->
+    </div>
+    
+    <div class="available-monsters">
+        <h3>선택 가능한 몬스터</h3>
+        <div class="monsters-grid" id="available-monsters-grid">
+            <!-- 여기에 선택 가능한 몬스터 목록이 표시됩니다 -->
+        </div>
+    </div>
+    
+    <div class="monster-list" id="selected-monsters">
+        <h3>배치된 몬스터</h3>
+        <div class="monster-list-container">
+            <ul id="selected-monsters-list">
+                <!-- 여기에 선택된 몬스터 목록이 표시됩니다 -->
+            </ul>
+        </div>
+    </div>
+    
+    <button id="create-result-btn" class="btn">결과 생성하기</button>
+    
+    <!-- 여기에 결과 출력 영역이 동적으로 추가됩니다 -->
+</div>
         
         <!-- 푸터 -->
         <footer class="footer">
