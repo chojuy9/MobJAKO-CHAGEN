@@ -126,8 +126,16 @@ async function initializeApp() {
         console.log("앱 초기화 완료");
     } catch (error) {
         console.error("앱 초기화 중 오류 발생:", error);
-        const basePath = getBasePath();
-        const errorDetails = `${error.message}<br><br>현재 경로: ${basePath}<br>호스트: ${window.location.hostname}<br>데이터 구조: ${JSON.stringify(dungeon, null, 2).substring(0, 200)}...<br><br>JSON 파일이 올바른 형식인지 확인해주세요.`;
+        const errorDetails = `
+            ${error.message}<br>
+            현재 경로: ${getBasePath()}<br>
+            호스트: ${window.location.hostname}<br>
+            <br>
+            디버깅 정보:<br>
+            dungeon.floors 타입: ${typeof dungeon.floors}<br>
+            dungeon.floors 배열 여부: ${Array.isArray(dungeon.floors)}<br>
+            dungeon 객체: ${JSON.stringify(dungeon).slice(0, 200)}...
+        `;
         showError(true, errorDetails);
     }
 }
@@ -222,17 +230,66 @@ async function loadDungeonData() {
         const structuresData = await structuresResponse.json();
         const atmospheresData = await atmospheresResponse.json();
         
-        console.log("로드된 데이터 구조 확인:");
-        console.log("floors 데이터:", floorsData);
-        console.log("structures 데이터:", structuresData);
-        console.log("atmospheres 데이터:", atmospheresData);
+        // 로드된 데이터 구조 로깅
+        console.log("floors 데이터 구조:", JSON.stringify(floorsData).slice(0, 100) + "...");
+        console.log("structures 데이터 구조:", JSON.stringify(structuresData).slice(0, 100) + "...");
+        console.log("atmospheres 데이터 구조:", JSON.stringify(atmospheresData).slice(0, 100) + "...");
         
-        // 데이터 저장 (구조에 맞게 처리)
-        dungeon.floors = floorsData.floors || [];
-        dungeon.structures = structuresData.structures || [];
-        dungeon.atmospheres = atmospheresData.atmospheres || [];
+        // 데이터 저장 및 검증 (데이터 구조에 맞게 처리)
+        if (floorsData && typeof floorsData === 'object') {
+            // 객체인 경우 floors 속성이 있는지 확인
+            if (Array.isArray(floorsData.floors)) {
+                dungeon.floors = floorsData.floors;
+            } else if (Array.isArray(floorsData)) {
+                dungeon.floors = floorsData;
+            } else {
+                dungeon.floors = []; // 비어있는 배열로 기본값 설정
+                console.error("유효한 floors 데이터가 없습니다:", floorsData);
+            }
+        } else {
+            dungeon.floors = [];
+            console.error("floors 데이터가 유효하지 않습니다:", floorsData);
+        }
         
-        console.log("기본 던전 데이터 로드 완료:", dungeon);
+        if (structuresData && typeof structuresData === 'object') {
+            if (Array.isArray(structuresData.structures)) {
+                dungeon.structures = structuresData.structures;
+            } else if (Array.isArray(structuresData)) {
+                dungeon.structures = structuresData;
+            } else {
+                dungeon.structures = [];
+                console.error("유효한 structures 데이터가 없습니다:", structuresData);
+            }
+        } else {
+            dungeon.structures = [];
+            console.error("structures 데이터가 유효하지 않습니다:", structuresData);
+        }
+        
+        if (atmospheresData && typeof atmospheresData === 'object') {
+            if (Array.isArray(atmospheresData.atmospheres)) {
+                dungeon.atmospheres = atmospheresData.atmospheres;
+            } else if (Array.isArray(atmospheresData)) {
+                dungeon.atmospheres = atmospheresData;
+            } else {
+                dungeon.atmospheres = [];
+                console.error("유효한 atmospheres 데이터가 없습니다:", atmospheresData);
+            }
+        } else {
+            dungeon.atmospheres = [];
+            console.error("atmospheres 데이터가 유효하지 않습니다:", atmospheresData);
+        }
+        
+        console.log("데이터 처리 후 던전 객체:", {
+            'floors 타입': typeof dungeon.floors,
+            'floors 배열여부': Array.isArray(dungeon.floors),
+            'floors 길이': dungeon.floors.length,
+            'structures 타입': typeof dungeon.structures,
+            'structures 배열여부': Array.isArray(dungeon.structures),
+            'atmospheres 타입': typeof dungeon.atmospheres,
+            'atmospheres 배열여부': Array.isArray(dungeon.atmospheres)
+        });
+        
+        console.log("기본 던전 데이터 로드 완료");
         
         // 몬스터 데이터는 필요할 때 로드하도록 함
     } catch (error) {
@@ -261,17 +318,33 @@ async function loadMonsterData(type) {
         
         // 응답을 JSON으로 변환
         const monsterData = await monsterResponse.json();
-        console.log(`로드된 ${type} 몬스터 데이터 구조:`, monsterData);
+        console.log(`${type} 몬스터 데이터 구조:`, JSON.stringify(monsterData).slice(0, 100) + "...");
         
-        // element 필드 검증 (선택 사항)
-        if (monsterData.element && monsterData.element !== type) {
-            console.warn(`경고: ${type}.json의 element 값(${monsterData.element})이 파일명과 일치하지 않습니다.`);
+        // 데이터 검증 및 처리
+        if (monsterData && typeof monsterData === 'object') {
+            // 객체인 경우 monsters 속성이 있는지 확인
+            if (Array.isArray(monsterData.monsters)) {
+                monsters[type] = monsterData.monsters;
+                
+                // element 필드 검증 (선택 사항)
+                if (monsterData.element && monsterData.element !== type) {
+                    console.warn(`경고: ${type}.json의 element 값(${monsterData.element})이 파일명과 일치하지 않습니다.`);
+                }
+            } else if (Array.isArray(monsterData)) {
+                monsters[type] = monsterData;
+            } else {
+                monsters[type] = []; // 비어있는 배열로 기본값 설정
+                console.error(`유효한 ${type} 몬스터 데이터가 없습니다:`, monsterData);
+            }
+        } else {
+            monsters[type] = [];
+            console.error(`${type} 몬스터 데이터가 유효하지 않습니다:`, monsterData);
         }
         
-        // 몬스터 데이터가 monsters 속성에 있는지 확인
-        monsters[type] = monsterData.monsters || [];
-        
-        console.log(`${type} 몬스터 데이터 로드 완료:`, monsters[type]);
+        console.log(`${type} 몬스터 배열 타입:`, typeof monsters[type]);
+        console.log(`${type} 몬스터 배열 여부:`, Array.isArray(monsters[type]));
+        console.log(`${type} 몬스터 데이터 길이:`, monsters[type].length);
+        console.log(`${type} 몬스터 데이터 로드 완료`);
         
         return monsters[type];
     } catch (error) {
@@ -284,66 +357,113 @@ async function loadMonsterData(type) {
 function initializeForm() {
     console.log("폼 초기화 시작");
     
-    console.log("던전 데이터 확인:", dungeon);
+    // 던전 데이터 확인
+    console.log("던전 객체 타입 확인:", {
+        'floors 타입': typeof dungeon.floors,
+        'floors 배열여부': Array.isArray(dungeon.floors),
+        'structures 타입': typeof dungeon.structures,
+        'structures 배열여부': Array.isArray(dungeon.structures),
+        'atmospheres 타입': typeof dungeon.atmospheres,
+        'atmospheres 배열여부': Array.isArray(dungeon.atmospheres)
+    });
     
-    // 층수 옵션 초기화
-    const floorsSelect = document.getElementById('dungeon-floors');
-    floorsSelect.innerHTML = '';
-    
-    if (!Array.isArray(dungeon.floors) || dungeon.floors.length === 0) {
-        console.error("dungeon.floors가 유효하지 않습니다:", dungeon.floors);
-        const option = document.createElement('option');
-        option.value = "1";
-        option.textContent = "1층 (기본값)";
-        floorsSelect.appendChild(option);
-    } else {
+    try {
+        // 층수 옵션 초기화
+        const floorsSelect = document.getElementById('dungeon-floors');
+        if (!floorsSelect) {
+            console.error("dungeon-floors 요소를 찾을 수 없습니다");
+            return;
+        }
+        
+        floorsSelect.innerHTML = '';
+        
+        if (!Array.isArray(dungeon.floors)) {
+            console.error("dungeon.floors가 배열이 아닙니다:", dungeon.floors);
+            // 임시 데이터로 채우기
+            const tempFloors = [
+                { value: "1", name: "1층" },
+                { value: "3", name: "3층" },
+                { value: "5", name: "5층" }
+            ];
+            dungeon.floors = tempFloors;
+        }
+        
         dungeon.floors.forEach(floor => {
-            const option = document.createElement('option');
-            option.value = floor.value;
-            option.textContent = floor.name;
-            floorsSelect.appendChild(option);
+            try {
+                const option = document.createElement('option');
+                option.value = floor.value || "1";
+                option.textContent = floor.name || "기본층";
+                floorsSelect.appendChild(option);
+            } catch (e) {
+                console.error("층수 옵션 생성 중 오류:", e, "floor 데이터:", floor);
+            }
         });
-    }
-    
-    // 구조 옵션 초기화
-    const structureSelect = document.getElementById('dungeon-structure');
-    structureSelect.innerHTML = '';
-    
-    if (!Array.isArray(dungeon.structures) || dungeon.structures.length === 0) {
-        console.error("dungeon.structures가 유효하지 않습니다:", dungeon.structures);
-        const option = document.createElement('option');
-        option.value = "cave";
-        option.textContent = "동굴 (기본값)";
-        structureSelect.appendChild(option);
-    } else {
+        
+        // 구조 옵션 초기화
+        const structureSelect = document.getElementById('dungeon-structure');
+        if (!structureSelect) {
+            console.error("dungeon-structure 요소를 찾을 수 없습니다");
+            return;
+        }
+        
+        structureSelect.innerHTML = '';
+        
+        if (!Array.isArray(dungeon.structures)) {
+            console.error("dungeon.structures가 배열이 아닙니다:", dungeon.structures);
+            // 임시 데이터로 채우기
+            const tempStructures = [
+                { id: "cave", name: "동굴" },
+                { id: "castle", name: "성" }
+            ];
+            dungeon.structures = tempStructures;
+        }
+        
         dungeon.structures.forEach(structure => {
-            const option = document.createElement('option');
-            option.value = structure.id;
-            option.textContent = structure.name;
-            structureSelect.appendChild(option);
+            try {
+                const option = document.createElement('option');
+                option.value = structure.id || "default";
+                option.textContent = structure.name || "기본구조";
+                structureSelect.appendChild(option);
+            } catch (e) {
+                console.error("구조 옵션 생성 중 오류:", e, "structure 데이터:", structure);
+            }
         });
-    }
-    
-    // 분위기 옵션 초기화
-    const atmosphereSelect = document.getElementById('dungeon-atmosphere');
-    atmosphereSelect.innerHTML = '';
-    
-    if (!Array.isArray(dungeon.atmospheres) || dungeon.atmospheres.length === 0) {
-        console.error("dungeon.atmospheres가 유효하지 않습니다:", dungeon.atmospheres);
-        const option = document.createElement('option');
-        option.value = "fire";
-        option.textContent = "화염의 던전 (기본값)";
-        atmosphereSelect.appendChild(option);
-    } else {
+        
+        // 분위기 옵션 초기화
+        const atmosphereSelect = document.getElementById('dungeon-atmosphere');
+        if (!atmosphereSelect) {
+            console.error("dungeon-atmosphere 요소를 찾을 수 없습니다");
+            return;
+        }
+        
+        atmosphereSelect.innerHTML = '';
+        
+        if (!Array.isArray(dungeon.atmospheres)) {
+            console.error("dungeon.atmospheres가 배열이 아닙니다:", dungeon.atmospheres);
+            // 임시 데이터로 채우기
+            const tempAtmospheres = [
+                { id: "fire", name: "화염의 던전" },
+                { id: "water", name: "수중의 던전" }
+            ];
+            dungeon.atmospheres = tempAtmospheres;
+        }
+        
         dungeon.atmospheres.forEach(atmosphere => {
-            const option = document.createElement('option');
-            option.value = atmosphere.id;
-            option.textContent = atmosphere.name;
-            atmosphereSelect.appendChild(option);
+            try {
+                const option = document.createElement('option');
+                option.value = atmosphere.id || "default";
+                option.textContent = atmosphere.name || "기본분위기";
+                atmosphereSelect.appendChild(option);
+            } catch (e) {
+                console.error("분위기 옵션 생성 중 오류:", e, "atmosphere 데이터:", atmosphere);
+            }
         });
+        
+        console.log("폼 초기화 완료");
+    } catch (error) {
+        console.error("폼 초기화 중 오류 발생:", error);
+        alert("폼 초기화 중 오류가 발생했습니다. 개발자 도구를 확인해주세요.");
     }
-    
-    console.log("폼 초기화 완료");
 }
 
 // 던전 생성 함수
