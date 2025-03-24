@@ -31,9 +31,9 @@ All modules utilize our proprietary **FANTASY SYNTHESIS ENGINE™** delivering r
 
 | CODENAME | SPECIALIZATION | EFFICIENCY RATING |
 |----------|----------------|-------------------|
-| WIZARD | Bot Creation & Medieval Analysis | ★★★★☆ |
-| MRS.37 | Visual Assets & Code Integration | ★★★★★ |
-| CONSPIRATOR | Conceptual Expansion | ★★★★☆ |
+| 홍삼정에브리타임 | 봇 제작 & 중세덕후 | ★★★★☆ |
+| 클로드쨩 | 디자이너 & 코더 | ★★★★★ |
+| 음모론자 | 음모론 살포 | ★★★★☆ |
 
 ---
 
@@ -59,7 +59,7 @@ Contributions from external partners are welcome through the following channels:
 
 **LICENSE:** All generated content is cleared for commercial application.  
 **DISCLAIMER:** Data pools are continuously expanding. Name collision probability exists.
-**PRIVACY POLICY:** MobJAKI-CHAGEN (hereinafter referred to as "Site") does not collect, use, or provide users' personal information. This site does not require a separate membership registration process, and we do not store or utilize users' personal information in the service provision process.
+**PRIVACY POLICY:** MobJAKO-CHAGEN (hereinafter referred to as "Site") does not collect, use, or provide users' personal information. This site does not require a separate membership registration process, and we do not store or utilize users' personal information in the service provision process.
 
 ---
 
