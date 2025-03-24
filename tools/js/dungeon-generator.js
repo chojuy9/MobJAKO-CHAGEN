@@ -75,10 +75,14 @@ document.addEventListener("DOMContentLoaded", function() {
         generateDungeon();
     });
     
-    // 결과 복사 기능
-    document.getElementById('copy-btn').addEventListener('click', function() {
-        createResultOutput();
-    });
+    // 결과 생성 버튼 이벤트 리스너
+    const createResultBtn = document.getElementById('create-result-btn');
+    if (createResultBtn) {
+        createResultBtn.addEventListener('click', function() {
+            console.log("결과 생성 버튼 클릭됨");
+            createResultOutput();
+        });
+    }
 });
 
 // 앱 초기화 함수
@@ -649,35 +653,40 @@ function createResultOutput() {
     // 내용 업데이트
     resultOutput.innerHTML = `
         <h3>던전 결과</h3>
-        <div id="markdown-content">${resultText.replace(/\n/g, '<br>')}</div>
-        <button id="copy-btn">복사하기</button>
+        <pre id="dungeon-result-text" class="result-textarea">${resultText}</pre>
+        <button id="copy-result-btn" class="copy-btn">결과 복사하기</button>
     `;
     
     // 복사하기 버튼 이벤트
-    document.getElementById('copy-btn').addEventListener('click', function() {
+    document.getElementById('copy-result-btn').addEventListener('click', function() {
         // 텍스트를 가져오기 위한 임시 textarea 생성
         const tempTextarea = document.createElement('textarea');
         tempTextarea.value = resultText;
+        tempTextarea.style.position = 'fixed';  // 화면 밖으로 위치시키기
+        tempTextarea.style.opacity = '0';
         document.body.appendChild(tempTextarea);
+        
+        // 텍스트 선택 및 복사
         tempTextarea.select();
+        tempTextarea.setSelectionRange(0, 99999); // 모바일 지원
         
         try {
             // execCommand 방식 사용 (호환성 좋음)
             const successful = document.execCommand('copy');
-            // 임시 textarea 제거
-            document.body.removeChild(tempTextarea);
             
             if (successful) {
                 // 복사 성공 시 버튼 스타일과 텍스트 변경
-                const copyBtn = document.getElementById('copy-btn');
+                const copyBtn = document.getElementById('copy-result-btn');
                 const originalText = copyBtn.textContent;
-                copyBtn.textContent = '복사 완료!';
-                copyBtn.style.background = '#4CAF50';
+                const originalBg = copyBtn.style.background;
+                
+                copyBtn.textContent = '복사 완료! ✨';
+                copyBtn.style.background = 'linear-gradient(135deg, #4CAF50, #45a049)';
                 
                 // 2초 후 원래 스타일로 복원
                 setTimeout(() => {
                     copyBtn.textContent = originalText;
-                    copyBtn.style.background = '';
+                    copyBtn.style.background = originalBg;
                 }, 2000);
             } else {
                 alert('복사하지 못했습니다. 텍스트를 직접 선택하여 복사해주세요.');
@@ -685,11 +694,9 @@ function createResultOutput() {
         } catch (err) {
             console.error('복사 중 오류 발생:', err);
             alert('복사하지 못했습니다. 텍스트를 직접 선택하여 복사해주세요.');
-            
-            // 임시 textarea 제거 확인
-            if (document.body.contains(tempTextarea)) {
-                document.body.removeChild(tempTextarea);
-            }
+        } finally {
+            // 임시 textarea 제거
+            document.body.removeChild(tempTextarea);
         }
     });
 }
