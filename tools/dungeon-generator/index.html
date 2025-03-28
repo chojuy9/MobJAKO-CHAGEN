@@ -6,164 +6,10 @@
     <title>던전 생성기 - 판타지 툴킷</title>
     <!-- 기본 스타일시트 로드 -->
     <link rel="stylesheet" href="../../assets/css/main.css">
-    <style>
-        /* 로딩 스피너 스타일 추가 */
-        .loading-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 60px 20px;
-        }
-        
-        .loading-text {
-            margin-top: 15px;
-            color: var(--primary-color);
-            font-weight: 500;
-        }
-        
-        /* 던전 생성기 스타일 조정 */
-        .result-output {
-            margin-top: 30px;
-            border-top: 1px dashed var(--primary-light);
-            padding-top: 20px;
-        }
-        
-        .result-textarea {
-            width: 100%;
-            min-height: 200px;
-            padding: 15px;
-            border: 2px solid var(--primary-light);
-            border-radius: var(--border-radius);
-            background-color: white;
-            font-family: monospace;
-            resize: vertical;
-            margin-bottom: 15px;
-        }
-        
-        /* 몬스터 아이콘 스타일 */
-        .monster-icon {
-            width: 40px;
-            height: 40px;
-            background-color: var(--primary-light);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            color: white;
-        }
-        
-        /* 오류 컨테이너 스타일 */
-        .error-container {
-            text-align: center;
-            padding: 30px;
-            background-color: rgba(229, 57, 53, 0.1);
-            border-radius: var(--border-radius);
-            border-left: 4px solid #e53935;
-            margin: 20px 0;
-        }
-        
-        .error-icon {
-            font-size: 32px;
-            margin-bottom: 15px;
-        }
-        
-        .error-details {
-            text-align: left;
-            background-color: rgba(0, 0, 0, 0.05);
-            padding: 15px;
-            border-radius: 8px;
-            margin: 15px 0;
-            font-size: 0.9rem;
-            max-height: 200px;
-            overflow-y: auto;
-        }
-        
-        .error-details code {
-            white-space: pre-wrap;
-            word-break: break-all;
-            display: block;
-            padding: 10px;
-            background-color: rgba(0, 0, 0, 0.1);
-            border-radius: 4px;
-            margin: 10px 0;
-            font-family: monospace;
-        }
-        
-        .retry-btn {
-            background: linear-gradient(135deg, #e53935, #ff5252);
-            margin-top: 20px;
-        }
-        
-        .retry-btn:hover {
-            background: linear-gradient(135deg, #ff5252, #e53935);
-        }
-        /* 결과 영역 스타일 개선 */
-.result-textarea {
-    width: 100%;
-    min-height: 200px;
-    padding: 15px;
-    border: 2px solid var(--primary-light);
-    border-radius: var(--border-radius);
-    background-color: white;
-    font-family: 'Gaegu', monospace;
-    font-size: 1.1rem;
-    resize: vertical;
-    margin-bottom: 15px;
-    white-space: pre-wrap;
-    line-height: 1.5;
-    color: var(--text-color);
-}
-
-/* 복사 버튼 스타일 개선 */
-.copy-btn {
-    background: linear-gradient(135deg, var(--accent-color), var(--primary-color));
-    color: white;
-    padding: 10px 20px;
-    border-radius: 30px;
-    cursor: pointer;
-    font-family: 'Jua', sans-serif;
-    box-shadow: 0 4px 8px rgba(173, 111, 255, 0.2);
-    transition: all 0.3s ease;
-    border: none;
-    display: inline-block;
-    margin-top: 0;
-}
-
-.copy-btn:hover {
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: 0 6px 12px rgba(173, 111, 255, 0.3);
-}
-
-/* 결과 컨테이너 스타일 */
-#result-output {
-    margin-top: 30px;
-    background: linear-gradient(to right, rgba(173, 111, 255, 0.05), rgba(255, 111, 215, 0.05));
-    padding: 25px;
-    border-radius: var(--border-radius);
-    border: 1px solid rgba(173, 111, 255, 0.1);
-    position: relative;
-}
-
-#result-output h3 {
-    margin-top: 0;
-    margin-bottom: 15px;
-    color: var(--primary-color);
-    font-family: 'Jua', sans-serif;
-    font-size: 1.3rem;
-}
-
-/* 애니메이션 효과 */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-#result-output {
-    animation: fadeIn 0.5s ease forwards;
-}
-    </style>
+    <!-- 생성기 공통 스타일 로드 -->
+    <link rel="stylesheet" href="../../assets/css/generator-common.css">
+    <!-- 던전 생성기 전용 스타일 로드 -->
+    <link rel="stylesheet" href="../../assets/css/dungeon-generator.css">
 </head>
 <body>
     <!-- ==================== 네비게이션 메뉴 ==================== -->
@@ -211,68 +57,69 @@
                 <button class="retry-btn" id="retry-btn">다시 시도</button>
             </div>
             
-            <!-- 던전 생성 폼 부분 수정 -->
-<form id="dungeon-form" style="display: none;" class="filter-section">
-    <h3 class="filter-title">던전 설정</h3>
-    <div class="filter-options">
-        <div class="filter-group">
-            <label for="dungeon-floors">던전 층수</label>
-            <select class="form-control" id="dungeon-floors"></select>
-        </div>
-        
-        <div class="filter-group">
-            <label for="dungeon-structure">던전 구조</label>
-            <select class="form-control" id="dungeon-structure"></select>
-        </div>
-        
-        <div class="filter-group">
-            <label for="dungeon-atmosphere">던전 분위기</label>
-            <select class="form-control" id="dungeon-atmosphere"></select>
-        </div>
-    </div>
-    
-    <button type="submit" class="btn" id="generate-btn">✨ 던전 생성하기 ✨</button>
-</form>
+            <!-- 던전 생성 폼 -->
+            <form id="dungeon-form" style="display: none;" class="filter-section">
+                <h3 class="filter-title">던전 설정</h3>
+                <div class="filter-options">
+                    <div class="filter-group">
+                        <label for="dungeon-floors">던전 층수</label>
+                        <select class="form-control" id="dungeon-floors"></select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="dungeon-structure">던전 구조</label>
+                        <select class="form-control" id="dungeon-structure"></select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="dungeon-atmosphere">던전 분위기</label>
+                        <select class="form-control" id="dungeon-atmosphere"></select>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn" id="generate-btn">✨ 던전 생성하기 ✨</button>
+            </form>
 
-<!-- 결과 표시 영역 -->
-<div class="result-container" id="result-container" style="display: none;">
-    <div class="character-attributes" id="dungeon-info">
-        <!-- 여기에 던전 정보가 표시됩니다 -->
-    </div>
-    
-    <div class="available-monsters">
-        <h3>선택 가능한 몬스터</h3>
-        <div class="monsters-grid" id="available-monsters-grid">
-            <!-- 여기에 선택 가능한 몬스터 목록이 표시됩니다 -->
-        </div>
-    </div>
-    
-    <div class="monster-list" id="selected-monsters">
-        <h3>배치된 몬스터</h3>
-        <div class="monster-list-container">
-            <ul id="selected-monsters-list">
-                <!-- 여기에 선택된 몬스터 목록이 표시됩니다 -->
-            </ul>
-        </div>
-    </div>
-    
-    <button id="create-result-btn" class="btn">결과 생성하기</button>
-    
-    <!-- 여기에 결과 출력 영역이 동적으로 추가됩니다 -->
-</div>
+            <!-- 결과 표시 영역 -->
+            <div class="result-container" id="result-container" style="display: none;">
+                <div class="character-attributes" id="dungeon-info">
+                    <!-- 여기에 던전 정보가 표시됩니다 -->
+                </div>
+                
+                <div class="available-monsters">
+                    <h3>선택 가능한 몬스터</h3>
+                    <div class="monsters-grid" id="available-monsters-grid">
+                        <!-- 여기에 선택 가능한 몬스터 목록이 표시됩니다 -->
+                    </div>
+                </div>
+                
+                <div class="monster-list" id="selected-monsters">
+                    <h3>배치된 몬스터</h3>
+                    <div class="monster-list-container">
+                        <ul id="selected-monsters-list">
+                            <!-- 여기에 선택된 몬스터 목록이 표시됩니다 -->
+                        </ul>
+                    </div>
+                </div>
+                
+                <button id="create-result-btn" class="btn">결과 생성하기</button>
+                
+                <!-- 여기에 결과 출력 영역이 동적으로 추가됩니다 -->
+            </div>
         
-        <!-- 푸터 -->
-        <footer class="footer">
-            <p>© 2025 판타지 툴킷. 모든 권리 보유.</p>
-            <p style="margin-top: 10px;">
-                <a href="/MobJAKO-CHAGEN/privacy.html">개인정보 처리방침</a> | 
-                <a href="/MobJAKO-CHAGEN/terms.html">이용약관</a> | 
-                <a href="/MobJAKO-CHAGEN/contact.html">문의하기</a>
-            </p>
-            <p style="margin-top: 15px;">
-                Made by 홍삼정에브리타임 💜
-            </p>
-        </footer>
+            <!-- 푸터 -->
+            <footer class="footer">
+                <p>© 2025 판타지 툴킷. 모든 권리 보유.</p>
+                <p style="margin-top: 10px;">
+                    <a href="/MobJAKO-CHAGEN/privacy.html">개인정보 처리방침</a> | 
+                    <a href="/MobJAKO-CHAGEN/terms.html">이용약관</a> | 
+                    <a href="/MobJAKO-CHAGEN/contact.html">문의하기</a>
+                </p>
+                <p style="margin-top: 15px;">
+                    Made by 홍삼정에브리타임 💜
+                </p>
+            </footer>
+        </div>
     </div>
 
     <!-- 자바스크립트 -->
