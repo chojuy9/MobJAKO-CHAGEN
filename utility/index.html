@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>유틸리티 - 판타지 툴킷</title>
+    <title>AI 번역 - 판타지 툴킷</title>
     <!-- 기본 스타일시트 로드 -->
     <link rel="stylesheet" href="assets/css/main.css">
     <!-- 생성기 공통 스타일 로드 -->
@@ -22,7 +22,7 @@
         }
         
         .utility-intro::before {
-            content: "🔮";
+            content: "🌐";
             position: absolute;
             top: -12px;
             left: 20px;
@@ -30,7 +30,7 @@
         }
         
         .utility-intro::after {
-            content: "✨";
+            content: "💬";
             position: absolute;
             bottom: -15px;
             right: 30px;
@@ -51,28 +51,18 @@
             font-size: 1.1rem;
         }
         
-        .utility-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 30px;
-            margin: 30px 0;
-        }
-        
-        .utility-card {
+        .translator-card {
             background-color: var(--card-background);
             border-radius: var(--border-radius);
             padding: 25px;
             box-shadow: var(--shadow);
             transition: var(--transition);
             border: 2px dashed var(--primary-light);
+            max-width: 800px;
+            margin: 30px auto;
         }
         
-        .utility-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(173, 111, 255, 0.2);
-        }
-        
-        .utility-card-header {
+        .translator-header {
             margin-bottom: 20px;
             padding-bottom: 15px;
             border-bottom: 1px dashed rgba(173, 111, 255, 0.2);
@@ -81,7 +71,7 @@
             gap: 15px;
         }
         
-        .utility-icon {
+        .translator-icon {
             font-size: 1.8rem;
             color: var(--primary-color);
             background-color: rgba(173, 111, 255, 0.1);
@@ -93,24 +83,24 @@
             border-radius: 50%;
         }
         
-        .utility-card-title {
+        .translator-title {
             font-size: 1.3rem;
             color: var(--primary-dark);
             font-family: 'Jua', sans-serif;
             font-weight: 700;
         }
         
-        .utility-card-content {
+        .translator-content {
             margin-bottom: 20px;
             font-size: 1.1rem;
             color: var(--text-color);
         }
         
-        .utility-form-group {
+        .form-group {
             margin-bottom: 16px;
         }
         
-        .utility-label {
+        .form-label {
             display: block;
             margin-bottom: 8px;
             color: var(--primary-dark);
@@ -118,7 +108,7 @@
             font-family: 'Jua', sans-serif;
         }
         
-        .utility-textarea {
+        .form-textarea {
             width: 100%;
             min-height: 150px;
             padding: 15px;
@@ -131,7 +121,7 @@
             transition: var(--transition);
         }
         
-        .utility-select, .utility-input {
+        .form-select {
             width: 100%;
             padding: 10px 15px;
             border: 2px solid var(--primary-light);
@@ -142,20 +132,20 @@
             color: var(--text-color);
         }
         
-        .utility-textarea:focus, .utility-select:focus, .utility-input:focus {
+        .form-textarea:focus, .form-select:focus {
             outline: none;
             border-color: var(--primary-color);
             box-shadow: 0 0 5px rgba(173, 111, 255, 0.3);
         }
         
-        .utility-buttons {
+        .form-buttons {
             display: flex;
             gap: 15px;
             flex-wrap: wrap;
             margin-top: 20px;
         }
         
-        .utility-button {
+        .form-button {
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
             border: none;
@@ -169,29 +159,29 @@
             box-shadow: 0 4px 12px rgba(173, 111, 255, 0.3);
         }
         
-        .utility-button:hover {
+        .form-button:hover {
             transform: translateY(-3px) scale(1.05);
             box-shadow: 0 8px 20px rgba(173, 111, 255, 0.4);
         }
         
-        .utility-button:active {
+        .form-button:active {
             transform: translateY(1px);
             box-shadow: 0 2px 8px rgba(173, 111, 255, 0.3);
         }
         
-        .utility-button.secondary {
+        .form-button.secondary {
             background: white;
             color: var(--primary-color);
             border: 2px solid var(--primary-light);
             box-shadow: 0 4px 8px rgba(173, 111, 255, 0.15);
         }
         
-        .utility-button.secondary:hover {
+        .form-button.secondary:hover {
             background-color: rgba(173, 111, 255, 0.1);
             transform: translateY(-3px) scale(1.05);
         }
         
-        .utility-result {
+        .translation-result {
             margin-top: 20px;
             background-color: white;
             border-radius: var(--border-radius);
@@ -204,45 +194,6 @@
             overflow-y: auto;
             white-space: pre-wrap;
             border: 1px dashed rgba(173, 111, 255, 0.2);
-        }
-        
-        .lorebook-template {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-        
-        .template-card {
-            background-color: white;
-            border-radius: 10px;
-            padding: 12px;
-            border: 1px solid var(--primary-light);
-            cursor: pointer;
-            transition: var(--transition);
-        }
-        
-        .template-card:hover, .template-card.selected {
-            background-color: rgba(173, 111, 255, 0.1);
-            transform: translateY(-2px);
-        }
-        
-        .template-card.selected {
-            border-width: 2px;
-            border-color: var(--primary-color);
-            box-shadow: 0 4px 12px rgba(173, 111, 255, 0.15);
-        }
-        
-        .template-title {
-            font-weight: 600;
-            color: var(--primary-dark);
-            margin-bottom: 5px;
-            font-family: 'Jua', sans-serif;
-        }
-        
-        .template-description {
-            font-size: 0.9rem;
-            color: var(--text-color);
         }
         
         .loading {
@@ -258,21 +209,44 @@
             animation: fadeIn 0.5s ease forwards;
         }
         
+        .feature-list {
+            margin-top: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        
+        .feature-item {
+            background-color: white;
+            border-radius: 10px;
+            padding: 15px;
+            border: 1px solid var(--primary-light);
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        
+        .feature-icon {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+        }
+        
+        .feature-text {
+            flex: 1;
+            font-size: 0.95rem;
+        }
+        
         @media (max-width: 768px) {
-            .utility-container {
-                grid-template-columns: 1fr;
-            }
-            
-            .lorebook-template {
-                grid-template-columns: 1fr;
-            }
-            
-            .utility-buttons {
+            .form-buttons {
                 flex-direction: column;
             }
             
-            .utility-button {
+            .form-button {
                 width: 100%;
+            }
+            
+            .feature-list {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -314,123 +288,84 @@
     
     <!-- 메인 콘텐츠 -->
     <div class="container">
-        <h1>유틸리티</h1>
+        <h1>AI 번역</h1>
         
         <div class="utility-intro">
-            <h2 class="utility-title">창작을 돕는 편리한 도구들</h2>
+            <h2 class="utility-title">맥락을 이해하는 스마트 번역</h2>
             <p class="utility-description">
-                AI 번역부터 로어북 생성까지, 판타지 툴킷의 다양한 유틸리티로 창작 작업을 더 쉽고 효율적으로 만들어보세요.
-                모든 도구는 무료로 제공되며 인터넷 연결이 있는 어디서든 사용할 수 있습니다.
+                판타지 툴킷의 AI 번역 도구는 단순한 단어 번역을 넘어 문맥과 뉘앙스를 이해하여 자연스러운 번역을 제공합니다. 
+                특히 판타지, SF, 게임 관련 용어와 세계관 설정에 최적화되어 있어 창작 활동에 완벽한 동반자가 됩니다.
             </p>
         </div>
         
-        <div class="utility-container">
-            <!-- AI 번역 도구 -->
-            <div class="utility-card">
-                <div class="utility-card-header">
-                    <div class="utility-icon">🌐</div>
-                    <h3 class="utility-card-title">AI 번역</h3>
-                </div>
-                
-                <div class="utility-card-content">
-                    <p>
-                        AI 기반 번역 도구로 문장의 뉘앙스와 맥락을 살려 자연스러운 번역을 제공합니다.
-                        판타지 용어와 세계관 설정에 최적화되어 있습니다.
-                    </p>
-                </div>
-                
-                <form id="translation-form">
-                    <div class="utility-form-group">
-                        <label class="utility-label" for="source-text">번역할 텍스트</label>
-                        <textarea class="utility-textarea" id="source-text" placeholder="여기에 번역할 텍스트를 입력하세요..."></textarea>
-                    </div>
-                    
-                    <div class="utility-form-group">
-                        <label class="utility-label" for="translation-direction">번역 방향</label>
-                        <select class="utility-select" id="translation-direction">
-                            <option value="ko-en">한국어 → 영어</option>
-                            <option value="en-ko">영어 → 한국어</option>
-                            <option value="ko-jp">한국어 → 일본어</option>
-                            <option value="jp-ko">일본어 → 한국어</option>
-                        </select>
-                    </div>
-                    
-                    <div class="utility-buttons">
-                        <button type="submit" class="utility-button" id="translate-btn">번역하기</button>
-                        <button type="reset" class="utility-button secondary">초기화</button>
-                    </div>
-                </form>
-                
-                <div class="loading" id="translation-loading">
-                    <div class="loading-spinner"></div>
-                    <p>번역 중입니다...</p>
-                </div>
-                
-                <div class="utility-result" id="translation-result" style="display: none;">
-                    번역 결과가 여기에 표시됩니다.
-                </div>
+        <div class="translator-card">
+            <div class="translator-header">
+                <div class="translator-icon">🌐</div>
+                <h3 class="translator-title">AI 번역 도구</h3>
             </div>
             
-            <!-- 로어북 생성 도구 -->
-            <div class="utility-card">
-                <div class="utility-card-header">
-                    <div class="utility-icon">📚</div>
-                    <h3 class="utility-card-title">로어북 생성</h3>
+            <div class="translator-content">
+                <p>
+                    번역할 내용을 입력하고 언어 방향을 선택한 후 '번역하기' 버튼을 클릭하세요.
+                    AI가 자연스러운 번역 결과를 제공해 드립니다.
+                </p>
+            </div>
+            
+            <form id="translation-form">
+                <div class="form-group">
+                    <label class="form-label" for="source-text">번역할 텍스트</label>
+                    <textarea class="form-textarea" id="source-text" placeholder="여기에 번역할 텍스트를 입력하세요..."></textarea>
                 </div>
                 
-                <div class="utility-card-content">
-                    <p>
-                        몇 가지 핵심 정보만 입력하면 AI가 세계관, 종족, 역사 등 다양한 로어를 포함한
-                        상세한 로어북을 생성해 드립니다.
-                    </p>
+                <div class="form-group">
+                    <label class="form-label" for="translation-direction">번역 방향</label>
+                    <select class="form-select" id="translation-direction">
+                        <option value="ko-en">한국어 → 영어</option>
+                        <option value="en-ko">영어 → 한국어</option>
+                        <option value="ko-jp">한국어 → 일본어</option>
+                        <option value="jp-ko">일본어 → 한국어</option>
+                    </select>
                 </div>
                 
-                <form id="lorebook-form">
-                    <div class="utility-form-group">
-                        <label class="utility-label">템플릿 선택</label>
-                        <div class="lorebook-template">
-                            <div class="template-card selected" data-template="fantasy">
-                                <div class="template-title">판타지 세계</div>
-                                <div class="template-description">마법, 신화적 생물, 중세 스타일의 세계관</div>
-                            </div>
-                            <div class="template-card" data-template="scifi">
-                                <div class="template-title">SF 세계</div>
-                                <div class="template-description">미래 기술, 우주 탐험, 외계 문명</div>
-                            </div>
-                            <div class="template-card" data-template="urban">
-                                <div class="template-title">어반 판타지</div>
-                                <div class="template-description">현대 세계에 마법과 초자연적 요소 공존</div>
-                            </div>
-                            <div class="template-card" data-template="post-apocalyptic">
-                                <div class="template-title">포스트 아포칼립스</div>
-                                <div class="template-description">문명 붕괴 이후의 황폐한 세계</div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="utility-form-group">
-                        <label class="utility-label" for="world-name">세계 이름</label>
-                        <input type="text" class="utility-input" id="world-name" placeholder="예: 아르카디아, 네오테라...">
-                    </div>
-                    
-                    <div class="utility-form-group">
-                        <label class="utility-label" for="world-concept">세계관 컨셉 (핵심 아이디어)</label>
-                        <textarea class="utility-textarea" id="world-concept" placeholder="예: 마법이 기술을 대체한 세계, 신들이 직접 개입하는 세계..." style="height: 100px;"></textarea>
-                    </div>
-                    
-                    <div class="utility-buttons">
-                        <button type="submit" class="utility-button" id="generate-lorebook-btn">로어북 생성</button>
-                        <button type="reset" class="utility-button secondary">초기화</button>
-                    </div>
-                </form>
-                
-                <div class="loading" id="lorebook-loading">
-                    <div class="loading-spinner"></div>
-                    <p>로어북을 생성하는 중입니다...</p>
+                <div class="form-buttons">
+                    <button type="submit" class="form-button" id="translate-btn">번역하기</button>
+                    <button type="reset" class="form-button secondary">초기화</button>
                 </div>
-                
-                <div class="utility-result" id="lorebook-result" style="display: none;">
-                    생성된 로어북이 여기에 표시됩니다.
+            </form>
+            
+            <div class="loading" id="translation-loading">
+                <div class="loading-spinner"></div>
+                <p>번역 중입니다...</p>
+            </div>
+            
+            <div class="translation-result" id="translation-result" style="display: none;">
+                번역 결과가 여기에 표시됩니다.
+            </div>
+        </div>
+        
+        <div class="feature-list">
+            <div class="feature-item">
+                <div class="feature-icon">✨</div>
+                <div class="feature-text">
+                    <strong>맥락 기반 번역</strong> - 단순 단어 대 단어 번역이 아닌 문맥을 고려한 자연스러운 번역
+                </div>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">🔮</div>
+                <div class="feature-text">
+                    <strong>판타지 용어 최적화</strong> - 판타지, SF, 게임 등 특수 영역의 용어에 최적화
+                </div>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">🚀</div>
+                <div class="feature-text">
+                    <strong>빠른 처리 속도</strong> - 대용량 텍스트도 빠르게 처리
+                </div>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">🔒</div>
+                <div class="feature-text">
+                    <strong>개인정보 보호</strong> - 모든 번역 데이터는 안전하게 처리되며 저장되지 않음
                 </div>
             </div>
         </div>
@@ -452,18 +387,9 @@
     <!-- 공통 자바스크립트 로드 -->
     <script src="assets/js/common.js"></script>
     
-    <!-- 유틸리티 전용 스크립트 -->
+    <!-- 번역 도구 전용 스크립트 -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // 템플릿 카드 선택 기능
-            const templateCards = document.querySelectorAll('.template-card');
-            templateCards.forEach(card => {
-                card.addEventListener('click', function() {
-                    templateCards.forEach(c => c.classList.remove('selected'));
-                    this.classList.add('selected');
-                });
-            });
-            
             // 번역 폼 제출 이벤트
             const translationForm = document.getElementById('translation-form');
             translationForm.addEventListener('submit', function(e) {
@@ -501,60 +427,6 @@
                     resultElement.textContent = result;
                     resultElement.style.display = 'block';
                 }, 1500);
-            });
-            
-            // 로어북 생성 폼 제출 이벤트
-            const lorebookForm = document.getElementById('lorebook-form');
-            lorebookForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                const worldName = document.getElementById('world-name').value.trim();
-                const worldConcept = document.getElementById('world-concept').value.trim();
-                
-                if (!worldName || !worldConcept) {
-                    alert('세계 이름과 컨셉을 모두 입력해주세요.');
-                    return;
-                }
-                
-                // 선택된 템플릿 확인
-                const selectedTemplate = document.querySelector('.template-card.selected').dataset.template;
-                
-                // 로딩 표시
-                document.getElementById('lorebook-loading').classList.add('active');
-                document.getElementById('lorebook-result').style.display = 'none';
-                
-                // API 호출을 시뮬레이션 (실제로는 여기서 서버에 요청을 보냄)
-                setTimeout(() => {
-                    // 템플릿별 샘플 응답 (실제로는 AI가 생성)
-                    let result = `# ${worldName} 로어북\n\n`;
-                    
-                    if (selectedTemplate === 'fantasy') {
-                        result += `## 세계관 개요\n${worldName}은(는) ${worldConcept}인 판타지 세계입니다. 마법이 일상에 깊이 뿌리내린 이 세계에서는 다양한 종족들이 공존하며 각자의 문명을 발전시켜 왔습니다.\n\n`;
-                        result += `## 주요 종족\n- 인간: 적응력과 창의성이 뛰어나 다양한 왕국을 건설했습니다.\n- 엘프: 자연과 조화를 이루며 살아가는 장수 종족입니다.\n- 드워프: 뛰어난 대장장이이자 광부로, 산맥 아래 웅장한 도시를 건설했습니다.\n\n`;
-                        result += `## 마법 체계\n${worldName}의 마법은 원소의 힘을 다루는 방식으로 발전했습니다. 불, 물, 흙, 공기의 네 가지 기본 원소를 조합하여 다양한 주문을 만들어낼 수 있습니다.\n\n`;
-                    } else if (selectedTemplate === 'scifi') {
-                        result += `## 세계관 개요\n${worldName}은(는) ${worldConcept}인 미래 세계입니다. 인류는 은하계 전역에 퍼져나갔으며, 다양한 외계 종족들과 접촉하고 있습니다.\n\n`;
-                        result += `## 주요 문명\n- 지구 연합: 인류의 본거지이자 정치적 중심지입니다.\n- 알파 공동체: 인공지능이 통치하는 고도로 발전된 행성계입니다.\n- 오메가 무역 연맹: 다양한 종족들이 모여 상업 활동을 하는 중립 지대입니다.\n\n`;
-                        result += `## 기술 수준\n초광속 우주 여행이 일반화되었으며, 테라포밍, 나노기술, 의식 업로드 등의 기술이 발전했습니다. 인공지능은 사회의 모든 영역에 통합되어 있습니다.\n\n`;
-                    } else if (selectedTemplate === 'urban') {
-                        result += `## 세계관 개요\n${worldName}은(는) ${worldConcept}인 현대 세계입니다. 일반 대중은 모르지만, 그림자 속에서 마법사, 흡혈귀, 늑대인간 등 초자연적 존재들이 활동하고 있습니다.\n\n`;
-                        result += `## 은밀한 사회\n- 마법사 길드: 도시 곳곳에 숨겨진 마법 학교와 연구소를 운영합니다.\n- 야행 클럽: 흡혈귀들의 사교 모임으로, 고급 나이트클럽을 소유하고 있습니다.\n- 수호자 협회: 초자연적 범죄와 싸우는 비밀 조직입니다.\n\n`;
-                        result += `## 마법의 현대적 응용\n현대 기술과 마법의 융합으로 새로운 형태의 마법 기기들이 등장했습니다. 마법 인터넷, 주문이 걸린 스마트폰, 영혼을 담는 배터리 등이 비밀리에 사용되고 있습니다.\n\n`;
-                    } else {
-                        result += `## 세계관 개요\n${worldName}은(는) ${worldConcept}인 황폐화된 세계입니다. 대재앙 이후 인류 문명은 붕괴되었고, 살아남은 이들은 자원을 두고 끊임없이 갈등하고 있습니다.\n\n`;
-                        result += `## 주요 파벌\n- 새 질서: 강력한 지도자 아래 군사적 규율을 중시하는 집단입니다.\n- 자유인: 독립적인 부족 형태로 살아가며 자유를 중시합니다.\n- 기계 숭배자: 고대 기술을 신성시하고 복원하려는 집단입니다.\n\n`;
-                        result += `## 생존 환경\n오염된 대기와 변형된 생태계로 인해 보호 장비 없이는 외부 활동이 어렵습니다. 깨끗한 물과 식량, 의약품은 가장 귀중한 자원이 되었습니다.\n\n`;
-                    }
-                    
-                    result += `## 주요 지리\n${worldName}의 주요 지역들은 각기 독특한 특성과 문화를 가지고 있습니다. 고대 유적, 신비한 숲, 위험한 황무지 등 다양한 환경이 탐험가들을 기다립니다.\n\n`;
-                    result += `## 역사\n수천 년에 걸친 ${worldName}의 역사는 위대한 영웅들과 끔찍한 악당들의 이야기로 가득합니다. 고대 문명의 흥망성쇠, 전설적인 전쟁, 신화적 사건들이 세계의 현재를 형성했습니다.\n\n`;
-                    
-                    // 결과 표시
-                    document.getElementById('lorebook-loading').classList.remove('active');
-                    const resultElement = document.getElementById('lorebook-result');
-                    resultElement.textContent = result;
-                    resultElement.style.display = 'block';
-                }, 2000);
             });
         });
     </script>
