@@ -1,0 +1,118 @@
+/* ==================== 던전 생성기 스타일 ==================== */
+
+/* 몬스터 아이콘 스타일 */
+.monster-icon {
+    width: 40px;
+    height: 40px;
+    background-color: var(--primary-light);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    color: white;
+}
+
+/* 결과 영역 스타일 개선 */
+#result-output {
+    margin-top: 30px;
+    background: linear-gradient(to right, rgba(173, 111, 255, 0.05), rgba(255, 111, 215, 0.05));
+    padding: 25px;
+    border-radius: var(--border-radius);
+    border: 1px solid rgba(173, 111, 255, 0.1);
+    position: relative;
+    animation: fadeIn 0.5s ease forwards;
+}
+
+#result-output h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: var(--primary-color);
+    font-family: 'Jua', sans-serif;
+    font-size: 1.3rem;
+}
+
+/* 몬스터 목록 스타일 */
+.monster-list {
+    margin-top: 20px;
+}
+
+.monster-list-container {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+#selected-monsters-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+#selected-monsters-list li {
+    padding: 8px 12px;
+    margin-bottom: 8px;
+    background-color: white;
+    border-radius: 8px;
+    border-left: 3px solid var(--primary-color);
+    display: flex;
+    align-items: center;
+}
+
+.monsters-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.monster-card {
+    background-color: white;
+    border-radius: 10px;
+    padding: 12px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 2px solid transparent;
+}
+
+.monster-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 12px rgba(173, 111, 255, 0.2);
+    border-color: var(--primary-light);
+}
+
+.monster-card.selected {
+    background-color: rgba(173, 111, 255, 0.1);
+    border-color: var(--primary-color);
+}
+
+.available-monsters {
+    margin-top: 25px;
+}
+
+/* 던전 정보 스타일 */
+#dungeon-info {
+    background: linear-gradient(to right, rgba(173, 111, 255, 0.05), rgba(255, 111, 215, 0.05));
+    border-radius: var(--border-radius);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+/* 던전 생성 폼 스타일 */
+#dungeon-form select {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid var(--primary-light);
+    border-radius: 8px;
+    background-color: white;
+    color: var(--text-color);
+    font-size: 1rem;
+    transition: all 0.3s;
+}
+
+#dungeon-form select:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 5px rgba(173, 111, 255, 0.2);
+}
