@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="../../assets/css/world-generator.css">
 </head>
 <body>
-    <!-- ==================== 네비게이션 메뉴 ==================== -->
+    
     <!-- ==================== 네비게이션 메뉴 ==================== -->
 <nav class="nav-container">
     <div class="nav-inner">
@@ -31,8 +31,10 @@
         
         <!-- 메뉴 링크 목록 -->
         <ul class="nav-links" id="nav-menu">
-            <li><a href="/">홈</a></li>
-            <li class="has-dropdown">
+            <li id="menu-home"><a href="/">홈</a></li>
+            <li id="menu-utility"><a href="/utility">유틸리티</a></li>
+            <li id="menu-lorebook"><a href="/lorebook">로어북 공유</a></li>
+            <li id="menu-generator" class="has-dropdown">
                 <a href="/tools" class="dropdown-toggle">생성기 도구 <i class="fas fa-caret-down"></i></a>
                 <ul class="dropdown-menu">
                     <li><a href="/tools/mob-generator/">모브 생성기</a></li>
@@ -40,9 +42,7 @@
                     <li><a href="/tools/dungeon-generator/">던전 생성기</a></li>
                 </ul>
             </li>
-            <li><a href="/utility">유틸리티</a></li>
-            <li><a href="/lorebook">로어북 공유</a></li>
-            <li><a href="/about.html">소개</a></li>
+            <li id="menu-about"><a href="/about.html">소개</a></li>
         </ul>
     </div>
 </nav>
