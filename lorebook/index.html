@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로어북 공유 - 판타지 툴킷</title>
+    <!-- 기본 스타일시트 로드 -->
+    <link rel="stylesheet" href="assets/css/main.css">
+    <style>
+        /* 로어북 공유 페이지 전용 스타일 */
+        .construction-container {
+            text-align: center;
+            padding: 80px 20px;
+            background: linear-gradient(135deg, rgba(173, 111, 255, 0.1), rgba(255, 111, 215, 0.1));
+            border-radius: var(--border-radius);
+            margin: 50px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .construction-container::before, .construction-container::after {
+            content: "🔨";
+            position: absolute;
+            font-size: 30px;
+            animation: bounce 2s infinite alternate;
+        }
+        
+        .construction-container::before {
+            top: 30px;
+            left: 50px;
+            animation-delay: 0s;
+        }
+        
+        .construction-container::after {
+            bottom: 30px;
+            right: 50px;
+            content: "🚧";
+            animation-delay: 0.5s;
+        }
+        
+        .construction-icon {
+            font-size: 100px;
+            margin-bottom: 30px;
+            display: inline-block;
+            animation: bounce 1.5s infinite alternate;
+        }
+        
+        .construction-title {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-family: 'Jua', sans-serif;
+        }
+        
+        .construction-description {
+            color: var(--text-color);
+            max-width: 700px;
+            margin: 0 auto 30px;
+            line-height: 1.7;
+            font-size: 1.2rem;
+        }
+        
+        .feature-preview {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 30px;
+            max-width: 800px;
+            margin: 40px auto;
+            box-shadow: var(--shadow);
+            text-align: left;
+            border: 2px dashed var(--primary-light);
+        }
+        
+        .preview-title {
+            font-size: 1.5rem;
+            color: var(--primary-dark);
+            margin-bottom: 20px;
+            font-family: 'Jua', sans-serif;
+            text-align: center;
+        }
+        
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .feature-item {
+            margin-bottom: 15px;
+            padding-left: 30px;
+            position: relative;
+        }
+        
+        .feature-item::before {
+            content: "✨";
+            position: absolute;
+            left: 0;
+            top: 2px;
+        }
+        
+        .eta-section {
+            margin-top: 40px;
+            padding: 20px;
+            background-color: rgba(173, 111, 255, 0.1);
+            border-radius: var(--border-radius);
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .eta-title {
+            font-size: 1.3rem;
+            color: var(--primary-dark);
+            margin-bottom: 10px;
+            font-family: 'Jua', sans-serif;
+            text-align: center;
+        }
+        
+        .eta-date {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            text-align: center;
+        }
+        
+        .subscribe-form {
+            max-width: 500px;
+            margin: 40px auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+        
+        .form-title {
+            font-size: 1.3rem;
+            color: var(--primary-dark);
+            margin-bottom: 20px;
+            font-family: 'Jua', sans-serif;
+            text-align: center;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--primary-dark);
+            font-weight: 500;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid var(--primary-light);
+            border-radius: var(--border-radius);
+            font-family: 'Gaegu', sans-serif;
+            font-size: 1rem;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 5px rgba(173, 111, 255, 0.3);
+        }
+        
+        .subscribe-button {
+            display: block;
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: 'Jua', sans-serif;
+        }
+        
+        .subscribe-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(173, 111, 255, 0.3);
+        }
+        
+        .back-home {
+            display: inline-block;
+            margin-top: 30px;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+        
+        .back-home:hover {
+            color: var(--secondary-color);
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            .construction-title {
+                font-size: 2rem;
+            }
+            
+            .construction-icon {
+                font-size: 80px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 네비게이션 메뉴 (navigation-template을 여기에 삽입) -->
+    
+    <!-- 메인 콘텐츠 -->
+    <div class="container">
+        <h1>로어북 공유</h1>
+        
+        <div class="construction-container">
+            <div class="construction-icon">👷‍♀️</div>
+            <h2 class="construction-title">페이지 공사중</h2>
+            <p class="construction-description">
+                로어북 공유 기능은 현재 개발 중입니다. 더 나은 서비스를 제공하기 위해 열심히 작업하고 있으니 조금만 기다려주세요!
+            </p>
+            
+            <div class="feature-preview">
+                <h3 class="preview-title">준비 중인 기능</h3>
+                <ul class="feature-list">
+                    <li class="feature-item">사용자가 직접 만든 로어북 익명 업로드</li>
+                    <li class="feature-item">카테고리별 로어북 브라우징 (판타지, SF, 어반 판타지 등)</li>
+                    <li class="feature-item">좋아요와 댓글 기능으로 커뮤니티 피드백</li>
+                    <li class="feature-item">로어북 검색 및 필터링 시스템</li>
+                    <li class="feature-item">마크다운 형식 지원으로 풍부한 포맷팅</li>
+                    <li class="feature-item">이미지와 맵 첨부 기능</li>
+                </ul>
+            </div>
+            
+            <div class="eta-section">
+                <h3 class="eta-title">예상 오픈 일정</h3>
+                <p class="eta-date">2025년 6월</p>
+            </div>
+            
+            <div class="subscribe-form">
+                <h3 class="form-title">로어북 공유 오픈 소식 받기</h3>
+                <form id="notify-form">
+                    <div class="form-group">
+                        <label class="form-label" for="notify-email">이메일</label>
+                        <input type="email" class="form-input" id="notify-email" placeholder="이메일 주소를 입력하세요">
+                    </div>
+                    <button type="submit" class="subscribe-button">알림 받기</button>
+                </form>
+            </div>
+            
+            <a href="/" class="back-home">← 홈으로 돌아가기</a>
+        </div>
+        
+        <!-- 푸터 -->
+        <footer class="footer">
+            <p>© 2025 판타지 툴킷. 모든 권리 보유.</p>
+            <p style="margin-top: 10px;">
+                <a href="/privacy.html">개인정보 처리방침</a> | 
+                <a href="/terms.html">이용약관</a> | 
+                <a href="/contact.html">문의하기</a>
+            </p>
+            <p style="margin-top: 15px;">
+                Made by 홍삼정에브리타임 💜
+            </p>
+        </footer>
+    </div>
+
+    <!-- 공통 자바스크립트 로드 -->
+    <script src="assets/js/common.js"></script>
+    
+    <!-- 간단한 알림 폼 처리 스크립트 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const notifyForm = document.getElementById('notify-form');
+            
+            notifyForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const email = document.getElementById('notify-email').value.trim();
+                
+                if (!email) {
+                    alert('이메일 주소를 입력해주세요.');
+                    return;
+                }
+                
+                // 이메일 형식 검증 (간단한 검증)
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
+                    alert('유효한 이메일 주소를 입력해주세요.');
+                    return;
+                }
+                
+                // 실제로는 서버에 이메일을 저장하는 API를 호출해야 함
+                // 여기서는 성공 메시지로 대체
+                alert('알림 신청이 완료되었습니다! 로어북 공유 기능이 오픈되면 알려드리겠습니다.');
+                notifyForm.reset();
+            });
+        });
+    </script>
+</body>
+</html>
