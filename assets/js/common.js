@@ -21,15 +21,42 @@ function initializeNavigation() {
         window.addEventListener('resize', function() {
             if (window.innerWidth > 768) {
                 navMenu.classList.remove('active');
+                // 모든 드롭다운 상태 초기화
+                const dropdownItems = document.querySelectorAll('.has-dropdown');
+                dropdownItems.forEach(item => {
+                    item.classList.remove('active');
+                });
             }
         });
     }
+    
+    // 드롭다운 메뉴 초기화
+    initDropdownMenus();
     
     // 네비게이션 링크 경로 업데이트
     updateNavigationLinks();
     
     // 현재 활성화된 메뉴 항목 표시하기
     highlightCurrentPage();
+}
+
+/**
+ * 드롭다운 메뉴 초기화 함수
+ */
+function initDropdownMenus() {
+    const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
+    
+    // 모바일에서 드롭다운 토글 동작
+    dropdownToggles.forEach(toggle => {
+        toggle.addEventListener('click', function(e) {
+            // 모바일 화면에서만 기본 동작 방지
+            if (window.innerWidth <= 768) {
+                e.preventDefault();
+                const parent = this.parentNode;
+                parent.classList.toggle('active');
+            }
+        });
+    });
 }
 
 /**
@@ -43,6 +70,8 @@ function updateNavigationLinks() {
         const href = link.getAttribute('href');
         // 이미 절대 URL인 경우 무시
         if (href.startsWith('http') || href.startsWith('https')) return;
+        // 드롭다운 토글 버튼인 경우 처리
+        if (link.classList.contains('dropdown-toggle')) return;
         
         // '/MobJAKO-CHAGEN' 접두사를 제거하고 basePath 추가
         let newHref = href.replace(/^\/MobJAKO-CHAGEN/, '');
@@ -71,6 +100,9 @@ function highlightCurrentPage() {
         // 링크 경로와 현재 경로 비교
         const linkPath = link.getAttribute('href');
         
+        // 드롭다운 토글은 건너뜀
+        if (link.classList.contains('dropdown-toggle')) return;
+        
         // 정확히 일치하거나, 현재 경로가 링크 경로를 포함하면서 홈페이지 링크가 아니면 활성화
         if (linkPath === currentPath || 
             (currentPath.includes(linkPath) && 
@@ -78,8 +110,21 @@ function highlightCurrentPage() {
              linkPath !== '/index.html')) {
             // 일치하는 링크에 'active' 클래스 추가
             link.classList.add('active');
+            
+            // 부모가 드롭다운인 경우 부모 드롭다운 토글도 활성화
+            const parentLi = link.closest('.has-dropdown');
+            if (parentLi) {
+                const dropdownToggle = parentLi.querySelector('.dropdown-toggle');
+                if (dropdownToggle) dropdownToggle.classList.add('active');
+            }
         }
     });
+    
+    // 도구 페이지 특별 처리
+    if (currentPath.includes('/tools/')) {
+        const toolsDropdown = document.querySelector('.dropdown-toggle[href="/tools"]');
+        if (toolsDropdown) toolsDropdown.classList.add('active');
+    }
     
     // 홈 페이지 특별 처리 (정확히 일치할 경우에만)
     if (currentPath === '/' || currentPath === '/index.html') {
