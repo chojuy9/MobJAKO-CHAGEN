@@ -1,0 +1,202 @@
+/* ==================== 생성기 공통 스타일 ==================== */
+/* 이 파일은 모든 생성기 도구에서 공유하는 스타일을 포함합니다 */
+
+/* 로딩 컨테이너 스타일 */
+.loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+}
+
+.loading-text {
+    margin-top: 15px;
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+/* 결과 영역 공통 스타일 */
+.result-container {
+    margin-top: 30px;
+    background: linear-gradient(to right, rgba(173, 111, 255, 0.05), rgba(255, 111, 215, 0.05));
+    padding: 25px;
+    border-radius: var(--border-radius);
+    border: 1px solid rgba(173, 111, 255, 0.1);
+    position: relative;
+    animation: fadeIn 0.5s ease forwards;
+}
+
+.result-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 2px dashed var(--primary-light);
+    padding-bottom: 15px;
+}
+
+.result-title {
+    font-size: 1.5rem;
+    color: var(--primary-dark);
+    font-family: 'Jua', sans-serif;
+}
+
+/* 텍스트 영역 스타일 */
+.result-textarea {
+    width: 100%;
+    min-height: 200px;
+    padding: 15px;
+    border: 2px solid var(--primary-light);
+    border-radius: var(--border-radius);
+    background-color: white;
+    font-family: 'Gaegu', monospace;
+    font-size: 1.1rem;
+    resize: vertical;
+    margin-bottom: 15px;
+    white-space: pre-wrap;
+    line-height: 1.5;
+    color: var(--text-color);
+}
+
+/* 복사 버튼 스타일 */
+.copy-btn {
+    background: linear-gradient(135deg, var(--accent-color), var(--primary-color));
+    color: white;
+    padding: 10px 20px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-family: 'Jua', sans-serif;
+    box-shadow: 0 4px 8px rgba(173, 111, 255, 0.2);
+    transition: all 0.3s ease;
+    border: none;
+    display: inline-block;
+    margin-top: 0;
+}
+
+.copy-btn:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 6px 12px rgba(173, 111, 255, 0.3);
+}
+
+/* 오류 컨테이너 스타일 */
+.error-container {
+    text-align: center;
+    padding: 30px;
+    background-color: rgba(229, 57, 53, 0.1);
+    border-radius: var(--border-radius);
+    border-left: 4px solid #e53935;
+    margin: 20px 0;
+}
+
+.error-icon {
+    font-size: 32px;
+    margin-bottom: 15px;
+}
+
+.error-details {
+    text-align: left;
+    background-color: rgba(0, 0, 0, 0.05);
+    padding: 15px;
+    border-radius: 8px;
+    margin: 15px 0;
+    font-size: 0.9rem;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.error-details code {
+    white-space: pre-wrap;
+    word-break: break-all;
+    display: block;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    margin: 10px 0;
+    font-family: monospace;
+}
+
+.retry-btn {
+    background: linear-gradient(135deg, #e53935, #ff5252);
+    margin-top: 20px;
+}
+
+.retry-btn:hover {
+    background: linear-gradient(135deg, #ff5252, #e53935);
+}
+
+/* 필터 섹션 확장 스타일 */
+.filter-options {
+    margin-bottom: 20px;
+}
+
+.option-group {
+    margin-bottom: 20px;
+}
+
+.option-title {
+    font-family: 'Jua', sans-serif;
+    color: var(--primary-dark);
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+}
+
+.filter-container {
+    margin-top: 10px;
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+/* 고급 옵션 토글 */
+.advanced-options-toggle {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.advanced-options-toggle button {
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 8px 15px;
+    border-radius: 20px;
+    transition: all 0.3s;
+}
+
+.advanced-options-toggle button:hover {
+    background-color: rgba(173, 111, 255, 0.1);
+}
+
+.advanced-options {
+    border-top: 1px dashed #ddd;
+    padding-top: 20px;
+    margin-top: 10px;
+}
+
+/* 액션 버튼 스타일 */
+.action-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.action-button {
+    padding: 8px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: var(--transition);
+}
+
+.save-button {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.copy-button {
+    background-color: #2196F3;
+    color: white;
+}
