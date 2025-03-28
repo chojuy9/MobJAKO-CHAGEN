@@ -1,0 +1,53 @@
+## CSS 파일 배치 안내
+
+다음과 같이 CSS 파일들을 배치하면 됩니다:
+
+### 1. 생성기 공통 스타일 파일 생성
+- `assets/css/generator-common.css` 파일을 생성하여 위에서 작성한 "생성기 공통 스타일 (generator-common.css)" 내용을 붙여넣습니다.
+
+### 2. 세계 생성기 스타일 파일 생성
+- `assets/css/world-generator.css` 파일을 생성하여 위에서 작성한 "세계 생성기 스타일 (world-generator.css)" 내용을 붙여넣습니다.
+
+### 3. 던전 생성기 스타일 파일 생성
+- `assets/css/dungeon-generator.css` 파일을 생성하여 위에서 작성한 "던전 생성기 스타일 (dungeon-generator.css)" 내용을 붙여넣습니다.
+
+### 4. HTML 파일 수정
+각 생성기의 HTML 파일을 수정하여 다음과 같이 CSS를 로드합니다:
+
+#### world-generator/index.html
+```html
+<head>
+    <!-- 기본 스타일시트 로드 -->
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <!-- 생성기 공통 스타일 로드 -->
+    <link rel="stylesheet" href="../../assets/css/generator-common.css">
+    <!-- 세계 생성기 전용 스타일 로드 -->
+    <link rel="stylesheet" href="../../assets/css/world-generator.css">
+</head>
+```
+
+#### dungeon-generator/index.html
+```html
+<head>
+    <!-- 기본 스타일시트 로드 -->
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <!-- 생성기 공통 스타일 로드 -->
+    <link rel="stylesheet" href="../../assets/css/generator-common.css">
+    <!-- 던전 생성기 전용 스타일 로드 -->
+    <link rel="stylesheet" href="../../assets/css/dungeon-generator.css">
+</head>
+```
+
+#### mob-generator/index.html
+```html
+<head>
+    <!-- 기본 스타일시트 로드 -->
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <!-- 생성기 공통 스타일 로드 -->
+    <link rel="stylesheet" href="../../assets/css/generator-common.css">
+</head>
+```
+
+### 5. main.css 수정 (선택사항)
+- `assets/css/main.css` 파일을 위에서 작성한 "수정된 main.css" 내용으로 변경합니다. 
+- 주석처리된 생성기 스타일 import 문은 필요하다면 해제할 수 있습니다.
