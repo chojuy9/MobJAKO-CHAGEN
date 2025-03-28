@@ -457,72 +457,7 @@
     <!-- 공통 자바스크립트 로드 -->
     <script src="../../assets/js/common.js"></script>
     
-    <!-- 로어북 생성기 전용 스크립트 -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // 템플릿 카드 선택 기능
-            const templateCards = document.querySelectorAll('.template-card');
-            templateCards.forEach(card => {
-                card.addEventListener('click', function() {
-                    templateCards.forEach(c => c.classList.remove('selected'));
-                    this.classList.add('selected');
-                });
-            });
-            
-            // 로어북 생성 폼 제출 이벤트
-            const lorebookForm = document.getElementById('lorebook-form');
-            lorebookForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                const worldName = document.getElementById('world-name').value.trim();
-                const worldConcept = document.getElementById('world-concept').value.trim();
-                
-                if (!worldName || !worldConcept) {
-                    alert('세계 이름과 컨셉을 모두 입력해주세요.');
-                    return;
-                }
-                
-                // 선택된 템플릿 확인
-                const selectedTemplate = document.querySelector('.template-card.selected').dataset.template;
-                
-                // 로딩 표시
-                document.getElementById('lorebook-loading').classList.add('active');
-                document.getElementById('lorebook-result').style.display = 'none';
-                
-                // API 호출을 시뮬레이션 (실제로는 여기서 서버에 요청을 보냄)
-                setTimeout(() => {
-                    // 템플릿별 샘플 응답 (실제로는 AI가 생성)
-                    let result = `# ${worldName} 로어북\n\n`;
-                    
-                    if (selectedTemplate === 'fantasy') {
-                        result += `## 세계관 개요\n${worldName}은(는) ${worldConcept}인 판타지 세계입니다. 마법이 일상에 깊이 뿌리내린 이 세계에서는 다양한 종족들이 공존하며 각자의 문명을 발전시켜 왔습니다.\n\n`;
-                        result += `## 주요 종족\n- 인간: 적응력과 창의성이 뛰어나 다양한 왕국을 건설했습니다.\n- 엘프: 자연과 조화를 이루며 살아가는 장수 종족입니다.\n- 드워프: 뛰어난 대장장이이자 광부로, 산맥 아래 웅장한 도시를 건설했습니다.\n\n`;
-                        result += `## 마법 체계\n${worldName}의 마법은 원소의 힘을 다루는 방식으로 발전했습니다. 불, 물, 흙, 공기의 네 가지 기본 원소를 조합하여 다양한 주문을 만들어낼 수 있습니다.\n\n`;
-                    } else if (selectedTemplate === 'scifi') {
-                        result += `## 세계관 개요\n${worldName}은(는) ${worldConcept}인 미래 세계입니다. 인류는 은하계 전역에 퍼져나갔으며, 다양한 외계 종족들과 접촉하고 있습니다.\n\n`;
-                        result += `## 주요 문명\n- 지구 연합: 인류의 본거지이자 정치적 중심지입니다.\n- 알파 공동체: 인공지능이 통치하는 고도로 발전된 행성계입니다.\n- 오메가 무역 연맹: 다양한 종족들이 모여 상업 활동을 하는 중립 지대입니다.\n\n`;
-                        result += `## 기술 수준\n초광속 우주 여행이 일반화되었으며, 테라포밍, 나노기술, 의식 업로드 등의 기술이 발전했습니다. 인공지능은 사회의 모든 영역에 통합되어 있습니다.\n\n`;
-                    } else if (selectedTemplate === 'urban') {
-                        result += `## 세계관 개요\n${worldName}은(는) ${worldConcept}인 현대 세계입니다. 일반 대중은 모르지만, 그림자 속에서 마법사, 흡혈귀, 늑대인간 등 초자연적 존재들이 활동하고 있습니다.\n\n`;
-                        result += `## 은밀한 사회\n- 마법사 길드: 도시 곳곳에 숨겨진 마법 학교와 연구소를 운영합니다.\n- 야행 클럽: 흡혈귀들의 사교 모임으로, 고급 나이트클럽을 소유하고 있습니다.\n- 수호자 협회: 초자연적 범죄와 싸우는 비밀 조직입니다.\n\n`;
-                        result += `## 마법의 현대적 응용\n현대 기술과 마법의 융합으로 새로운 형태의 마법 기기들이 등장했습니다. 마법 인터넷, 주문이 걸린 스마트폰, 영혼을 담는 배터리 등이 비밀리에 사용되고 있습니다.\n\n`;
-                    } else {
-                        result += `## 세계관 개요\n${worldName}은(는) ${worldConcept}인 황폐화된 세계입니다. 대재앙 이후 인류 문명은 붕괴되었고, 살아남은 이들은 자원을 두고 끊임없이 갈등하고 있습니다.\n\n`;
-                        result += `## 주요 파벌\n- 새 질서: 강력한 지도자 아래 군사적 규율을 중시하는 집단입니다.\n- 자유인: 독립적인 부족 형태로 살아가며 자유를 중시합니다.\n- 기계 숭배자: 고대 기술을 신성시하고 복원하려는 집단입니다.\n\n`;
-                        result += `## 생존 환경\n오염된 대기와 변형된 생태계로 인해 보호 장비 없이는 외부 활동이 어렵습니다. 깨끗한 물과 식량, 의약품은 가장 귀중한 자원이 되었습니다.\n\n`;
-                    }
-                    
-                    result += `## 주요 지리\n${worldName}의 주요 지역들은 각기 독특한 특성과 문화를 가지고 있습니다. 고대 유적, 신비한 숲, 위험한 황무지 등 다양한 환경이 탐험가들을 기다립니다.\n\n`;
-                    result += `## 역사\n수천 년에 걸친 ${worldName}의 역사는 위대한 영웅들과 끔찍한 악당들의 이야기로 가득합니다. 고대 문명의 흥망성쇠, 전설적인 전쟁, 신화적 사건들이 세계의 현재를 형성했습니다.\n\n`;
-                    
-                    // 결과 표시
-                    document.getElementById('lorebook-loading').classList.remove('active');
-                    const resultElement = document.getElementById('lorebook-result');
-                    resultElement.textContent = result;
-                    resultElement.style.display = 'block';
-                }, 2000);
-            });
-        });
-    </script>
+    <!-- 로어북 생성기 전용 스크립트 로드 -->
+    <script src="../../assets/js/lorebook-generator.js"></script>
 </body>
 </html>
