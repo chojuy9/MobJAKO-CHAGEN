@@ -6,49 +6,48 @@
     <title>유틸리티 - 판타지 툴킷</title>
     <!-- 기본 스타일시트 로드 -->
     <link rel="stylesheet" href="assets/css/main.css">
+    <!-- 생성기 공통 스타일 로드 -->
+    <link rel="stylesheet" href="assets/css/generator-common.css">
     <style>
-        /* 유틸리티 페이지 전용 스타일 */
+        /* 유틸리티 페이지 전용 스타일 - 기존 컴포넌트 스타일과 일관성 유지 */
         .utility-intro {
-            background: linear-gradient(135deg, rgba(173, 111, 255, 0.1), rgba(255, 111, 215, 0.1));
+            background: linear-gradient(to right, rgba(173, 111, 255, 0.05), rgba(255, 111, 215, 0.05));
             border-radius: var(--border-radius);
-            padding: 40px;
-            margin-bottom: 40px;
-            text-align: center;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(173, 111, 255, 0.08);
+            border: 1px solid rgba(173, 111, 255, 0.1);
             position: relative;
-            overflow: hidden;
+            animation: fadeIn 0.5s ease forwards;
         }
         
         .utility-intro::before {
             content: "🔮";
             position: absolute;
-            top: 20px;
+            top: -12px;
             left: 20px;
             font-size: 24px;
-            animation: bounce 2s infinite;
         }
         
         .utility-intro::after {
             content: "✨";
             position: absolute;
-            bottom: 20px;
-            right: 20px;
+            bottom: -15px;
+            right: 30px;
             font-size: 24px;
-            animation: bounce 2s infinite;
-            animation-delay: 0.5s;
+            transform: rotate(10deg);
         }
         
         .utility-title {
-            font-size: 2.5rem;
+            font-size: 1.8rem;
             color: var(--primary-color);
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             font-family: 'Jua', sans-serif;
         }
         
         .utility-description {
             color: var(--text-color);
-            max-width: 800px;
-            margin: 0 auto;
-            line-height: 1.7;
+            line-height: 1.6;
             font-size: 1.1rem;
         }
         
@@ -56,38 +55,38 @@
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
             gap: 30px;
-            margin: 40px 0;
+            margin: 30px 0;
         }
         
         .utility-card {
-            background-color: white;
+            background-color: var(--card-background);
             border-radius: var(--border-radius);
-            padding: 30px;
+            padding: 25px;
             box-shadow: var(--shadow);
-            border: 2px dashed var(--primary-light);
             transition: var(--transition);
+            border: 2px dashed var(--primary-light);
         }
         
         .utility-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(173, 111, 255, 0.2);
+            box-shadow: 0 8px 20px rgba(173, 111, 255, 0.2);
         }
         
         .utility-card-header {
             margin-bottom: 20px;
             padding-bottom: 15px;
-            border-bottom: 2px dashed var(--primary-light);
+            border-bottom: 1px dashed rgba(173, 111, 255, 0.2);
             display: flex;
             align-items: center;
             gap: 15px;
         }
         
         .utility-icon {
-            font-size: 2rem;
+            font-size: 1.8rem;
             color: var(--primary-color);
             background-color: rgba(173, 111, 255, 0.1);
-            width: 60px;
-            height: 60px;
+            width: 50px;
+            height: 50px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -95,17 +94,20 @@
         }
         
         .utility-card-title {
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             color: var(--primary-dark);
             font-family: 'Jua', sans-serif;
+            font-weight: 700;
         }
         
         .utility-card-content {
             margin-bottom: 20px;
+            font-size: 1.1rem;
+            color: var(--text-color);
         }
         
         .utility-form-group {
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
         
         .utility-label {
@@ -118,7 +120,7 @@
         
         .utility-textarea {
             width: 100%;
-            height: 150px;
+            min-height: 150px;
             padding: 15px;
             border: 2px solid var(--primary-light);
             border-radius: var(--border-radius);
@@ -126,15 +128,18 @@
             font-family: 'Gaegu', sans-serif;
             font-size: 1rem;
             line-height: 1.5;
+            transition: var(--transition);
         }
         
         .utility-select, .utility-input {
             width: 100%;
-            padding: 12px 15px;
+            padding: 10px 15px;
             border: 2px solid var(--primary-light);
-            border-radius: var(--border-radius);
+            border-radius: 8px;
             font-family: 'Gaegu', sans-serif;
             font-size: 1rem;
+            transition: var(--transition);
+            color: var(--text-color);
         }
         
         .utility-textarea:focus, .utility-select:focus, .utility-input:focus {
@@ -147,6 +152,7 @@
             display: flex;
             gap: 15px;
             flex-wrap: wrap;
+            margin-top: 20px;
         }
         
         .utility-button {
@@ -160,29 +166,36 @@
             cursor: pointer;
             transition: var(--transition);
             font-family: 'Jua', sans-serif;
+            box-shadow: 0 4px 12px rgba(173, 111, 255, 0.3);
         }
         
         .utility-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(173, 111, 255, 0.3);
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 20px rgba(173, 111, 255, 0.4);
+        }
+        
+        .utility-button:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 8px rgba(173, 111, 255, 0.3);
         }
         
         .utility-button.secondary {
             background: white;
             color: var(--primary-color);
             border: 2px solid var(--primary-light);
+            box-shadow: 0 4px 8px rgba(173, 111, 255, 0.15);
         }
         
         .utility-button.secondary:hover {
-            background-color: var(--primary-light);
-            color: white;
+            background-color: rgba(173, 111, 255, 0.1);
+            transform: translateY(-3px) scale(1.05);
         }
         
         .utility-result {
             margin-top: 20px;
-            background-color: #f8f8f8;
+            background-color: white;
             border-radius: var(--border-radius);
-            padding: 20px;
+            padding: 15px;
             font-family: 'Gaegu', sans-serif;
             border-left: 4px solid var(--primary-color);
             font-size: 1rem;
@@ -190,32 +203,34 @@
             max-height: 300px;
             overflow-y: auto;
             white-space: pre-wrap;
+            border: 1px dashed rgba(173, 111, 255, 0.2);
         }
         
         .lorebook-template {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
+            gap: 15px;
             margin-bottom: 20px;
         }
         
         .template-card {
-            background-color: #f8f8f8;
-            border-radius: var(--border-radius);
-            padding: 15px;
-            border: 1px solid #eee;
+            background-color: white;
+            border-radius: 10px;
+            padding: 12px;
+            border: 1px solid var(--primary-light);
             cursor: pointer;
             transition: var(--transition);
         }
         
         .template-card:hover, .template-card.selected {
             background-color: rgba(173, 111, 255, 0.1);
-            border-color: var(--primary-light);
+            transform: translateY(-2px);
         }
         
         .template-card.selected {
             border-width: 2px;
             border-color: var(--primary-color);
+            box-shadow: 0 4px 12px rgba(173, 111, 255, 0.15);
         }
         
         .template-title {
@@ -240,16 +255,7 @@
         
         .loading.active {
             display: block;
-        }
-        
-        .loading-spinner {
-            border: 4px solid rgba(173, 111, 255, 0.1);
-            border-top: 4px solid var(--primary-color);
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 10px;
+            animation: fadeIn 0.5s ease forwards;
         }
         
         @media (max-width: 768px) {
@@ -272,7 +278,39 @@
     </style>
 </head>
 <body>
-    <!-- 네비게이션 메뉴 (navigation-template을 여기에 삽입) -->
+    <!-- 네비게이션 메뉴 -->
+    <nav class="nav-container">
+        <div class="nav-inner">
+            <!-- 로고 및 사이트 제목 -->
+            <a href="/" class="nav-logo">
+                <i class="fas fa-dice-d20"></i>
+                ✨ 판타지 툴킷 ✨
+            </a>
+            
+            <!-- 햄버거 메뉴 토글 버튼 (모바일 전용) -->
+            <div class="menu-toggle" id="mobile-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            
+            <!-- 메뉴 링크 목록 -->
+            <ul class="nav-links" id="nav-menu">
+                <li id="menu-home"><a href="/">홈</a></li>
+                <li id="menu-utility"><a href="/utility">유틸리티</a></li>
+                <li id="menu-lorebook"><a href="/lorebook">로어북 공유</a></li>
+                <li id="menu-generator" class="has-dropdown">
+                    <a href="/tools" class="dropdown-toggle">생성기 도구 <i class="fas fa-caret-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/tools/mob-generator/">모브 생성기</a></li>
+                        <li><a href="/tools/world-generator/">세계 생성기</a></li>
+                        <li><a href="/tools/dungeon-generator/">던전 생성기</a></li>
+                    </ul>
+                </li>
+                <li id="menu-about"><a href="/about.html">소개</a></li>
+            </ul>
+        </div>
+    </nav>
     
     <!-- 메인 콘텐츠 -->
     <div class="container">
