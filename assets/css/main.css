@@ -14,6 +14,7 @@
 @import url('../css/navigation.css');
 @import url('../css/components.css');
 @import url('../css/animations.css');
+@import url('../css/dropdown.css'); /* 새로 추가된 드롭다운 메뉴 스타일 */
 
 /* 생성기 관련 스타일 - 필요한 경우 특정 페이지에서만 로드 */
 /* @import url('../css/generator-common.css'); */
