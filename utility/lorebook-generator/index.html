@@ -300,44 +300,7 @@
 </head>
 <body>
     <!-- 네비게이션 메뉴 -->
-<nav class="nav-container">
-    <div class="nav-inner">
-        <!-- 로고 및 사이트 제목 -->
-        <a href="/" class="nav-logo">
-            <i class="fas fa-dice-d20"></i>
-            ✨ 판타지 툴킷 ✨
-        </a>
-        
-        <!-- 햄버거 메뉴 토글 버튼 (모바일 전용) -->
-        <div class="menu-toggle" id="mobile-menu">
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
-        
-        <!-- 메뉴 링크 목록 -->
-        <ul class="nav-links" id="nav-menu">
-            <li id="menu-home"><a href="/">홈</a></li>
-            <li id="menu-utility" class="has-dropdown">
-                <a href="/utility" class="dropdown-toggle">유틸리티 <i class="fas fa-caret-down"></i></a>
-                <ul class="dropdown-menu">
-                    <li><a href="/utility">AI 번역</a></li>
-                    <li><a href="/utility/lorebook-generator/">로어북 생성기</a></li>
-                </ul>
-            </li>
-            <li id="menu-lorebook"><a href="/lorebook">로어북 공유</a></li>
-            <li id="menu-generator" class="has-dropdown">
-                <a href="/tools" class="dropdown-toggle">생성기 도구 <i class="fas fa-caret-down"></i></a>
-                <ul class="dropdown-menu">
-                    <li><a href="/tools/mob-generator/">모브 생성기</a></li>
-                    <li><a href="/tools/world-generator/">세계 생성기</a></li>
-                    <li><a href="/tools/dungeon-generator/">던전 생성기</a></li>
-                </ul>
-            </li>
-            <li id="menu-about"><a href="/about.html">소개</a></li>
-        </ul>
-    </div>
-</nav>
+    <div id="header-placeholder"></div>
     
     <!-- 메인 콘텐츠 -->
     <div class="container">
@@ -439,25 +402,19 @@
                 </div>
             </div>
         </div>
-        
-        <!-- 푸터 -->
-        <footer class="footer">
-            <p>© 2025 판타지 툴킷. 모든 권리 보유.</p>
-            <p style="margin-top: 10px;">
-                <a href="/privacy.html">개인정보 처리방침</a> | 
-                <a href="/terms.html">이용약관</a> | 
-                <a href="/contact.html">문의하기</a>
-            </p>
-            <p style="margin-top: 15px;">
-                Made by 홍삼정에브리타임 💜
-            </p>
-        </footer>
+
+        <!-- 푸터
+        <div id="header-placeholder"></div>
+        -->
     </div>
 
     <!-- 공통 자바스크립트 로드 -->
     <script src="../../assets/js/common.js"></script>
-    
     <!-- 로어북 생성기 전용 스크립트 로드 -->
     <script src="../../utility/js/lorebook-generator.js"></script>
+    <!-- Header 스크립트 로드 -->
+    <script src="../../assets/js/loadHeader.js"></script>
+    <!-- Footer 스크립트 로드 -->
+    <script src="../../assets/js/loadFooter.js"></script>
 </body>
 </html>
