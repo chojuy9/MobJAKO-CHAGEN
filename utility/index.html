@@ -102,13 +102,13 @@
                 
                 <!-- 고급 설정 토글 버튼 -->
                 <div class="advanced-options-toggle">
-                    <button type="button" id="toggle-advanced-options">
-                        <i class="fas fa-cog"></i> 고급 설정 보기
+                    <button type="button" id="toggle-advanced-options" onclick="toggleAdvancedOptions()">
+                        <i class="fas fa-cog"></i> 고급 설정 숨기기
                     </button>
                 </div>
                 
-                <!-- 고급 설정 영역 -->
-                <div class="advanced-options" id="advanced-options" style="display: none;">
+                <!-- 고급 설정 영역 - 기본적으로 보이게 설정 -->
+                <div class="advanced-options" id="advanced-options">
                     <div class="advanced-options-header">
                         <h4>Gemini 모델 매개변수 설정</h4>
                         <p>번역 품질과 특성을 조정하려면 아래 값을 변경하세요.</p>
@@ -265,6 +265,32 @@
     
     <!-- 고급 매개변수 관리 스크립트 로드 -->
     <script src="../utility/js/advanced-params.js"></script>
+    
+    <!-- 인라인 토글 스크립트 -->
+    <script>
+        // 페이지 로드 시 초기 상태 설정
+        document.addEventListener('DOMContentLoaded', function() {
+            // 명시적으로 초기 상태 설정 (기본적으로 보이게)
+            document.getElementById('advanced-options').style.display = 'block';
+            document.getElementById('toggle-advanced-options').innerHTML = '<i class="fas fa-cog"></i> 고급 설정 숨기기';
+        });
+        
+        // 토글 기능
+        function toggleAdvancedOptions() {
+            var advancedOptions = document.getElementById('advanced-options');
+            var toggleButton = document.getElementById('toggle-advanced-options');
+            
+            if (advancedOptions.style.display === 'none') {
+                // 보이게 설정
+                advancedOptions.style.display = 'block';
+                toggleButton.innerHTML = '<i class="fas fa-cog"></i> 고급 설정 숨기기';
+            } else {
+                // 숨기게 설정
+                advancedOptions.style.display = 'none';
+                toggleButton.innerHTML = '<i class="fas fa-cog"></i> 고급 설정 보기';
+            }
+        }
+    </script>
     
     <!-- 결과 복사 버튼 동작 스크립트 -->
     <script>
