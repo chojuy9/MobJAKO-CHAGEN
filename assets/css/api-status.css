@@ -1,0 +1,40 @@
+/* API 상태 표시 스타일 */
+.api-status {
+    margin-top: 10px;
+    font-size: 0.9rem;
+}
+
+.status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 10px;
+    border-radius: 15px;
+    background-color: rgba(173, 111, 255, 0.1);
+    display: inline-flex;
+}
+
+.status-indicator.loading .status-dot {
+    background-color: #FFA000;
+    animation: pulse 1.5s infinite;
+}
+
+.status-indicator.ready .status-dot {
+    background-color: #4CAF50;
+}
+
+.status-indicator.error .status-dot {
+    background-color: #F44336;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.4; }
+    100% { opacity: 1; }
+}
