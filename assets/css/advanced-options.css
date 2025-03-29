@@ -34,6 +34,7 @@
     margin-bottom: 20px;
     border: 1px dashed var(--primary-light);
     animation: fadeIn 0.3s ease-in-out;
+    /* 기본적으로 보이도록 display: none 제거 */
 }
 
 .advanced-options-header {
