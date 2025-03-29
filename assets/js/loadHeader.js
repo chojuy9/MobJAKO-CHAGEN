@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const headerPlaceholder = document.getElementById('header-placeholder');
     
     // 네비게이션 헤더를 서버에서 가져옵니다.
-    fetch('/${basePath}assets/includes/header.html')
+    fetch('${basePath}assets/includes/header.html')
         .then(response => {
             if (!response.ok) {
                 throw new Error('네비게이션 헤더를 로드하는데 실패했습니다.');
