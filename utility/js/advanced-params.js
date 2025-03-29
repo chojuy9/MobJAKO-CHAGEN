@@ -13,7 +13,14 @@ document.addEventListener('DOMContentLoaded', function() {
     // 매개변수 변경 이벤트 리스너 설정
     setupParameterChangeListeners();
     
-    // 고급 설정 접기/펼치기 상태 저장
+    // 고급 설정 접기/펼치기 기능 설정
+    setupAdvancedOptionsToggle();
+});
+
+/**
+ * 고급 설정 접기/펼치기 기능 설정
+ */
+function setupAdvancedOptionsToggle() {
     const advancedOptionsToggle = document.getElementById('toggle-advanced-options');
     const advancedOptionsSection = document.getElementById('advanced-options');
     
@@ -31,11 +38,23 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // 상태 변경 이벤트
         advancedOptionsToggle.addEventListener('click', function() {
-            const isOpen = advancedOptionsSection.style.display !== 'none';
-            localStorage.setItem('advanced_options_open', !isOpen);
+            // 현재 표시 상태 확인
+            const isCurrentlyOpen = advancedOptionsSection.style.display !== 'none';
+            
+            // 상태 토글
+            if (isCurrentlyOpen) {
+                advancedOptionsSection.style.display = 'none';
+                advancedOptionsToggle.innerHTML = '<i class="fas fa-cog"></i> 고급 설정 보기';
+            } else {
+                advancedOptionsSection.style.display = 'block';
+                advancedOptionsToggle.innerHTML = '<i class="fas fa-cog"></i> 고급 설정 숨기기';
+            }
+            
+            // 새 상태 저장
+            localStorage.setItem('advanced_options_open', !isCurrentlyOpen);
         });
     }
-});
+}
 
 /**
  * 매개변수 설명 툴팁 초기화
@@ -49,10 +68,12 @@ function initParameterTooltips() {
     };
     
     for (const [id, description] of Object.entries(parameterDescriptions)) {
-        const descElement = document.querySelector(`#${id}`).closest('.form-group').querySelector('.parameter-description');
-        if (descElement) {
-            descElement.setAttribute('title', description);
-            // 호버 이벤트에 자세한 설명 표시 기능 추가 가능
+        const paramElement = document.getElementById(id);
+        if (paramElement) {
+            const descElement = paramElement.closest('.form-group').querySelector('.parameter-description');
+            if (descElement) {
+                descElement.setAttribute('title', description);
+            }
         }
     }
 }
@@ -66,6 +87,14 @@ function setupParameterChangeListeners() {
     parameterIds.forEach(id => {
         const slider = document.getElementById(id);
         if (slider) {
+            slider.addEventListener('input', function() {
+                // 슬라이더 값이 변경될 때 표시 업데이트
+                const valueDisplay = document.getElementById(`${id}-value`);
+                if (valueDisplay) {
+                    valueDisplay.textContent = this.value;
+                }
+            });
+            
             slider.addEventListener('change', function() {
                 // 값이 변경될 때 로컬 스토리지에 저장
                 saveParameterValue(id, this.value);
