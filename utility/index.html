@@ -12,9 +12,15 @@
     <link rel="stylesheet" href="../assets/css/utility-common.css">
     <!-- AI 번역 전용 스타일 로드 -->
     <link rel="stylesheet" href="../assets/css/ai-translator.css">
+    <!-- AI 번역 개선 스타일 로드 -->
+    <link rel="stylesheet" href="../assets/css/ai-translator-improved.css">
+    <!-- API 상태 표시 스타일 로드 -->
+    <link rel="stylesheet" href="../assets/css/api-status.css">
+    <!-- API 키 입력 관련 스타일 로드 -->
+    <link rel="stylesheet" href="../assets/css/api-key.css">
 </head>
 <body>
-    <!-- ==========================네비게이션 메뉴=============================-->
+    <!-- 네비게이션 메뉴 -->
     <div id="header-placeholder"></div>
     
     <!-- 메인 콘텐츠 -->
@@ -26,23 +32,57 @@
             <p class="utility-description">
                 판타지 툴킷의 AI 번역 도구는 단순한 단어 번역을 넘어 문맥과 뉘앙스를 이해하여 자연스러운 번역을 제공합니다. 
                 특히 판타지, SF, 게임 관련 용어와 세계관 설정에 최적화되어 있어 창작 활동에 완벽한 동반자가 됩니다.
+                Google의 최신 Gemini 2.0 Flash 모델을 활용하여 더욱 정확하고 자연스러운 번역 결과를 제공합니다.
             </p>
+            <div class="info-message">
+                <i class="fas fa-info-circle"></i> 이 번역 서비스는 사용자의 개인 API 키를 사용합니다. 번역 데이터는 사용자의 브라우저에서 직접 Google Gemini API로 전송되며, 저희 서버에는 어떠한 데이터도 저장되지 않습니다.
+            </div>
         </div>
         
         <div class="translator-card">
             <div class="translator-header">
                 <div class="translator-icon">🌐</div>
                 <h3 class="translator-title">AI 번역 도구</h3>
+                <div class="gemini-badge">
+                    <i class="fas fa-robot"></i> Gemini 2.0 모델 사용
+                </div>
             </div>
             
             <div class="translator-content">
                 <p>
                     번역할 내용을 입력하고 언어 방향을 선택한 후 '번역하기' 버튼을 클릭하세요.
-                    AI가 자연스러운 번역 결과를 제공해 드립니다.
+                    Gemini AI가 자연스러운 번역 결과를 제공해 드립니다.
                 </p>
+                <div class="api-status" id="api-status">
+                    <div class="status-indicator loading">
+                        <div class="status-dot"></div>
+                        <span>Gemini API 연결 중...</span>
+                    </div>
+                </div>
             </div>
             
             <form id="translation-form">
+                <div class="api-key-section">
+                    <div class="form-group">
+                        <label class="form-label" for="api-key">Gemini API 키</label>
+                        <div class="api-key-input-container">
+                            <input type="password" class="form-input" id="api-key" placeholder="여기에 API 키를 입력하세요">
+                            <button type="button" class="toggle-api-visibility" id="toggle-api-visibility">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <div class="api-key-help">
+                            <a href="https://ai.google.dev/" target="_blank" class="api-key-link">
+                                <i class="fas fa-external-link-alt"></i> Google AI 스튜디오에서 API 키 얻기
+                            </a>
+                            <div class="api-key-save">
+                                <input type="checkbox" id="save-api-key">
+                                <label for="save-api-key">이 브라우저에 API 키 저장 (안전한 환경에서만 사용)</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
                 <div class="form-group">
                     <label class="form-label" for="source-text">번역할 텍스트</label>
                     <textarea class="form-textarea" id="source-text" placeholder="여기에 번역할 텍스트를 입력하세요..."></textarea>
@@ -72,6 +112,12 @@
             <div class="translation-result" id="translation-result" style="display: none;">
                 번역 결과가 여기에 표시됩니다.
             </div>
+            
+            <div class="form-buttons" style="justify-content: flex-end; margin-top: 10px;">
+                <button class="form-button secondary" id="copy-translation-btn" style="display: none;">
+                    <i class="fas fa-copy"></i> 결과 복사하기
+                </button>
+            </div>
         </div>
         
         <div class="feature-list">
@@ -90,22 +136,52 @@
             <div class="feature-item">
                 <div class="feature-icon">🚀</div>
                 <div class="feature-text">
-                    <strong>빠른 처리 속도</strong> - 대용량 텍스트도 빠르게 처리
+                    <strong>Gemini 2.0 엔진</strong> - Google의 최신 AI 모델로 뛰어난 이해력과 번역 품질 제공
                 </div>
             </div>
             <div class="feature-item">
                 <div class="feature-icon">🔒</div>
                 <div class="feature-text">
-                    <strong>개인정보 보호</strong> - 모든 번역 데이터는 안전하게 처리되며 저장되지 않음
+                    <strong>개인정보 보호</strong> - 자신의 API 키 사용으로 데이터가 직접 Google로 전송, 서버에 저장되지 않음
+                </div>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">⚡</div>
+                <div class="feature-text">
+                    <strong>쉽고 빠른 사용</strong> - 간단한 인터페이스로 몇 초 만에 번역 완료
+                </div>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">🔄</div>
+                <div class="feature-text">
+                    <strong>다국어 지원</strong> - 한국어, 영어, 일본어 간 번역 지원 (추후 확장 예정)
                 </div>
             </div>
         </div>
 
-        <!-- 푸터
+        <!-- 푸터 -->
         <div id="footer-placeholder"></div>
-        -->
     </div>
 
+    <!-- Gemini API 로드 -->
+    <script type="importmap">
+      {
+        "imports": {
+          "@google/generative-ai": "https://esm.run/@google/generative-ai"
+        }
+      }
+    </script>
+    
+    <!-- Gemini API 모듈 스크립트 -->
+    <script type="module">
+      import { GoogleGenerativeAI } from "@google/generative-ai";
+      // GoogleGenerativeAI를 전역 변수로 등록
+      window.GoogleGenerativeAI = GoogleGenerativeAI;
+      
+      // 모듈이 로드되었음을 알리는 이벤트 발생
+      window.dispatchEvent(new Event('geminiApiLoaded'));
+    </script>
+    
     <!-- 공통 자바스크립트 로드 -->
     <script src="../assets/js/common.js"></script>
     <!-- AI 번역 전용 스크립트 로드 -->
@@ -114,5 +190,29 @@
     <script src="../assets/js/loadHeader.js"></script>
     <!-- Footer 스크립트 로드 -->
     <script src="../assets/js/loadFooter.js"></script>
+    
+    <!-- API 상태 관리 스크립트 로드 -->
+    <script src="../utility/js/api-status.js"></script>
+    
+    <!-- 결과 복사 버튼 동작 스크립트 -->
+    <script>
+        // 번역 결과가 표시될 때 복사 버튼도 표시
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.target.id === 'translation-result' && 
+                    mutation.target.style.display !== 'none') {
+                    document.getElementById('copy-translation-btn').style.display = 'block';
+                } else if (mutation.target.id === 'translation-result' && 
+                           mutation.target.style.display === 'none') {
+                    document.getElementById('copy-translation-btn').style.display = 'none';
+                }
+            });
+        });
+        
+        observer.observe(document.getElementById('translation-result'), {
+            attributes: true,
+            attributeFilter: ['style']
+        });
+    </script>
 </body>
 </html>
