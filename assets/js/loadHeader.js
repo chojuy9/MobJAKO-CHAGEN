@@ -8,11 +8,15 @@ document.addEventListener('DOMContentLoaded', function() {
     // 없으면 body의 첫 번째 자식 요소 앞에 삽입합니다.
     const headerPlaceholder = document.getElementById('header-placeholder');
     
+    // 경로 감지 함수 호출 - common.js 파일에서 가져온 함수
+    const basePath = getBasePath();
+    console.log('헤더 로드 경로:', basePath);
+    
     // 네비게이션 헤더를 서버에서 가져옵니다.
-    fetch('${basePath}assets/includes/header.html')
+    fetch(basePath + 'assets/includes/header.html')
         .then(response => {
             if (!response.ok) {
-                throw new Error('네비게이션 헤더를 로드하는데 실패했습니다.');
+                throw new Error('네비게이션 헤더를 로드하는데 실패했습니다: ' + response.status);
             }
             return response.text();
         })
@@ -34,5 +38,15 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .catch(error => {
             console.error('헤더 로드 오류:', error);
+            // 오류 발생 시 추가 디버깅 정보 표시
+            if (headerPlaceholder) {
+                headerPlaceholder.innerHTML = `
+                    <div class="error-message">
+                        헤더를 로드하는 중 오류가 발생했습니다:<br>
+                        ${error.message}<br>
+                        시도한 경로: ${basePath}assets/includes/header.html
+                    </div>
+                `;
+            }
         });
 });
