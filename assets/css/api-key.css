@@ -1,0 +1,99 @@
+/* API 키 입력 관련 스타일 */
+.api-key-section {
+    background-color: rgba(173, 111, 255, 0.05);
+    padding: 15px;
+    border-radius: var(--border-radius);
+    margin-bottom: 20px;
+    border: 1px dashed var(--primary-light);
+    position: relative;
+}
+
+.api-key-section::before {
+    content: "🔑";
+    position: absolute;
+    top: -10px;
+    left: 15px;
+    font-size: 18px;
+    background-color: white;
+    border-radius: 50%;
+    padding: 2px;
+}
+
+.api-key-input-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.toggle-api-visibility {
+    position: absolute;
+    right: 10px;
+    background: none;
+    border: none;
+    color: var(--text-light);
+    cursor: pointer;
+    padding: 5px;
+    transition: var(--transition);
+}
+
+.toggle-api-visibility:hover {
+    color: var(--primary-color);
+}
+
+.api-key-help {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-size: 0.9rem;
+}
+
+.api-key-link {
+    color: var(--primary-color);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: var(--transition);
+}
+
+.api-key-link:hover {
+    color: var(--primary-dark);
+    text-decoration: underline;
+}
+
+.api-key-save {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--text-light);
+}
+
+.api-key-save input[type="checkbox"] {
+    accent-color: var(--primary-color);
+}
+
+/* 정보 알림 메시지 스타일 */
+.info-message {
+    background-color: rgba(33, 150, 243, 0.1);
+    border-left: 4px solid #2196F3;
+    padding: 10px 15px;
+    margin: 15px 0;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    color: #0D47A1;
+}
+
+.info-message i {
+    margin-right: 5px;
+}
+
+/* 모바일 대응 */
+@media (max-width: 768px) {
+    .api-key-help {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
