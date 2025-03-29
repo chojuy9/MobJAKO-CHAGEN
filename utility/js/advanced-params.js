@@ -13,48 +13,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // 매개변수 변경 이벤트 리스너 설정
     setupParameterChangeListeners();
     
-    // 고급 설정 접기/펼치기 기능 설정
-    setupAdvancedOptionsToggle();
+    // 토글 버튼은 인라인 스크립트에서 처리하므로 여기서는 제거
 });
-
-/**
- * 고급 설정 접기/펼치기 기능 설정
- */
-function setupAdvancedOptionsToggle() {
-    const advancedOptionsToggle = document.getElementById('toggle-advanced-options');
-    const advancedOptionsSection = document.getElementById('advanced-options');
-    
-    if (advancedOptionsToggle && advancedOptionsSection) {
-        // 저장된 상태 불러오기
-        const isAdvancedOpen = localStorage.getItem('advanced_options_open') === 'true';
-        
-        if (isAdvancedOpen) {
-            advancedOptionsSection.style.display = 'block';
-            advancedOptionsToggle.innerHTML = '<i class="fas fa-cog"></i> 고급 설정 숨기기';
-        } else {
-            advancedOptionsSection.style.display = 'none';
-            advancedOptionsToggle.innerHTML = '<i class="fas fa-cog"></i> 고급 설정 보기';
-        }
-        
-        // 상태 변경 이벤트
-        advancedOptionsToggle.addEventListener('click', function() {
-            // 현재 표시 상태 확인
-            const isCurrentlyOpen = advancedOptionsSection.style.display !== 'none';
-            
-            // 상태 토글
-            if (isCurrentlyOpen) {
-                advancedOptionsSection.style.display = 'none';
-                advancedOptionsToggle.innerHTML = '<i class="fas fa-cog"></i> 고급 설정 보기';
-            } else {
-                advancedOptionsSection.style.display = 'block';
-                advancedOptionsToggle.innerHTML = '<i class="fas fa-cog"></i> 고급 설정 숨기기';
-            }
-            
-            // 새 상태 저장
-            localStorage.setItem('advanced_options_open', !isCurrentlyOpen);
-        });
-    }
-}
 
 /**
  * 매개변수 설명 툴팁 초기화
