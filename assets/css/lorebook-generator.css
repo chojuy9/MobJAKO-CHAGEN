@@ -1,0 +1,71 @@
+/* ==================== 로어북 생성기 전용 스타일 ==================== */
+
+/* 로어북 페이지 고유 아이콘 내용 */
+.generator-intro::before {
+    content: "📚";
+}
+
+.generator-intro::after {
+    content: "🖋️";
+}
+
+/* 로어북 결과 창 최대 높이 설정 */
+.lorebook-result {
+    max-height: 500px;
+}
+
+/* 템플릿 컨테이너 스타일 */
+.template-container {
+    margin-bottom: 20px;
+}
+
+.template-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.template-card {
+    background-color: white;
+    border-radius: 10px;
+    padding: 12px;
+    border: 1px solid var(--primary-light);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.template-card:hover, .template-card.selected {
+    background-color: rgba(173, 111, 255, 0.1);
+    transform: translateY(-2px);
+}
+
+.template-card.selected {
+    border-width: 2px;
+    border-color: var(--primary-color);
+    box-shadow: 0 4px 12px rgba(173, 111, 255, 0.15);
+}
+
+.template-title {
+    font-weight: 600;
+    color: var(--primary-dark);
+    margin-bottom: 5px;
+    font-family: 'Jua', sans-serif;
+}
+
+.template-description {
+    font-size: 0.9rem;
+    color: var(--text-color);
+}
+
+/* 로어북 기능 목록 마진 조정 */
+.feature-list {
+    margin-top: 40px;
+}
+
+/* 모바일 반응형 */
+@media (max-width: 768px) {
+    .template-list {
+        grid-template-columns: 1fr;
+    }
+}
