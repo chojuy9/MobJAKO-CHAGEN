@@ -14,6 +14,7 @@
 <body>
     
     <!-- ==================== 네비게이션 메뉴 ==================== -->
+<!-- 네비게이션 메뉴 -->
 <nav class="nav-container">
     <div class="nav-inner">
         <!-- 로고 및 사이트 제목 -->
@@ -32,7 +33,13 @@
         <!-- 메뉴 링크 목록 -->
         <ul class="nav-links" id="nav-menu">
             <li id="menu-home"><a href="/">홈</a></li>
-            <li id="menu-utility"><a href="/utility">유틸리티</a></li>
+            <li id="menu-utility" class="has-dropdown">
+                <a href="/utility" class="dropdown-toggle">유틸리티 <i class="fas fa-caret-down"></i></a>
+                <ul class="dropdown-menu">
+                    <li><a href="/utility">AI 번역</a></li>
+                    <li><a href="/utility/lorebook-generator/">로어북 생성기</a></li>
+                </ul>
+            </li>
             <li id="menu-lorebook"><a href="/lorebook">로어북 공유</a></li>
             <li id="menu-generator" class="has-dropdown">
                 <a href="/tools" class="dropdown-toggle">생성기 도구 <i class="fas fa-caret-down"></i></a>
