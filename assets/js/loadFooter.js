@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const footerPlaceholder = document.getElementById('footer-placeholder');
     
     // 푸터를 서버에서 가져옵니다.
-    fetch('/assets/includes/footer.html')
+    fetch('/${basePath}assets/includes/footer.html')
         .then(response => {
             if (!response.ok) {
                 throw new Error('푸터를 로드하는데 실패했습니다.');
