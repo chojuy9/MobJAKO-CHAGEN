@@ -70,8 +70,50 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 /**
- * API 키 저장 체크박스 초기화
+ * 슬라이더 초기화 및 이벤트 리스너 설정
  */
+function initSliders() {
+    // 각 슬라이더에 대한 값 표시 업데이트 설정
+    const sliders = [
+        { id: 'temperature', defaultValue: 0.2 },
+        { id: 'max-tokens', defaultValue: 800 },
+        { id: 'top-p', defaultValue: 0.8 },
+        { id: 'top-k', defaultValue: 16 }
+    ];
+    
+    sliders.forEach(slider => {
+        const sliderElement = document.getElementById(slider.id);
+        const valueElement = document.getElementById(`${slider.id}-value`);
+        
+        if (sliderElement && valueElement) {
+            // 초기값 설정
+            sliderElement.value = slider.defaultValue;
+            valueElement.textContent = slider.defaultValue;
+            
+            // 값 변경 이벤트 설정
+            sliderElement.addEventListener('input', function() {
+                valueElement.textContent = this.value;
+            });
+        }
+    });
+}
+
+/**
+ * 모델 매개변수를 기본값으로 재설정
+ */
+function resetParameters() {
+    document.getElementById('temperature').value = 0.2;
+    document.getElementById('temperature-value').textContent = 0.2;
+    
+    document.getElementById('max-tokens').value = 800;
+    document.getElementById('max-tokens-value').textContent = 800;
+    
+    document.getElementById('top-p').value = 0.8;
+    document.getElementById('top-p-value').textContent = 0.8;
+    
+    document.getElementById('top-k').value = 16;
+    document.getElementById('top-k-value').textContent = 16;
+}
 function initApiKeySaveCheckbox() {
     const saveApiKeyCheckbox = document.getElementById('save-api-key');
     if (saveApiKeyCheckbox) {
@@ -92,8 +134,17 @@ function initApiKeySaveCheckbox() {
 }
 
 /**
- * 저장된 API 키 불러오기
+ * 사용자 설정 모델 매개변수 가져오기
+ * @returns {Object} 모델 매개변수 객체
  */
+function getModelParameters() {
+    return {
+        temperature: parseFloat(document.getElementById('temperature').value),
+        maxOutputTokens: parseInt(document.getElementById('max-tokens').value),
+        topP: parseFloat(document.getElementById('top-p').value),
+        topK: parseInt(document.getElementById('top-k').value)
+    };
+}
 function loadSavedApiKey() {
     const apiKeyInput = document.getElementById('api-key');
     const saveApiKeyCheckbox = document.getElementById('save-api-key');
@@ -194,8 +245,21 @@ async function translateWithGemini(text, direction, apiKey) {
         // Google Generative AI 초기화
         const genAI = new window.GoogleGenerativeAI(apiKey);
         
-        // 모델 인스턴스 생성 (gemini-2.0-flash-exp 사용)
-        const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-exp" });
+        // 사용자 설정 모델 매개변수 가져오기
+        const modelParams = getModelParameters();
+        
+        // 모델 인스턴스 생성 (gemini-2.0-flash-exp와 매개변수 사용)
+        const generationConfig = {
+            temperature: modelParams.temperature,
+            maxOutputTokens: modelParams.maxOutputTokens,
+            topP: modelParams.topP,
+            topK: modelParams.topK
+        };
+        
+        const model = genAI.getGenerativeModel({ 
+            model: "gemini-2.0-flash-exp",
+            generationConfig
+        });
         
         // 번역 방향에 따른 프롬프트 설정
         let sourceLang = "";
