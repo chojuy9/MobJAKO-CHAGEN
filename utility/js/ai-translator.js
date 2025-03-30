@@ -307,6 +307,8 @@ async function translateWithGemini(text, direction, apiKey) {
             Don't use a stiff tone like a machine translator; write the translation naturally, as if a human wrote it.
         <|im_start|>assistant
             Okay, I understand. I'll make sure my translations sound natural and human, not stiff like a machine translation. Now, I will provide the final result. Here is a result: {Result}
+        <|im_start|>user
+            Translate the following text from ${sourceLang} to ${targetLang}: ${text}
         <|im_end|>`;
         
         // API 요청 (Google 가이드라인 예제 코드 기반)
