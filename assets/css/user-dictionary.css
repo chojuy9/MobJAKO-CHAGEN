@@ -1,0 +1,351 @@
+/* ==================== 사용자 사전 및 커스텀 프롬프트 스타일 ==================== */
+
+/* 탭 컨테이너 스타일 */
+.tabs-container {
+    margin-top: 20px;
+}
+
+.tabs-header {
+    display: flex;
+    border-bottom: 2px solid var(--primary-light);
+    margin-bottom: 20px;
+}
+
+.tab-button {
+    padding: 10px 15px;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    cursor: pointer;
+    font-family: 'Jua', sans-serif;
+    color: var(--text-color);
+    transition: var(--transition);
+}
+
+.tab-button:hover {
+    color: var(--primary-color);
+}
+
+.tab-button.active {
+    color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* 사용자 사전 스타일 */
+.dictionary-container {
+    background-color: white;
+    border-radius: var(--border-radius);
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    margin-bottom: 20px;
+}
+
+.dictionary-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.dictionary-title {
+    font-family: 'Jua', sans-serif;
+    color: var(--primary-dark);
+    font-size: 1.2rem;
+    margin: 0;
+}
+
+.dictionary-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 24px;
+}
+
+.toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .toggle-slider {
+    background-color: var(--primary-color);
+}
+
+input:checked + .toggle-slider:before {
+    transform: translateX(26px);
+}
+
+/* 단어 입력 폼 */
+.dictionary-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px dashed var(--primary-light);
+}
+
+.dictionary-form .form-group {
+    flex: 1;
+    min-width: 200px;
+}
+
+.add-entry-btn {
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 20px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    transition: var(--transition);
+    font-family: 'Jua', sans-serif;
+    margin-left: auto;
+}
+
+.add-entry-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(173, 111, 255, 0.3);
+}
+
+/* 단어 목록 테이블 */
+.dictionary-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.dictionary-table th,
+.dictionary-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.dictionary-table th {
+    font-family: 'Jua', sans-serif;
+    color: var(--primary-dark);
+    font-weight: 500;
+}
+
+.dictionary-table tr:hover {
+    background-color: rgba(173, 111, 255, 0.05);
+}
+
+.dictionary-table td:last-child {
+    text-align: right;
+}
+
+.action-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-light);
+    padding: 5px;
+    border-radius: 4px;
+    transition: var(--transition);
+}
+
+.action-btn:hover {
+    color: var(--primary-color);
+    background-color: rgba(173, 111, 255, 0.1);
+}
+
+.action-btn.delete-btn:hover {
+    color: #e53935;
+    background-color: rgba(229, 57, 53, 0.1);
+}
+
+.empty-dictionary {
+    text-align: center;
+    padding: 20px;
+    color: var(--text-light);
+    font-style: italic;
+}
+
+/* 커스텀 프롬프트 스타일 */
+.prompt-templates {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px dashed var(--primary-light);
+}
+
+.prompt-templates-title {
+    font-family: 'Jua', sans-serif;
+    color: var(--primary-dark);
+    font-size: 1rem;
+    margin-bottom: 10px;
+}
+
+.template-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.template-btn {
+    background-color: white;
+    border: 1px solid var(--primary-light);
+    border-radius: 20px;
+    padding: 6px 15px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: var(--transition);
+    color: var(--primary-dark);
+}
+
+.template-btn:hover {
+    background-color: rgba(173, 111, 255, 0.1);
+    transform: translateY(-2px);
+}
+
+/* 플레이스홀더 스타일 강화 */
+::placeholder {
+    color: #aaa;
+    opacity: 0.7;
+    font-style: italic;
+}
+
+/* 텍스트 영역 개선 */
+#custom-prompt-text {
+    min-height: 120px;
+    line-height: 1.6;
+    font-family: 'Gaegu', sans-serif;
+    font-size: 1rem;
+    color: var(--text-color);
+    resize: vertical;
+}
+
+#custom-prompt-text:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 5px rgba(173, 111, 255, 0.3);
+}
+
+/* 프롬프트 에디터 모달 */
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.modal-content {
+    background-color: white;
+    border-radius: var(--border-radius);
+    padding: 25px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+.modal-header {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-title {
+    font-family: 'Jua', sans-serif;
+    color: var(--primary-dark);
+    margin: 0;
+    font-size: 1.3rem;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: var(--text-light);
+    transition: var(--transition);
+}
+
+.modal-close:hover {
+    color: var(--primary-color);
+    transform: rotate(90deg);
+}
+
+.modal-body {
+    margin-bottom: 20px;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .dictionary-form {
+        flex-direction: column;
+    }
+    
+    .dictionary-form .form-group {
+        width: 100%;
+    }
+    
+    .prompt-list {
+        grid-template-columns: 1fr;
+    }
+    
+    .add-entry-btn {
+        margin-top: 10px;
+        width: 100%;
+        justify-content: center;
+    }
+}
