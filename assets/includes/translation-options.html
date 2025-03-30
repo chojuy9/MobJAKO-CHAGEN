@@ -1,0 +1,100 @@
+<!-- 번역 옵션 탭 컨테이너 -->
+<div class="tabs-container" id="translation-options">
+    <div class="tabs-header">
+        <button type="button" class="tab-button active" data-target="user-dictionary-tab">사용자 사전</button>
+        <button type="button" class="tab-button" data-target="custom-prompts-tab">커스텀 프롬프트</button>
+    </div>
+    
+    <!-- 사용자 사전 탭 -->
+    <div id="user-dictionary-tab" class="tab-content active">
+        <div class="dictionary-container">
+            <div class="dictionary-header">
+                <h4 class="dictionary-title">사용자 정의 번역 사전</h4>
+                <div class="dictionary-toggle">
+                    <span>사용</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="dictionary-toggle" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+            
+            <form id="dictionary-form" class="dictionary-form">
+                <div class="form-group">
+                    <label class="form-label" for="dict-source">원본 텍스트</label>
+                    <input type="text" class="form-input" id="dict-source" placeholder="예: 판타지 툴킷, 마법사, 엘프의 숲">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="dict-target">번역 텍스트</label>
+                    <input type="text" class="form-input" id="dict-target" placeholder="예: Fantasy Toolkit, Wizard, Elven Forest">
+                </div>
+                <button type="submit" class="add-entry-btn">
+                    <i class="fas fa-plus"></i> 추가
+                </button>
+            </form>
+            
+            <div id="dictionary-entries" class="dictionary-entries">
+                <!-- 사전 항목들이 동적으로 여기에 추가됩니다 -->
+                <div class="empty-dictionary">
+                    등록된 단어가 없습니다. 위 폼을 통해 새 단어를 추가해보세요.
+                </div>
+            </div>
+        </div>
+        
+        <div class="info-message">
+            <i class="fas fa-info-circle"></i> 
+            사용자 사전은 특정 용어나 문구에 대해 일관된 번역을 적용합니다. 
+            캐릭터 이름, 전문 용어, 또는 특별한 표현을 정확히 번역하고 싶을 때 유용합니다.
+        </div>
+    </div>
+    
+    <!-- 커스텀 프롬프트 탭 -->
+    <div id="custom-prompts-tab" class="tab-content">
+        <div class="dictionary-container">
+            <div class="dictionary-header">
+                <h4 class="dictionary-title">커스텀 번역 프롬프트</h4>
+                <div class="dictionary-toggle">
+                    <span>사용</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="prompt-toggle" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+            
+            <div class="info-message">
+                <i class="fas fa-info-circle"></i> 
+                번역 프롬프트를 자유롭게 작성하여 번역 품질과 스타일을 개선할 수 있습니다.
+                작성한 내용은 AI에게 추가 지시사항으로 전달됩니다.
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label" for="custom-prompt-text">커스텀 프롬프트 (AI에게 전달할 지시사항)</label>
+                <textarea class="form-textarea" id="custom-prompt-text" 
+                    placeholder="예: '문학적인 번역을 해주세요. 직역보다 자연스러운 의역을 선호합니다.' 또는 '기술 문서이므로 전문 용어를 정확하게 번역해주세요.'"
+                    rows="6"></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label" for="prompt-position">프롬프트 위치</label>
+                <select class="form-select" id="prompt-position">
+                    <option value="start">번역 시작 전에 적용 (권장)</option>
+                    <option value="end">번역 지시 후에 적용</option>
+                </select>
+                <div class="parameter-description">
+                    프롬프트가 주 번역 지시문의 어디에 삽입될지 선택합니다.
+                </div>
+            </div>
+            
+            <div class="prompt-templates">
+                <h5 class="prompt-templates-title">자주 사용하는 프롬프트 예시</h5>
+                <div class="template-buttons">
+                    <button type="button" class="template-btn" data-template="literary">문학적 번역</button>
+                    <button type="button" class="template-btn" data-template="technical">기술 문서</button>
+                    <button type="button" class="template-btn" data-template="conversation">일상 대화</button>
+                    <button type="button" class="template-btn" data-template="fantasy">판타지/게임</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
