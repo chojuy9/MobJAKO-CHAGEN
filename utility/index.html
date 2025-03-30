@@ -20,6 +20,8 @@
     <link rel="stylesheet" href="../assets/css/api-key.css">
     <!-- 고급 설정 관련 스타일 로드 -->
     <link rel="stylesheet" href="../assets/css/advanced-options.css">
+    <!-- 사용자 사전 및 커스텀 프롬프트 스타일 로드 -->
+    <link rel="stylesheet" href="../assets/css/user-dictionary.css">
 </head>
 <body>
     <!-- 네비게이션 메뉴 -->
@@ -100,6 +102,16 @@
                     </select>
                 </div>
                 
+                <!-- 번역 옵션 토글 버튼 -->
+                <div class="advanced-options-toggle">
+                    <button type="button" id="toggle-translation-options">
+                        <i class="fas fa-cog"></i> 번역 옵션 보기
+                    </button>
+                </div>
+                
+                <!-- 번역 옵션 컨테이너 - 동적으로 로드될 영역 -->
+                <div id="translation-options-container" style="display: none;"></div>
+                
                 <!-- 고급 설정 영역 - 동적으로 로드될 컨테이너 -->
                 <div id="advanced-options-container"></div>
                 
@@ -145,21 +157,21 @@
                 </div>
             </div>
             <div class="feature-item">
+                <div class="feature-icon">📝</div>
+                <div class="feature-text">
+                    <strong>사용자 정의 사전</strong> - 특정 단어나 문구에 대한 맞춤형 번역 적용 가능
+                </div>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">🎯</div>
+                <div class="feature-text">
+                    <strong>커스텀 프롬프트</strong> - 번역 스타일이나 특성을 세밀하게 조절할 수 있는 기능
+                </div>
+            </div>
+            <div class="feature-item">
                 <div class="feature-icon">🔒</div>
                 <div class="feature-text">
                     <strong>개인정보 보호</strong> - 자신의 API 키 사용으로 데이터가 직접 Google로 전송, 서버에 저장되지 않음
-                </div>
-            </div>
-            <div class="feature-item">
-                <div class="feature-icon">⚡</div>
-                <div class="feature-text">
-                    <strong>쉽고 빠른 사용</strong> - 간단한 인터페이스로 몇 초 만에 번역 완료
-                </div>
-            </div>
-            <div class="feature-item">
-                <div class="feature-icon">🔄</div>
-                <div class="feature-text">
-                    <strong>다국어 지원</strong> - 한국어, 영어, 일본어 간 번역 지원 (추후 확장 예정)
                 </div>
             </div>
         </div>
@@ -193,6 +205,12 @@
     <script src="../utility/js/ai-translator.js"></script>
     <!-- 고급 설정 로더 스크립트 로드 -->
     <script src="../utility/js/advanced-options-loader.js"></script>
+    <!-- 번역 옵션 로더 스크립트 로드 -->
+    <script src="../utility/js/translator-options-loader.js"></script>
+    <!-- 사용자 사전 관리 스크립트 로드 -->
+    <script src="../utility/js/user-dictionary.js"></script>
+    <!-- 커스텀 프롬프트 관리 스크립트 로드 -->
+    <script src="../utility/js/custom-prompts.js"></script>
     <!-- Header 스크립트 로드 -->
     <script src="../assets/js/loadHeader.js"></script>
     <!-- Footer 스크립트 로드 -->
@@ -219,6 +237,29 @@
         observer.observe(document.getElementById('translation-result'), {
             attributes: true,
             attributeFilter: ['style']
+        });
+        
+        // 페이지 로드 시 번역 옵션 초기 상태 설정
+        document.addEventListener('DOMContentLoaded', function() {
+            const optionsContainer = document.getElementById('translation-options-container');
+            const toggleButton = document.getElementById('toggle-translation-options');
+            
+            if (optionsContainer && toggleButton) {
+                // 기본적으로 숨겨진 상태로 시작
+                optionsContainer.style.display = 'none';
+                toggleButton.innerHTML = '<i class="fas fa-cog"></i> 번역 옵션 보기';
+                
+                // 토글 버튼 클릭 이벤트
+                toggleButton.addEventListener('click', function() {
+                    if (optionsContainer.style.display === 'none') {
+                        optionsContainer.style.display = 'block';
+                        toggleButton.innerHTML = '<i class="fas fa-cog"></i> 번역 옵션 숨기기';
+                    } else {
+                        optionsContainer.style.display = 'none';
+                        toggleButton.innerHTML = '<i class="fas fa-cog"></i> 번역 옵션 보기';
+                    }
+                });
+            }
         });
     </script>
 </body>
