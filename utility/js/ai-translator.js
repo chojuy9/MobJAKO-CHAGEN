@@ -348,10 +348,13 @@ async function translateWithGemini(text, direction, apiKey) {
             console.warn('dictionaryManager 객체를 찾을 수 없음, 사전 적용 건너뜀');
         }
         
- // 커스텀 프롬프트 상태 확인 및 적용
+ // ai-translator.js 파일의 translateWithGemini 함수에서
+// 커스텀 프롬프트 적용 부분만 다음 코드로 바꿔주세요 (중복 방지!)
+
+// 커스텀 프롬프트 적용 시도
 console.log('커스텀 프롬프트 적용 시도...');
 
-// 전역 커스텀 프롬프트 상태 확인
+// 전역 커스텀 프롬프트 상태 확인 (이 방법만 사용!)
 if (window.customPromptState) {
     console.log('window.customPromptState 발견:', window.customPromptState);
     
@@ -365,7 +368,7 @@ if (window.customPromptState) {
         // 추가할 프롬프트 텍스트
         const customPromptText = `
 <|im_start|>user
-The following are specific instructions for the translation:
+다음은 번역에 대한 특별한 지시사항입니다:
 ${customText}
 <|im_end|>
 <|im_start|>assistant
@@ -400,7 +403,9 @@ Ok, I understand. I will adhere to these specific instructions during the transl
     } else {
         console.log('커스텀 프롬프트가 비활성화되었거나 비어있음. 상태:', window.customPromptState);
     }
-} 
+} else {
+    console.warn('커스텀 프롬프트 상태 객체를 찾을 수 없음, 적용 건너뜀');
+}
 // 기존 promptManager 방식으로도 시도 (백업용)
 else if (window.promptManager && typeof window.promptManager.addCustomPromptToPrompt === 'function') {
     console.log('promptManager 객체 발견, 커스텀 프롬프트 적용 시도');
