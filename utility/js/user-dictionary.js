@@ -20,10 +20,16 @@ document.addEventListener('DOMContentLoaded', function() {
     const dictionaryForm = document.getElementById('dictionary-form');
     if (dictionaryForm) {
         dictionaryForm.addEventListener('submit', function(e) {
-            e.preventDefault(); // 폼 기본 제출 동작 방지
-            e.stopPropagation(); // 이벤트 전파 중단 - 중요!
+            // 폼 기본 제출 동작 방지
+            e.preventDefault(); 
+            // 이벤트 전파 중단 - 중요!
+            e.stopPropagation();
             
+            // 사전 항목 추가
             addDictionaryEntry();
+            
+            // 상위 폼으로의 이벤트 전파 확실히 방지
+            return false;
         });
     }
     
