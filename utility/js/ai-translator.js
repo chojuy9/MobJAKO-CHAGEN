@@ -348,25 +348,22 @@ async function translateWithGemini(text, direction, apiKey) {
             console.warn('dictionaryManager 객체를 찾을 수 없음, 사전 적용 건너뜀');
         }
         
- // ai-translator.js 파일의 translateWithGemini 함수에서
-// 커스텀 프롬프트 적용 부분만 다음 코드로 바꿔주세요 (중복 방지!)
+        // 커스텀 프롬프트 적용 시도
+        console.log('커스텀 프롬프트 적용 시도...');
 
-// 커스텀 프롬프트 적용 시도
-console.log('커스텀 프롬프트 적용 시도...');
-
-// 전역 커스텀 프롬프트 상태 확인 (이 방법만 사용!)
-if (window.customPromptState) {
-    console.log('window.customPromptState 발견:', window.customPromptState);
-    
-    // customPromptState를 직접 사용하여 프롬프트 적용
-    if (window.customPromptState.isEnabled && window.customPromptState.promptText.trim()) {
-        console.log('커스텀 프롬프트 설정 확인됨, 직접 적용 시작');
-        
-        const customText = window.customPromptState.promptText.trim();
-        const customPosition = window.customPromptState.promptPosition;
-        
-        // 추가할 프롬프트 텍스트
-        const customPromptText = `
+        // 전역 커스텀 프롬프트 상태 확인 (이 방법만 사용!)
+        if (window.customPromptState) {
+            console.log('window.customPromptState 발견:', window.customPromptState);
+            
+            // customPromptState를 직접 사용하여 프롬프트 적용
+            if (window.customPromptState.isEnabled && window.customPromptState.promptText.trim()) {
+                console.log('커스텀 프롬프트 설정 확인됨, 직접 적용 시작');
+                
+                const customText = window.customPromptState.promptText.trim();
+                const customPosition = window.customPromptState.promptPosition;
+                
+                // 추가할 프롬프트 텍스트
+                const customPromptText = `
 <|im_start|>user
 The following are specific instructions for the translation:
 ${customText}
@@ -375,52 +372,50 @@ ${customText}
 Ok, I understand. I will adhere to these specific instructions during the translation process.
 <|im_end|>
 `;
-        
-        const originalLength = prompt.length;
-        
-        // 프롬프트 삽입 위치에 따라 처리
-        if (customPosition === 'start') {
-            // 첫 번째 사용자 메시지 이전에 삽입
-            const firstUserPos = prompt.indexOf('<|im_start|>user');
-            if (firstUserPos !== -1) {
-                prompt = prompt.slice(0, firstUserPos) + customPromptText + prompt.slice(firstUserPos);
+                
+                const originalLength = prompt.length;
+                
+                // 프롬프트 삽입 위치에 따라 처리
+                if (customPosition === 'start') {
+                    // 첫 번째 사용자 메시지 이전에 삽입
+                    const firstUserPos = prompt.indexOf('<|im_start|>user');
+                    if (firstUserPos !== -1) {
+                        prompt = prompt.slice(0, firstUserPos) + customPromptText + prompt.slice(firstUserPos);
+                    } else {
+                        // 프롬프트 시작 부분에 삽입
+                        prompt = customPromptText + prompt;
+                    }
+                } else {
+                    // 마지막 사용자 메시지 이전에 삽입
+                    const lastUserPos = prompt.lastIndexOf('<|im_start|>user');
+                    if (lastUserPos !== -1) {
+                        prompt = prompt.slice(0, lastUserPos) + customPromptText + prompt.slice(lastUserPos);
+                    } else {
+                        // 프롬프트 끝에 추가
+                        prompt = prompt + customPromptText;
+                    }
+                }
+                
+                console.log('커스텀 프롬프트가 직접 적용됨 (+' + (prompt.length - originalLength) + ' 글자)');
             } else {
-                // 프롬프트 시작 부분에 삽입
-                prompt = customPromptText + prompt;
+                console.log('커스텀 프롬프트가 비활성화되었거나 비어있음. 상태:', window.customPromptState);
+            }
+        } 
+        // 여기 부분이 문법 오류였어요! else { ... } 다음에 else if는 올 수 없어요!
+        else if (window.promptManager && typeof window.promptManager.addCustomPromptToPrompt === 'function') {
+            console.log('promptManager 객체 발견, 커스텀 프롬프트 적용 시도');
+            
+            const originalLength = prompt.length;
+            prompt = window.promptManager.addCustomPromptToPrompt(prompt);
+            
+            if (prompt.length > originalLength) {
+                console.log('promptManager를 통해 커스텀 프롬프트가 적용됨 (+' + (prompt.length - originalLength) + ' 글자)');
+            } else {
+                console.warn('promptManager를 통한 커스텀 프롬프트 적용 실패');
             }
         } else {
-            // 마지막 사용자 메시지 이전에 삽입
-            const lastUserPos = prompt.lastIndexOf('<|im_start|>user');
-            if (lastUserPos !== -1) {
-                prompt = prompt.slice(0, lastUserPos) + customPromptText + prompt.slice(lastUserPos);
-            } else {
-                // 프롬프트 끝에 추가
-                prompt = prompt + customPromptText;
-            }
+            console.warn('커스텀 프롬프트 관련 객체를 찾을 수 없음, 적용 건너뜀');
         }
-        
-        console.log('커스텀 프롬프트가 직접 적용됨 (+' + (prompt.length - originalLength) + ' 글자)');
-    } else {
-        console.log('커스텀 프롬프트가 비활성화되었거나 비어있음. 상태:', window.customPromptState);
-    }
-} else {
-    console.warn('커스텀 프롬프트 상태 객체를 찾을 수 없음, 적용 건너뜀');
-}
-// 기존 promptManager 방식으로도 시도 (백업용)
-else if (window.promptManager && typeof window.promptManager.addCustomPromptToPrompt === 'function') {
-    console.log('promptManager 객체 발견, 커스텀 프롬프트 적용 시도');
-    
-    const originalLength = prompt.length;
-    prompt = window.promptManager.addCustomPromptToPrompt(prompt);
-    
-    if (prompt.length > originalLength) {
-        console.log('promptManager를 통해 커스텀 프롬프트가 적용됨 (+' + (prompt.length - originalLength) + ' 글자)');
-    } else {
-        console.warn('promptManager를 통한 커스텀 프롬프트 적용 실패');
-    }
-} else {
-    console.warn('커스텀 프롬프트 관련 객체를 찾을 수 없음, 적용 건너뜀');
-}
         
         // 최종 프롬프트 길이 확인
         console.log('최종 프롬프트 길이:', prompt.length);
@@ -469,14 +464,13 @@ else if (window.promptManager && typeof window.promptManager.addCustomPromptToPr
 
 // 이 함수를 window.translateWithGemini에 할당하여 원본 함수를 덮어씁니다
 window.translateWithGemini = translateWithGemini;
-// 이 함수를 window.translateWithGemini에 할당하여 원본 함수를 덮어씁니다
-window.translateWithGemini = translateWithGemini;
 
 // 전역 객체에 번역 함수 참조 추가
 if (!window.translationManager) {
     window.translationManager = {};
 }
 window.translationManager.translateWithGemini = translateWithGemini;
+
 /**
  * 번역 결과를 화면에 표시
  * @param {string} text - 번역된 텍스트
