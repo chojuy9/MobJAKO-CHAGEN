@@ -34,37 +34,49 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('dictionaryManager 전역 객체 등록 여부:', window.dictionaryManager ? '등록됨' : '등록되지 않음');
 });
 
+// 무한 루프 방지를 위한 플래그
+let isUpdating = false;
+let lastOptionsVisibility = false;
+let lastChildCount = 0;
+
 // 번역 옵션 컨테이너 로딩 감시 설정
 function setupTranslationOptionsObserver() {
     const optionsContainer = document.getElementById('translation-options-container');
     if (!optionsContainer) return;
     
+    // 초기 상태 저장
+    lastOptionsVisibility = optionsContainer.style.display !== 'none';
+    
     // 옵션 컨테이너의 표시/숨김 및 내용 변경 감시
     const observer = new MutationObserver(function(mutations) {
-        for (const mutation of mutations) {
-            // 스타일 변경 감지 (표시/숨김)
-            if (mutation.type === 'attributes' && 
-                mutation.attributeName === 'style' &&
-                optionsContainer.style.display !== 'none') {
-                
-                // 옵션 컨테이너가 표시되면 사전 UI 초기화
-                setTimeout(function() {
-                    console.log('번역 옵션 컨테이너가 표시됨. 사전 UI 초기화');
-                    updateDictionaryUI();
-                    updateDictionaryToggle();
-                    
-                    // 폼과 버튼 이벤트 리스너 설정
-                    setupDictionaryFormListeners();
-                }, 300);
-            }
+        if (isUpdating) return; // 이미 업데이트 중이면 중단
+        
+        // 현재 상태 확인
+        const isVisible = optionsContainer.style.display !== 'none';
+        const childCount = optionsContainer.childNodes.length;
+        
+        // 실제 변화가 있을 때만 처리
+        if (isVisible !== lastOptionsVisibility || 
+            (isVisible && childCount !== lastChildCount && childCount > 0)) {
             
-            // 내용 변경 감지
-            if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
-                // 내용이 추가되면 사전 UI 초기화 시도
+            // 상태 업데이트
+            lastOptionsVisibility = isVisible;
+            lastChildCount = childCount;
+            
+            if (isVisible) {
+                // 업데이트 중 플래그 설정
+                isUpdating = true;
+                
                 setTimeout(function() {
+                    console.log('번역 옵션 컨테이너 상태 변경 감지. 사전 UI 초기화');
+                    
+                    // 사전 UI 관련 초기화
                     updateDictionaryUI();
                     updateDictionaryToggle();
                     setupDictionaryFormListeners();
+                    
+                    // 업데이트 완료
+                    isUpdating = false;
                 }, 300);
             }
         }
@@ -73,8 +85,7 @@ function setupTranslationOptionsObserver() {
     // 컨테이너 감시 시작 (스타일 및 내용 변경)
     observer.observe(optionsContainer, { 
         attributes: true, 
-        childList: true, 
-        subtree: true 
+        childList: true
     });
 }
 
@@ -161,13 +172,27 @@ function initDictionary() {
     updateDictionaryToggle();
 }
 
+// 이벤트 리스너 설정 상태 추적
+let formListenersInitialized = false;
+
 // 폼과 버튼 이벤트 리스너 설정 함수
 function setupDictionaryFormListeners() {
+    // 이미 설정된 경우 또는 최근에 설정된 경우 중복 방지
+    if (formListenersInitialized) {
+        return;
+    }
+    
     const dictionaryForm = document.getElementById('dictionary-form');
     if (!dictionaryForm) {
-        console.log('사전 폼을 찾을 수 없음');
+        // 로그를 한 번만 표시
+        if (!formListenersInitialized) {
+            console.log('사전 폼을 찾을 수 없음');
+        }
         return; // 폼이 없으면 처리하지 않음
     }
+    
+    // 이벤트 리스너 설정 완료 표시
+    formListenersInitialized = true;
     
     console.log('사전 폼 발견, 이벤트 리스너 설정');
     
@@ -228,10 +253,21 @@ function setupDictionaryFormListeners() {
     }
 }
 
+// UI 업데이트 제한을 위한 변수
+let lastUpdateTime = 0;
+const UPDATE_COOLDOWN = 1000; // 1초 쿨다운
+
 /**
  * 사전 항목 UI 업데이트
  */
 function updateDictionaryUI() {
+    // 마지막 업데이트 이후 쿨다운 시간이 지나지 않았으면 중단
+    const now = Date.now();
+    if (now - lastUpdateTime < UPDATE_COOLDOWN) {
+        return;
+    }
+    lastUpdateTime = now;
+    
     const entriesContainer = document.getElementById('dictionary-entries');
     if (!entriesContainer) {
         console.log('사전 항목 컨테이너를 찾을 수 없음');
@@ -297,10 +333,17 @@ function updateDictionaryToggle() {
     }
 }
 
+// 사전 항목 추가 중복 방지 플래그
+let isAddingEntry = false;
+
 /**
  * 새 사전 항목 추가
  */
 function addDictionaryEntry() {
+    // 이미 처리 중이면 중복 실행 방지
+    if (isAddingEntry) return;
+    isAddingEntry = true;
+    
     console.log('addDictionaryEntry 함수 호출됨');
     
     const sourceInput = document.getElementById('dict-source');
@@ -348,13 +391,23 @@ function addDictionaryEntry() {
     
     // 성공 메시지 표시
     alert(`사전에 "${source}" → "${target}" 항목이 추가되었습니다.`);
+    
+    // 중복 실행 방지 플래그 초기화
+    isAddingEntry = false;
 }
+
+// 사전 항목 삭제 중복 방지 플래그
+let isRemovingEntry = false;
 
 /**
  * 사전 항목 삭제
  * @param {number} index - 삭제할 항목의 인덱스
  */
 function removeDictionaryEntry(index) {
+    // 이미 처리 중이면 중복 실행 방지
+    if (isRemovingEntry) return;
+    isRemovingEntry = true;
+    
     if (index >= 0 && index < userDictionary.length) {
         const removedEntry = userDictionary[index];
         console.log('사전 항목 삭제:', removedEntry.source);
@@ -366,6 +419,9 @@ function removeDictionaryEntry(index) {
         saveDictionary();
         updateDictionaryUI();
     }
+    
+    // 중복 실행 방지 플래그 초기화
+    isRemovingEntry = false;
 }
 
 /**
