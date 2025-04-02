@@ -167,10 +167,8 @@ function addCustomPromptToPrompt(prompt) {
     const promptText = `
 <|im_start|>user
 ${cachedPromptText}
-<|im_end|>
 <|im_start|>assistant
 I understand. I'll follow this specific instruction for the translation.
-<|im_end|>
 `;
     
     // 위치에 따라 삽입
