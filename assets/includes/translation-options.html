@@ -5,48 +5,50 @@
         <button type="button" class="tab-button" data-target="custom-prompts-tab">커스텀 프롬프트</button>
     </div>
     
-    <!-- 사용자 사전 탭 -->
-    <div id="user-dictionary-tab" class="tab-content active">
-        <div class="dictionary-container">
-            <div class="dictionary-header">
-                <h4 class="dictionary-title">사용자 정의 번역 사전</h4>
-                <div class="dictionary-toggle">
-                    <span>사용</span>
-                    <label class="toggle-switch">
-                        <input type="checkbox" id="dictionary-toggle" checked>
-                        <span class="toggle-slider"></span>
-                    </label>
-                </div>
-            </div>
-            
-            <form id="dictionary-form" class="dictionary-form">
-                <div class="form-group">
-                    <label class="form-label" for="dict-source">원본 텍스트</label>
-                    <input type="text" class="form-input" id="dict-source" placeholder="예: 판타지 툴킷, 마법사, 엘프의 숲">
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="dict-target">번역 텍스트</label>
-                    <input type="text" class="form-input" id="dict-target" placeholder="예: Fantasy Toolkit, Wizard, Elven Forest">
-                </div>
-                <button type="button" class="add-entry-btn">
-                    <i class="fas fa-plus"></i> 추가
-                </button>
-            </form>
-            
-            <div id="dictionary-entries" class="dictionary-entries">
-                <!-- 사전 항목들이 동적으로 여기에 추가됩니다 -->
-                <div class="empty-dictionary">
-                    등록된 단어가 없습니다. 위 폼을 통해 새 단어를 추가해보세요.
-                </div>
+    <!-- 사용자 사전 탭 부분만 수정 -->
+<div id="user-dictionary-tab" class="tab-content active">
+    <div class="dictionary-container">
+        <div class="dictionary-header">
+            <h4 class="dictionary-title">사용자 정의 번역 사전</h4>
+            <div class="dictionary-toggle">
+                <span>사용</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="dictionary-toggle" checked>
+                    <span class="toggle-slider"></span>
+                </label>
             </div>
         </div>
         
-        <div class="info-message">
-            <i class="fas fa-info-circle"></i> 
-            사용자 사전은 특정 용어나 문구에 대해 일관된 번역을 적용합니다. 
-            캐릭터 이름, 전문 용어, 또는 특별한 표현을 정확히 번역하고 싶을 때 유용합니다.
+        <!-- 여기가 중요한 부분: 폼 타입을 명시적으로 지정 -->
+        <form id="dictionary-form" class="dictionary-form" onsubmit="return false;">
+            <div class="form-group">
+                <label class="form-label" for="dict-source">원본 텍스트</label>
+                <input type="text" class="form-input" id="dict-source" placeholder="예: 판타지 툴킷, 마법사, 엘프의 숲">
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="dict-target">번역 텍스트</label>
+                <input type="text" class="form-input" id="dict-target" placeholder="예: Fantasy Toolkit, Wizard, Elven Forest">
+            </div>
+            <!-- 버튼 타입을 명확하게 지정 -->
+            <button type="button" class="add-entry-btn" id="add-dictionary-btn">
+                <i class="fas fa-plus"></i> 추가
+            </button>
+        </form>
+        
+        <div id="dictionary-entries" class="dictionary-entries">
+            <!-- 사전 항목들이 동적으로 여기에 추가됩니다 -->
+            <div class="empty-dictionary">
+                등록된 단어가 없습니다. 위 폼을 통해 새 단어를 추가해보세요.
+            </div>
         </div>
     </div>
+    
+    <div class="info-message">
+        <i class="fas fa-info-circle"></i> 
+        사용자 사전은 특정 용어나 문구에 대해 일관된 번역을 적용합니다. 
+        캐릭터 이름, 전문 용어, 또는 특별한 표현을 정확히 번역하고 싶을 때 유용합니다.
+    </div>
+</div>
     
     <!-- 커스텀 프롬프트 탭 -->
     <div id="custom-prompts-tab" class="tab-content">
