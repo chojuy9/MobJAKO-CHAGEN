@@ -230,7 +230,7 @@ function updateApiStatus(status, message) {
 }
 
 /**
- * Gemini API를 사용한 텍스트 번역 함수
+ * 번역 API 호출 함수 수정 - 사용자 사전과 커스텀 프롬프트 통합
  * @param {string} text - 번역할 텍스트
  * @param {string} direction - 번역 방향 (ko-en, en-ko 등)
  * @param {string} apiKey - 사용자의 Gemini API 키
@@ -288,7 +288,7 @@ async function translateWithGemini(text, direction, apiKey) {
         }
         
         // 번역 프롬프트 구성
-        const prompt = `<|im_start|>system
+        let prompt = `<|im_start|>system
         # Setting
             - This prompt is designed for multilingual translation.
         ## Role
@@ -314,6 +314,21 @@ async function translateWithGemini(text, direction, apiKey) {
         <|im_start|>user
             Translate the following text from ${sourceLang} to ${targetLang}: ${text}
         <|im_end|>`;
+        
+        // 사용자 사전 적용 (전역 객체에서 함수 호출)
+        if (window.dictionaryManager && typeof window.dictionaryManager.addDictionaryToPrompt === 'function') {
+            prompt = window.dictionaryManager.addDictionaryToPrompt(prompt);
+            console.log('사용자 사전이 프롬프트에 적용되었습니다.');
+        }
+        
+        // 커스텀 프롬프트 적용 (전역 객체에서 함수 호출)
+        if (window.promptManager && typeof window.promptManager.addCustomPromptToPrompt === 'function') {
+            prompt = window.promptManager.addCustomPromptToPrompt(prompt);
+            console.log('커스텀 프롬프트가 적용되었습니다.');
+        }
+        
+        // 디버깅을 위해 프롬프트 로깅
+        console.log('최종 프롬프트:', prompt);
         
         // API 요청 (Google 가이드라인 예제 코드 기반)
         const result = await model.generateContent(prompt);
@@ -349,6 +364,14 @@ async function translateWithGemini(text, direction, apiKey) {
     }
 }
 
+// 이 함수를 window.translateWithGemini에 할당하여 원본 함수를 덮어씁니다
+window.translateWithGemini = translateWithGemini;
+
+// 전역 객체에 번역 함수 참조 추가
+if (!window.translationManager) {
+    window.translationManager = {};
+}
+window.translationManager.translateWithGemini = translateWithGemini;
 /**
  * 번역 결과를 화면에 표시
  * @param {string} text - 번역된 텍스트
