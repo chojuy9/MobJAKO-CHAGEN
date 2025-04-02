@@ -368,7 +368,7 @@ if (window.customPromptState) {
         // 추가할 프롬프트 텍스트
         const customPromptText = `
 <|im_start|>user
-다음은 번역에 대한 특별한 지시사항입니다:
+The following are specific instructions for the translation:
 ${customText}
 <|im_end|>
 <|im_start|>assistant
