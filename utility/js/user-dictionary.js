@@ -1,5 +1,5 @@
 /**
- * user-dictionary.js - 사용자 사전 관리 스크립트
+ * user-dictionary.js - 개선된 사용자 사전 관리 스크립트
  * 번역 시 적용할 사용자 정의 용어를 관리합니다.
  */
 
@@ -13,24 +13,47 @@ let isDictionaryEnabled = true;
 
 // 페이지 로드 시 실행
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('사용자 사전 스크립트 로드됨');
+    
     // 사전 초기화
     initDictionary();
     
     // 사전 폼 제출 이벤트 리스너
     const dictionaryForm = document.getElementById('dictionary-form');
     if (dictionaryForm) {
+        console.log('사전 폼 발견됨, 이벤트 리스너 등록');
+        
+        // 폼 제출 이벤트 방지
         dictionaryForm.addEventListener('submit', function(e) {
-            // 폼 기본 제출 동작 방지
-            e.preventDefault(); 
-            // 이벤트 전파 중단 - 중요!
+            e.preventDefault();
             e.stopPropagation();
             
-            // 사전 항목 추가
+            console.log('사전 폼 제출 이벤트 발생, 항목 추가 시도');
             addDictionaryEntry();
             
-            // 상위 폼으로의 이벤트 전파 확실히 방지
             return false;
         });
+        
+        // 추가 버튼 별도 처리
+        const addButton = dictionaryForm.querySelector('.add-entry-btn');
+        if (addButton) {
+            console.log('사전 추가 버튼 발견됨, 클릭 이벤트 등록');
+            
+            // 버튼 타입을 button으로 명시적 변경
+            addButton.setAttribute('type', 'button');
+            
+            addButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                console.log('사전 추가 버튼 클릭됨, 항목 추가 시도');
+                addDictionaryEntry();
+                
+                return false;
+            });
+        }
+    } else {
+        console.warn('사전 폼(dictionary-form)을 찾을 수 없습니다');
     }
     
     // 사전 활성화 토글 이벤트 리스너
@@ -38,9 +61,15 @@ document.addEventListener('DOMContentLoaded', function() {
     if (dictionaryToggle) {
         dictionaryToggle.addEventListener('change', function() {
             isDictionaryEnabled = this.checked;
+            console.log('사전 활성화 상태 변경:', isDictionaryEnabled);
             saveDictionarySettings();
         });
+    } else {
+        console.warn('사전 토글(dictionary-toggle)을 찾을 수 없습니다');
     }
+    
+    // 디버깅을 위해 콘솔에 전역 객체 등록 여부 확인
+    console.log('dictionaryManager 전역 객체 등록 여부:', window.dictionaryManager ? '등록됨' : '등록되지 않음');
 });
 
 /**
@@ -52,15 +81,20 @@ function initDictionary() {
     if (savedDictionary) {
         try {
             userDictionary = JSON.parse(savedDictionary);
+            console.log('저장된 사전 로드 성공, 항목 수:', userDictionary.length);
         } catch (e) {
             console.error('사전 데이터 파싱 오류:', e);
             userDictionary = [];
         }
+    } else {
+        console.log('저장된 사전 없음, 빈 사전으로 초기화');
+        userDictionary = [];
     }
     
     // 사전 활성화 상태 불러오기
     const savedEnabled = localStorage.getItem(DICTIONARY_ENABLED_KEY);
     isDictionaryEnabled = savedEnabled !== null ? savedEnabled === 'true' : true;
+    console.log('사전 활성화 상태:', isDictionaryEnabled);
     
     // UI 업데이트
     updateDictionaryUI();
@@ -72,7 +106,12 @@ function initDictionary() {
  */
 function updateDictionaryUI() {
     const entriesContainer = document.getElementById('dictionary-entries');
-    if (!entriesContainer) return;
+    if (!entriesContainer) {
+        console.error('사전 항목 컨테이너(dictionary-entries)를 찾을 수 없습니다');
+        return;
+    }
+    
+    console.log('사전 UI 업데이트, 항목 수:', userDictionary.length);
     
     // 사전이 비어있는 경우
     if (userDictionary.length === 0) {
@@ -147,10 +186,15 @@ function addDictionaryEntry() {
     const sourceInput = document.getElementById('dict-source');
     const targetInput = document.getElementById('dict-target');
     
-    if (!sourceInput || !targetInput) return;
+    if (!sourceInput || !targetInput) {
+        console.error('사전 입력 필드를 찾을 수 없습니다');
+        return;
+    }
     
     const source = sourceInput.value.trim();
     const target = targetInput.value.trim();
+    
+    console.log('사전 항목 추가 시도:', source, '->', target);
     
     // 입력 검증
     if (!source || !target) {
@@ -165,9 +209,11 @@ function addDictionaryEntry() {
         userDictionary = userDictionary.map(entry => 
             entry.source === source ? { source, target } : entry
         );
+        console.log('기존 항목 업데이트:', source);
     } else {
         // 새 항목 추가
         userDictionary.push({ source, target });
+        console.log('새 항목 추가:', source);
     }
     
     // 저장 및 UI 업데이트
@@ -178,6 +224,9 @@ function addDictionaryEntry() {
     sourceInput.value = '';
     targetInput.value = '';
     sourceInput.focus();
+    
+    // 성공 메시지 표시
+    alert(`사전에 "${source}" → "${target}" 항목이 추가되었습니다.`);
 }
 
 /**
@@ -186,6 +235,9 @@ function addDictionaryEntry() {
  */
 function removeDictionaryEntry(index) {
     if (index >= 0 && index < userDictionary.length) {
+        const removedEntry = userDictionary[index];
+        console.log('사전 항목 삭제:', removedEntry.source);
+        
         // 해당 인덱스 항목 제거
         userDictionary.splice(index, 1);
         
@@ -200,6 +252,13 @@ function removeDictionaryEntry(index) {
  */
 function saveDictionary() {
     localStorage.setItem(DICTIONARY_STORAGE_KEY, JSON.stringify(userDictionary));
+    console.log('사전 저장 완료, 항목 수:', userDictionary.length);
+    
+    // 번역 기능과의 통합을 위해 이벤트 발생
+    const event = new CustomEvent('dictionaryUpdated', { 
+        detail: { dictionary: userDictionary, enabled: isDictionaryEnabled } 
+    });
+    window.dispatchEvent(event);
 }
 
 /**
@@ -207,6 +266,7 @@ function saveDictionary() {
  */
 function saveDictionarySettings() {
     localStorage.setItem(DICTIONARY_ENABLED_KEY, isDictionaryEnabled);
+    console.log('사전 설정 저장 완료, 활성화:', isDictionaryEnabled);
 }
 
 /**
@@ -216,8 +276,11 @@ function saveDictionarySettings() {
  */
 function applyDictionary(text) {
     if (!isDictionaryEnabled || userDictionary.length === 0) {
+        console.log('사전 적용 안 함 (비활성화 또는 빈 사전)');
         return text;
     }
+    
+    console.log('사전 적용 시작, 항목 수:', userDictionary.length);
     
     // 정규식 이스케이프 함수
     function escapeRegExp(string) {
@@ -230,7 +293,13 @@ function applyDictionary(text) {
     userDictionary.forEach(entry => {
         // 단어 경계를 고려한 정규식 패턴 생성
         const pattern = new RegExp(`\\b${escapeRegExp(entry.source)}\\b`, 'g');
+        const origResult = result;
         result = result.replace(pattern, entry.target);
+        
+        // 변경이 있었는지 확인
+        if (origResult !== result) {
+            console.log(`사전 적용: "${entry.source}" → "${entry.target}"`);
+        }
     });
     
     return result;
@@ -243,13 +312,18 @@ function applyDictionary(text) {
  */
 function addDictionaryToPrompt(prompt) {
     if (!isDictionaryEnabled || userDictionary.length === 0) {
+        console.log('사전 프롬프트 추가 안 함 (비활성화 또는 빈 사전)');
         return prompt;
     }
+    
+    console.log('사전 프롬프트 추가, 항목 수:', userDictionary.length);
     
     // 사전 항목을 문자열로 변환
     const dictionaryTerms = userDictionary.map(entry => 
         `"${entry.source}" → "${entry.target}"`
     ).join('\n');
+    
+    console.log('사전 항목:', dictionaryTerms);
     
     // 사전 지시사항
     const dictionaryPrompt = `
@@ -267,18 +341,51 @@ I understand and will use these specific translations for the terms you've provi
     
     // 마지막 사용자 메시지 이전에 사전 지시사항 삽입
     const lastUserPos = prompt.lastIndexOf('<|im_start|>user');
+    let resultPrompt;
+    
     if (lastUserPos !== -1) {
-        return prompt.slice(0, lastUserPos) + dictionaryPrompt + prompt.slice(lastUserPos);
+        resultPrompt = prompt.slice(0, lastUserPos) + dictionaryPrompt + prompt.slice(lastUserPos);
+        console.log('사전 프롬프트가 마지막 사용자 메시지 이전에 삽입됨');
+    } else {
+        // 적절한 위치를 찾지 못한 경우 프롬프트 끝에 추가
+        resultPrompt = prompt + dictionaryPrompt;
+        console.log('사전 프롬프트가 프롬프트 끝에 추가됨');
     }
     
-    // 적절한 위치를 찾지 못한 경우 프롬프트 끝에 추가
-    return prompt + dictionaryPrompt;
+    // 디버깅용 프롬프트 길이 정보
+    console.log('원본 프롬프트 길이:', prompt.length);
+    console.log('사전 프롬프트 길이:', dictionaryPrompt.length);
+    console.log('최종 프롬프트 길이:', resultPrompt.length);
+    
+    return resultPrompt;
+}
+
+// 디버깅용 사전 내용 출력 함수
+function printDictionary() {
+    console.log('--- 현재 사전 내용 ---');
+    console.log('활성화 상태:', isDictionaryEnabled);
+    console.log('항목 수:', userDictionary.length);
+    
+    if (userDictionary.length > 0) {
+        userDictionary.forEach((entry, index) => {
+            console.log(`${index + 1}. "${entry.source}" → "${entry.target}"`);
+        });
+    } else {
+        console.log('(사전이 비어 있습니다)');
+    }
+    console.log('---------------------');
 }
 
 // 전역 객체에 함수 노출
 window.dictionaryManager = {
     applyDictionary,
     addDictionaryToPrompt,
+    addDictionaryEntry,  // 추가: 외부에서 직접 호출 가능하도록
+    printDictionary,     // 추가: 디버깅용 함수
     isEnabled: () => isDictionaryEnabled,
-    getDictionary: () => userDictionary
+    getDictionary: () => userDictionary,
+    getCount: () => userDictionary.length
 };
+
+// 스크립트 로드 완료 알림
+console.log('사용자 사전 관리 스크립트 초기화 완료');
