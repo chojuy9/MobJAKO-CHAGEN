@@ -348,28 +348,74 @@ async function translateWithGemini(text, direction, apiKey) {
             console.warn('dictionaryManager 객체를 찾을 수 없음, 사전 적용 건너뜀');
         }
         
-        // 커스텀 프롬프트가 있는지 확인하고 적용
-        if (window.promptManager && typeof window.promptManager.addCustomPromptToPrompt === 'function') {
-            console.log('커스텀 프롬프트 관리자 발견, 현재 상태:', window.promptManager.checkStatus ? window.promptManager.checkStatus() : '상태 확인 불가');
+ // 커스텀 프롬프트 상태 확인 및 적용
+console.log('커스텀 프롬프트 적용 시도...');
+
+// 전역 커스텀 프롬프트 상태 확인
+if (window.customPromptState) {
+    console.log('window.customPromptState 발견:', window.customPromptState);
     
-            const originalLength = prompt.length;
-            prompt = window.promptManager.addCustomPromptToPrompt(prompt);
-    
-            if (prompt.length > originalLength) {
-        console.log('커스텀 프롬프트가 성공적으로 적용됨 (+' + (prompt.length - originalLength) + ' 글자)');
+    // customPromptState를 직접 사용하여 프롬프트 적용
+    if (window.customPromptState.isEnabled && window.customPromptState.promptText.trim()) {
+        console.log('커스텀 프롬프트 설정 확인됨, 직접 적용 시작');
+        
+        const customText = window.customPromptState.promptText.trim();
+        const customPosition = window.customPromptState.promptPosition;
+        
+        // 추가할 프롬프트 텍스트
+        const customPromptText = `
+<|im_start|>user
+다음은 번역에 대한 특별한 지시사항입니다:
+${customText}
+<|im_end|>
+<|im_start|>assistant
+네, 이해했습니다. 번역 시 이 특별한 지시사항을 따르겠습니다.
+<|im_end|>
+`;
+        
+        const originalLength = prompt.length;
+        
+        // 프롬프트 삽입 위치에 따라 처리
+        if (customPosition === 'start') {
+            // 첫 번째 사용자 메시지 이전에 삽입
+            const firstUserPos = prompt.indexOf('<|im_start|>user');
+            if (firstUserPos !== -1) {
+                prompt = prompt.slice(0, firstUserPos) + customPromptText + prompt.slice(firstUserPos);
             } else {
-                console.warn('커스텀 프롬프트가 적용되지 않음 (프롬프트가 비어있거나 비활성화됨)');
+                // 프롬프트 시작 부분에 삽입
+                prompt = customPromptText + prompt;
             }
         } else {
-            console.warn('promptManager 객체 또는 함수를 찾을 수 없음, 커스텀 프롬프트 적용 건너뜀');
-    
-            // 디버깅: window 객체에 있는 promptManager 확인
-            if (window.promptManager) {
-                console.log('promptManager 객체 존재함. 사용 가능한 메서드:', Object.keys(window.promptManager));
+            // 마지막 사용자 메시지 이전에 삽입
+            const lastUserPos = prompt.lastIndexOf('<|im_start|>user');
+            if (lastUserPos !== -1) {
+                prompt = prompt.slice(0, lastUserPos) + customPromptText + prompt.slice(lastUserPos);
             } else {
-                console.error('promptManager 객체가 window에 존재하지 않음. 스크립트 로드 순서 확인 필요');
+                // 프롬프트 끝에 추가
+                prompt = prompt + customPromptText;
+            }
         }
-        }
+        
+        console.log('커스텀 프롬프트가 직접 적용됨 (+' + (prompt.length - originalLength) + ' 글자)');
+    } else {
+        console.log('커스텀 프롬프트가 비활성화되었거나 비어있음. 상태:', window.customPromptState);
+    }
+} 
+// 기존 promptManager 방식으로도 시도 (백업용)
+else if (window.promptManager && typeof window.promptManager.addCustomPromptToPrompt === 'function') {
+    console.log('promptManager 객체 발견, 커스텀 프롬프트 적용 시도');
+    
+    const originalLength = prompt.length;
+    prompt = window.promptManager.addCustomPromptToPrompt(prompt);
+    
+    if (prompt.length > originalLength) {
+        console.log('promptManager를 통해 커스텀 프롬프트가 적용됨 (+' + (prompt.length - originalLength) + ' 글자)');
+    } else {
+        console.warn('promptManager를 통한 커스텀 프롬프트 적용 실패');
+    }
+} else {
+    console.warn('커스텀 프롬프트 관련 객체를 찾을 수 없음, 적용 건너뜀');
+}
         
         // 최종 프롬프트 길이 확인
         console.log('최종 프롬프트 길이:', prompt.length);
