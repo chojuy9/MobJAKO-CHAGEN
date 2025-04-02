@@ -16,6 +16,10 @@ function cleanResponseText(text) {
     
     // 3. 다른 모든 형태의 im_start 태그 제거
     cleanText = cleanText.replace(/<\|im_start\|>[^>]*?>/g, '');
+
+    // 4. "<|file_separator|>" 태그 제거
+    cleanText = cleanText.replace(/<\|file_separator\|>/g, '');
+
     
     // 4. 따옴표로 감싸진 실제 번역 내용만 추출 (필요한 경우)
     const quotedMatch = cleanText.match(/"([^"]*)"/);
