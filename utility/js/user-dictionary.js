@@ -72,9 +72,7 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('dictionaryManager 전역 객체 등록 여부:', window.dictionaryManager ? '등록됨' : '등록되지 않음');
 });
 
-/**
- * 사전 초기화 - 저장된 설정 불러오기
- */
+// 사전 초기화 함수
 function initDictionary() {
     // 저장된 사전 불러오기
     const savedDictionary = localStorage.getItem(DICTIONARY_STORAGE_KEY);
@@ -96,9 +94,75 @@ function initDictionary() {
     isDictionaryEnabled = savedEnabled !== null ? savedEnabled === 'true' : true;
     console.log('사전 활성화 상태:', isDictionaryEnabled);
     
-    // UI 업데이트
+    // UI 업데이트 시도
     updateDictionaryUI();
     updateDictionaryToggle();
+    
+    // 번역 옵션 로드 이벤트를 위한 MutationObserver 설정
+    const translationOptionsContainer = document.getElementById('translation-options-container');
+    if (translationOptionsContainer) {
+        const observer = new MutationObserver(function(mutations) {
+            for (const mutation of mutations) {
+                if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+                    // translation-options가 로드되었을 때 다시 UI 업데이트 시도
+                    const dictionaryEntries = document.getElementById('dictionary-entries');
+                    if (dictionaryEntries) {
+                        console.log('번역 옵션이 로드되어 사전 UI 다시 업데이트');
+                        updateDictionaryUI();
+                        updateDictionaryToggle();
+                        
+                        // 폼 이벤트 다시 설정
+                        initDictionaryForm();
+                        
+                        // 감시 종료
+                        observer.disconnect();
+                    }
+                }
+            }
+        });
+        
+        // 컨테이너 내용 변경 감시 시작
+        observer.observe(translationOptionsContainer, { childList: true, subtree: true });
+    }
+}
+
+// 초기 폼 설정 분리
+function initDictionaryForm() {
+    const dictionaryForm = document.getElementById('dictionary-form');
+    if (dictionaryForm) {
+        console.log('사전 폼 발견됨, 이벤트 리스너 등록');
+        
+        // 폼 제출 이벤트 방지
+        dictionaryForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            console.log('사전 폼 제출 이벤트 발생, 항목 추가 시도');
+            addDictionaryEntry();
+            
+            return false;
+        });
+        
+        // 추가 버튼 별도 처리
+        const addButton = document.getElementById('add-dictionary-btn') || 
+                          dictionaryForm.querySelector('.add-entry-btn');
+        if (addButton) {
+            console.log('사전 추가 버튼 발견됨, 클릭 이벤트 등록');
+            
+            // 버튼 타입을 button으로 명시적 변경
+            addButton.setAttribute('type', 'button');
+            
+            addButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                console.log('사전 추가 버튼 클릭됨, 항목 추가 시도');
+                addDictionaryEntry();
+                
+                return false;
+            });
+        }
+    }
 }
 
 /**
