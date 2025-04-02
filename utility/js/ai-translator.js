@@ -365,11 +365,11 @@ if (window.customPromptState) {
         // 추가할 프롬프트 텍스트
         const customPromptText = `
 <|im_start|>user
-다음은 번역에 대한 특별한 지시사항입니다:
+The following are specific instructions for the translation:
 ${customText}
 <|im_end|>
 <|im_start|>assistant
-네, 이해했습니다. 번역 시 이 특별한 지시사항을 따르겠습니다.
+Ok, I understand. I will adhere to these specific instructions during the translation process.
 <|im_end|>
 `;
         
