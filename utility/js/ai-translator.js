@@ -350,16 +350,25 @@ async function translateWithGemini(text, direction, apiKey) {
         
         // 커스텀 프롬프트가 있는지 확인하고 적용
         if (window.promptManager && typeof window.promptManager.addCustomPromptToPrompt === 'function') {
+            console.log('커스텀 프롬프트 관리자 발견, 현재 상태:', window.promptManager.checkStatus ? window.promptManager.checkStatus() : '상태 확인 불가');
+    
             const originalLength = prompt.length;
             prompt = window.promptManager.addCustomPromptToPrompt(prompt);
-            
+    
             if (prompt.length > originalLength) {
-                console.log('커스텀 프롬프트가 성공적으로 적용됨');
+        console.log('커스텀 프롬프트가 성공적으로 적용됨 (+' + (prompt.length - originalLength) + ' 글자)');
             } else {
-                console.log('커스텀 프롬프트가 적용되지 않음 (프롬프트가 비어있거나 비활성화됨)');
+                console.warn('커스텀 프롬프트가 적용되지 않음 (프롬프트가 비어있거나 비활성화됨)');
             }
         } else {
-            console.log('promptManager 객체 또는 함수를 찾을 수 없음, 커스텀 프롬프트 적용 건너뜀');
+            console.warn('promptManager 객체 또는 함수를 찾을 수 없음, 커스텀 프롬프트 적용 건너뜀');
+    
+            // 디버깅: window 객체에 있는 promptManager 확인
+            if (window.promptManager) {
+                console.log('promptManager 객체 존재함. 사용 가능한 메서드:', Object.keys(window.promptManager));
+            } else {
+                console.error('promptManager 객체가 window에 존재하지 않음. 스크립트 로드 순서 확인 필요');
+        }
         }
         
         // 최종 프롬프트 길이 확인
