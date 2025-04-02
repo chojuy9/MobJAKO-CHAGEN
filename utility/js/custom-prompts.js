@@ -10,48 +10,57 @@ const PROMPT_TEXT_STORAGE_KEY = 'custom_prompt_text';
 const PROMPT_POSITION_STORAGE_KEY = 'custom_prompt_position';
 const PROMPT_ENABLED_KEY = 'custom_prompt_enabled';
 
-// 전역 변수
-let isPromptEnabled = true;
-let cachedPromptText = '';
-let cachedPromptPosition = 'start';
+// 전역 변수 - 먼저 기본값으로 초기화
+window.customPromptState = {
+    isEnabled: true,
+    promptText: '',
+    promptPosition: 'start'
+};
 
-// 즉시 실행 함수로 설정 로드 (페이지 로드 직후 실행)
+// 즉시 실행 함수로 설정 로드 (스크립트 실행 즉시)
 (function loadSettings() {
-    // 로컬 스토리지에서 설정 불러오기
-    const savedText = localStorage.getItem(PROMPT_TEXT_STORAGE_KEY);
-    const savedPosition = localStorage.getItem(PROMPT_POSITION_STORAGE_KEY);
-    const savedEnabled = localStorage.getItem(PROMPT_ENABLED_KEY);
-    
-    // 저장된 값 또는 기본값으로 초기화
-    cachedPromptText = savedText || '';
-    cachedPromptPosition = savedPosition || 'start';
-    isPromptEnabled = savedEnabled !== null ? savedEnabled === 'true' : true;
-    
-    console.log('커스텀 프롬프트 설정이 즉시 로드됨:', {
-        enabled: isPromptEnabled,
-        position: cachedPromptPosition,
-        textLength: cachedPromptText.length
-    });
+    try {
+        // 로컬 스토리지에서 설정 불러오기
+        const savedText = localStorage.getItem(PROMPT_TEXT_STORAGE_KEY) || '';
+        const savedPosition = localStorage.getItem(PROMPT_POSITION_STORAGE_KEY) || 'start';
+        const savedEnabled = localStorage.getItem(PROMPT_ENABLED_KEY);
+        const isEnabled = savedEnabled !== null ? savedEnabled === 'true' : true;
+        
+        // 전역 상태 객체에 설정
+        window.customPromptState = {
+            isEnabled: isEnabled,
+            promptText: savedText,
+            promptPosition: savedPosition
+        };
+        
+        console.log('커스텀 프롬프트 설정이 즉시 로드됨:', window.customPromptState);
+    } catch (error) {
+        console.error('커스텀 프롬프트 설정 로드 실패:', error);
+    }
 })();
 
 /**
  * 문서 로드 시 초기화 함수
  */
 document.addEventListener('DOMContentLoaded', function() {
-    // 커스텀 프롬프트 기능 초기화
+    // UI 요소 초기화
     initCustomPrompt();
     
     // 프롬프트 활성화 토글 이벤트 리스너
     const promptToggle = document.getElementById('prompt-toggle');
     if (promptToggle) {
-        promptToggle.addEventListener('change', togglePromptEnabled);
+        promptToggle.addEventListener('change', function() {
+            window.customPromptState.isEnabled = this.checked;
+            savePromptSettings();
+            console.log('커스텀 프롬프트 활성화 상태 변경:', window.customPromptState.isEnabled);
+        });
     }
     
     // 프롬프트 위치 변경 이벤트 리스너
     const positionSelect = document.getElementById('prompt-position');
     if (positionSelect) {
         positionSelect.addEventListener('change', function() {
-            cachedPromptPosition = this.value;
+            window.customPromptState.promptPosition = this.value;
             savePromptSettings();
         });
     }
@@ -60,7 +69,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const promptText = document.getElementById('custom-prompt-text');
     if (promptText) {
         promptText.addEventListener('input', function() {
-            cachedPromptText = this.value;
+            window.customPromptState.promptText = this.value;
             savePromptSettings();
         });
     }
@@ -73,10 +82,13 @@ document.addEventListener('DOMContentLoaded', function() {
  * 커스텀 프롬프트 초기화
  */
 function initCustomPrompt() {
-    // UI 요소 업데이트
-    updatePromptUI();
-    
-    console.log('커스텀 프롬프트 UI가 초기화됨');
+    try {
+        // UI 요소 업데이트
+        updatePromptUI();
+        console.log('커스텀 프롬프트 UI가 초기화됨');
+    } catch (error) {
+        console.error('커스텀 프롬프트 UI 초기화 실패:', error);
+    }
 }
 
 /**
@@ -86,19 +98,19 @@ function updatePromptUI() {
     // 프롬프트 텍스트 영역 업데이트
     const promptText = document.getElementById('custom-prompt-text');
     if (promptText) {
-        promptText.value = cachedPromptText;
+        promptText.value = window.customPromptState.promptText;
     }
     
     // 위치 선택 업데이트
     const positionSelect = document.getElementById('prompt-position');
     if (positionSelect) {
-        positionSelect.value = cachedPromptPosition;
+        positionSelect.value = window.customPromptState.promptPosition;
     }
     
     // 토글 스위치 업데이트
     const promptToggle = document.getElementById('prompt-toggle');
     if (promptToggle) {
-        promptToggle.checked = isPromptEnabled;
+        promptToggle.checked = window.customPromptState.isEnabled;
     }
 }
 
@@ -119,19 +131,21 @@ function setupTemplateButtons() {
                 if (promptTextArea) {
                     promptTextArea.value = templateText;
                     
-                    // 전역 캐시 및 저장
-                    cachedPromptText = templateText;
-                    savePromptSettings();
+                    // 전역 상태 업데이트
+                    window.customPromptState.promptText = templateText;
                     
-                    // 프롬프트 활성화
-                    if (!isPromptEnabled) {
-                        isPromptEnabled = true;
+                    // 비활성화된 경우 활성화
+                    if (!window.customPromptState.isEnabled) {
+                        window.customPromptState.isEnabled = true;
                         const promptToggle = document.getElementById('prompt-toggle');
                         if (promptToggle) {
                             promptToggle.checked = true;
                         }
-                        savePromptSettings();
                     }
+                    
+                    // 설정 저장
+                    savePromptSettings();
+                    console.log('템플릿이 적용됨:', templateId);
                 }
             }
         });
@@ -139,95 +153,102 @@ function setupTemplateButtons() {
 }
 
 /**
- * 프롬프트 활성화 상태 토글
- */
-function togglePromptEnabled() {
-    isPromptEnabled = this.checked;
-    savePromptSettings();
-    console.log('커스텀 프롬프트 활성화 상태 변경:', isPromptEnabled);
-}
-
-/**
  * 프롬프트 설정 저장
  */
 function savePromptSettings() {
-    localStorage.setItem(PROMPT_TEXT_STORAGE_KEY, cachedPromptText);
-    localStorage.setItem(PROMPT_POSITION_STORAGE_KEY, cachedPromptPosition);
-    localStorage.setItem(PROMPT_ENABLED_KEY, isPromptEnabled);
-    console.log('커스텀 프롬프트 설정 저장됨');
+    try {
+        localStorage.setItem(PROMPT_TEXT_STORAGE_KEY, window.customPromptState.promptText);
+        localStorage.setItem(PROMPT_POSITION_STORAGE_KEY, window.customPromptState.promptPosition);
+        localStorage.setItem(PROMPT_ENABLED_KEY, window.customPromptState.isEnabled);
+        console.log('커스텀 프롬프트 설정 저장됨:', window.customPromptState);
+    } catch (error) {
+        console.error('커스텀 프롬프트 설정 저장 실패:', error);
+    }
 }
 
 /**
- * 번역 프롬프트에 커스텀 프롬프트 추가 (개선된 버전)
+ * 번역 프롬프트에 커스텀 프롬프트 추가 (완전히 개선된 버전)
  * @param {string} prompt - 원본 프롬프트
  * @returns {string} 커스텀 프롬프트가 추가된 프롬프트
  */
 function addCustomPromptToPrompt(prompt) {
-    // 프롬프트가 비활성화되었거나 내용이 없으면 원본 반환
-    if (!isPromptEnabled || !cachedPromptText.trim()) {
-        console.log('커스텀 프롬프트가 비활성화되었거나 내용이 없음');
-        return prompt;
-    }
+    console.log('addCustomPromptToPrompt 함수 호출됨');
     
-    console.log('커스텀 프롬프트 추가 시작');
-    console.log('프롬프트 텍스트 길이:', cachedPromptText.length);
-    console.log('프롬프트 위치:', cachedPromptPosition);
-    
-    // 프롬프트에 추가할 텍스트
-    const promptText = `
+    try {
+        // 현재 상태 확인을 위한 로그
+        console.log('커스텀 프롬프트 상태:', window.customPromptState);
+        
+        // 프롬프트가 비활성화되었거나 내용이 없으면 원본 반환
+        if (!window.customPromptState.isEnabled) {
+            console.log('커스텀 프롬프트가 비활성화됨');
+            return prompt;
+        }
+        
+        const customText = window.customPromptState.promptText.trim();
+        if (!customText) {
+            console.log('커스텀 프롬프트 내용이 비어있음');
+            return prompt;
+        }
+        
+        // 추가할 프롬프트 텍스트 준비
+        const promptText = `
 <|im_start|>user
 다음은 번역에 대한 특별한 지시사항입니다:
-${cachedPromptText}
+${customText}
 <|im_end|>
 <|im_start|>assistant
 네, 이해했습니다. 번역 시 이 특별한 지시사항을 따르겠습니다.
 <|im_end|>
 `;
-    
-    let resultPrompt = prompt;
-    
-    // 위치에 따라 삽입
-    if (cachedPromptPosition === 'start') {
-        // 첫 번째 사용자 메시지 이전에 삽입
-        const firstUserPos = prompt.indexOf('<|im_start|>user');
-        if (firstUserPos !== -1) {
-            console.log('프롬프트를 시작 부분에 삽입합니다.');
-            resultPrompt = prompt.slice(0, firstUserPos) + promptText + prompt.slice(firstUserPos);
-        } else {
-            // system 태그 이후에 삽입 시도
-            const systemEndPos = prompt.indexOf('<|im_end|>');
-            if (systemEndPos !== -1) {
-                console.log('system 태그 이후에 프롬프트를 삽입합니다.');
-                resultPrompt = prompt.slice(0, systemEndPos + 10) + promptText + prompt.slice(systemEndPos + 10);
+        
+        let resultPrompt = prompt;
+        const position = window.customPromptState.promptPosition;
+        
+        // 프롬프트 삽입 위치에 따라 처리
+        if (position === 'start') {
+            // 첫 번째 사용자 메시지 이전에 삽입 시도
+            const firstUserPos = prompt.indexOf('<|im_start|>user');
+            if (firstUserPos !== -1) {
+                console.log('프롬프트 시작 부분에 삽입 (첫 번째 사용자 메시지 이전)');
+                resultPrompt = prompt.slice(0, firstUserPos) + promptText + prompt.slice(firstUserPos);
             } else {
-                // 프롬프트 시작 부분에 삽입
-                console.log('프롬프트 맨 앞에 삽입합니다.');
-                resultPrompt = promptText + prompt;
+                // 두 번째 대안: 시스템 메시지 이후 삽입 시도
+                const systemEndPos = prompt.indexOf('<|im_end|>');
+                if (systemEndPos !== -1) {
+                    console.log('시스템 메시지 이후에 삽입');
+                    resultPrompt = prompt.slice(0, systemEndPos + 10) + promptText + prompt.slice(systemEndPos + 10);
+                } else {
+                    // 마지막 대안: 프롬프트 시작 부분에 삽입
+                    console.log('프롬프트 시작 부분에 삽입 (기본)');
+                    resultPrompt = promptText + prompt;
+                }
+            }
+        } else {
+            // 마지막 사용자 메시지 이전에 삽입 시도
+            const lastUserPos = prompt.lastIndexOf('<|im_start|>user');
+            if (lastUserPos !== -1) {
+                console.log('마지막 사용자 메시지 이전에 삽입');
+                resultPrompt = prompt.slice(0, lastUserPos) + promptText + prompt.slice(lastUserPos);
+            } else {
+                // 대안: 맨 마지막에 삽입
+                console.log('프롬프트 맨 마지막에 삽입');
+                resultPrompt = prompt + promptText;
             }
         }
-    } else {
-        // 마지막 사용자 메시지 이전에 삽입
-        const lastUserPos = prompt.lastIndexOf('<|im_start|>user');
-        if (lastUserPos !== -1) {
-            console.log('마지막 사용자 메시지 이전에 프롬프트를 삽입합니다.');
-            resultPrompt = prompt.slice(0, lastUserPos) + promptText + prompt.slice(lastUserPos);
+        
+        // 성공 여부 확인
+        if (resultPrompt.length > prompt.length) {
+            console.log('커스텀 프롬프트 추가 성공! 추가된 길이:', resultPrompt.length - prompt.length);
+            return resultPrompt;
         } else {
-            // 프롬프트 끝에 추가 (마지막 대안)
-            console.log('프롬프트 끝에 삽입합니다.');
-            resultPrompt = prompt + promptText;
+            // 실패 시 명시적으로 끝에 추가
+            console.warn('커스텀 프롬프트 추가 실패, 맨 끝에 강제 추가');
+            return prompt + promptText;
         }
+    } catch (error) {
+        console.error('커스텀 프롬프트 추가 중 오류 발생:', error);
+        return prompt; // 오류 발생 시 원본 반환
     }
-    
-    // 프롬프트가 변경되었는지 확인
-    if (resultPrompt.length > prompt.length) {
-        console.log('커스텀 프롬프트가 성공적으로 추가됨. 추가된 길이:', resultPrompt.length - prompt.length);
-    } else {
-        console.error('커스텀 프롬프트 추가에 실패했습니다!');
-        // 실패 시 간단히 끝에 추가
-        resultPrompt = prompt + promptText;
-    }
-    
-    return resultPrompt;
 }
 
 // 템플릿 프롬프트 예시
@@ -238,24 +259,14 @@ const promptTemplates = {
     fantasy: '이 텍스트는 판타지/게임 콘텐츠입니다. 판타지 세계관에 맞는 용어와 분위기를 유지해주세요. 마법, 종족, 직업, 아이템 등의 용어는 일관되게 번역하고, 세계관의 분위기를 살려주세요.'
 };
 
-// 디버깅을 위한 프롬프트 상태 확인 함수
-function checkPromptStatus() {
-    return {
-        enabled: isPromptEnabled,
-        text: cachedPromptText,
-        position: cachedPromptPosition,
-        textLength: cachedPromptText.length
-    };
-}
-
-// 외부 스크립트에서 사용할 수 있도록 전역 객체에 함수 노출
+// 전역 객체에 함수 등록
 window.promptManager = {
-    addCustomPromptToPrompt,
-    isEnabled: () => isPromptEnabled,
-    getPromptText: () => cachedPromptText,
-    getPromptPosition: () => cachedPromptPosition,
-    checkStatus: checkPromptStatus
+    addCustomPromptToPrompt: addCustomPromptToPrompt,
+    isEnabled: () => window.customPromptState.isEnabled,
+    getPromptText: () => window.customPromptState.promptText,
+    getPromptPosition: () => window.customPromptState.promptPosition,
+    getStatus: () => ({ ...window.customPromptState })
 };
 
 // 콘솔에 초기화 메시지 출력
-console.log('커스텀 프롬프트 관리자가 초기화되었습니다.');
+console.log('커스텀 프롬프트 관리자가 초기화되었습니다. 전역 상태:', window.customPromptState);
