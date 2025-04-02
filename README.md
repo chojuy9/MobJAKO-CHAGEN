@@ -58,7 +58,9 @@ Contributions from external partners are welcome through the following channels:
 ## ⚖️ LEGAL PARAMETERS
 
 **LICENSE:** All generated content is cleared for commercial application.  
+
 **DISCLAIMER:** Data pools are continuously expanding. Name collision probability exists.
+
 **PRIVACY POLICY:** MobJAKO-CHAGEN (hereinafter referred to as "Site") does not collect, use, or provide users' personal information. This site does not require a separate membership registration process, and we do not store or utilize users' personal information in the service provision process.
 
 ---
