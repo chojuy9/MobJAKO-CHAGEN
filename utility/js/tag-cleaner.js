@@ -6,12 +6,22 @@
 function cleanResponseText(text) {
     if (!text) return '';
     
-    // <|im_start|>assistant 및 <|im_end|> 태그 제거
+    // ChatML 태그 제거를 위한 개선된 방식
+    
+    // 1. "<|im_start|>assistant" 태그 제거
     let cleanText = text.replace(/<\|im_start\|>assistant\s*/g, '');
+    
+    // 2. "<|im_end|>" 태그 제거
     cleanText = cleanText.replace(/<\|im_end\|>/g, '');
     
-    // 그 외 가능한 태그들 제거
-    cleanText = cleanText.replace(/<\|im_start\|>.*?\|>/g, '');
+    // 3. 다른 모든 형태의 im_start 태그 제거
+    cleanText = cleanText.replace(/<\|im_start\|>[^>]*?>/g, '');
+    
+    // 4. 따옴표로 감싸진 실제 번역 내용만 추출 (필요한 경우)
+    const quotedMatch = cleanText.match(/"([^"]*)"/);
+    if (quotedMatch && quotedMatch[1]) {
+        cleanText = quotedMatch[1];
+    }
     
     // 앞뒤 공백 제거
     cleanText = cleanText.trim();
