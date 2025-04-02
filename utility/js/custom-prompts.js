@@ -259,7 +259,7 @@ const promptTemplates = {
     fantasy: '이 텍스트는 판타지/게임 콘텐츠입니다. 판타지 세계관에 맞는 용어와 분위기를 유지해주세요. 마법, 종족, 직업, 아이템 등의 용어는 일관되게 번역하고, 세계관의 분위기를 살려주세요.'
 };
 
-// 전역 객체에 함수 등록
+// 전역 객체에 함수 등록 - 호환성 유지
 window.promptManager = {
     addCustomPromptToPrompt: addCustomPromptToPrompt,
     isEnabled: () => window.customPromptState.isEnabled,
