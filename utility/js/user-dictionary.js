@@ -253,10 +253,8 @@ I have some specific terms that I want you to translate in a particular way. Ple
 ${dictionaryTerms}
 
 These translations should be applied consistently throughout the text.
-<|im_end|>
 <|im_start|>assistant
 I understand and will use these specific translations for the terms you've provided.
-<|im_end|>
 `;
     
     // 마지막 사용자 메시지 이전에 사전 지시사항 삽입
