@@ -230,13 +230,13 @@ function updateApiStatus(status, message) {
 }
 
 /**
- * 번역 API 호출 함수 수정 - 사용자 사전과 커스텀 프롬프트 통합
- * @param {string} text - 번역할 텍스트
- * @param {string} direction - 번역 방향 (ko-en, en-ko 등)
- * @param {string} apiKey - 사용자의 Gemini API 키
+ * 개선된 Gemini 번역 함수
+ * 아래 함수를 ai-translator.js 파일의 translateWithGemini 함수 대신 사용하세요.
  */
 async function translateWithGemini(text, direction, apiKey) {
     try {
+        console.log('번역 시작');
+        
         // Google Generative AI가 로드되지 않았다면 오류 표시
         if (typeof window.GoogleGenerativeAI === 'undefined') {
             throw new Error('Gemini API가 로드되지 않았습니다. 페이지를 새로고침하고 다시 시도하세요.');
@@ -247,6 +247,7 @@ async function translateWithGemini(text, direction, apiKey) {
         
         // 사용자 설정 모델 매개변수 가져오기
         const modelParams = getModelParameters();
+        console.log('번역 모델 매개변수:', modelParams);
         
         // 모델 인스턴스 생성 (gemini-2.0-flash-exp와 매개변수 사용)
         const generationConfig = {
@@ -287,6 +288,8 @@ async function translateWithGemini(text, direction, apiKey) {
                 targetLang = "영어";
         }
         
+        console.log('번역 방향:', sourceLang, '->', targetLang);
+        
         // 번역 프롬프트 구성
         let prompt = `<|im_start|>system
         # Setting
@@ -316,25 +319,64 @@ async function translateWithGemini(text, direction, apiKey) {
             Translate the following text from ${sourceLang} to ${targetLang}: ${text}
         <|im_end|>`;
         
-        // 사용자 사전 적용 (전역 객체에서 함수 호출)
-        if (window.dictionaryManager && typeof window.dictionaryManager.addDictionaryToPrompt === 'function') {
-            prompt = window.dictionaryManager.addDictionaryToPrompt(prompt);
-            console.log('사용자 사전이 프롬프트에 적용되었습니다.');
+        // 사용자 사전이 있는지 확인하고 적용
+        if (window.dictionaryManager) {
+            console.log('사전 모듈 발견됨, 사전 정보 확인:');
+            
+            // 디버깅: 사전 정보 출력
+            if (typeof window.dictionaryManager.printDictionary === 'function') {
+                window.dictionaryManager.printDictionary();
+            } else {
+                console.log('- 활성화 상태:', window.dictionaryManager.isEnabled());
+                console.log('- 항목 수:', window.dictionaryManager.getCount ? window.dictionaryManager.getCount() : '알 수 없음');
+            }
+            
+            // 사전 프롬프트 적용
+            if (typeof window.dictionaryManager.addDictionaryToPrompt === 'function') {
+                const originalLength = prompt.length;
+                prompt = window.dictionaryManager.addDictionaryToPrompt(prompt);
+                
+                if (prompt.length > originalLength) {
+                    console.log('사전 프롬프트가 성공적으로 적용됨 (+' + (prompt.length - originalLength) + ' 글자)');
+                } else {
+                    console.log('사전 프롬프트가 적용되지 않음 (사전이 비어있거나 비활성화됨)');
+                }
+            } else {
+                console.warn('dictionaryManager.addDictionaryToPrompt 함수를 찾을 수 없음');
+            }
+        } else {
+            console.warn('dictionaryManager 객체를 찾을 수 없음, 사전 적용 건너뜀');
         }
         
-        // 커스텀 프롬프트 적용 (전역 객체에서 함수 호출)
+        // 커스텀 프롬프트가 있는지 확인하고 적용
         if (window.promptManager && typeof window.promptManager.addCustomPromptToPrompt === 'function') {
+            const originalLength = prompt.length;
             prompt = window.promptManager.addCustomPromptToPrompt(prompt);
-            console.log('커스텀 프롬프트가 적용되었습니다.');
+            
+            if (prompt.length > originalLength) {
+                console.log('커스텀 프롬프트가 성공적으로 적용됨');
+            } else {
+                console.log('커스텀 프롬프트가 적용되지 않음 (프롬프트가 비어있거나 비활성화됨)');
+            }
+        } else {
+            console.log('promptManager 객체 또는 함수를 찾을 수 없음, 커스텀 프롬프트 적용 건너뜀');
         }
         
-        // 디버깅을 위해 프롬프트 로깅
-        console.log('최종 프롬프트:', prompt);
+        // 최종 프롬프트 길이 확인
+        console.log('최종 프롬프트 길이:', prompt.length);
         
-        // API 요청 (Google 가이드라인 예제 코드 기반)
+        // 프롬프트 내용의 첫 부분과 마지막 부분 확인
+        const previewLength = 100;
+        console.log('프롬프트 시작 부분:', prompt.substring(0, previewLength) + '...');
+        console.log('프롬프트 끝 부분:', '...' + prompt.substring(prompt.length - previewLength));
+        
+        // API 요청
+        console.log('Gemini API 호출 중...');
         const result = await model.generateContent(prompt);
         const response = await result.response;
         const translatedText = response.text();
+        
+        console.log('번역 완료, 결과 길이:', translatedText.length);
         
         // 결과 표시
         displayTranslationResult(translatedText, targetLang);
@@ -365,6 +407,8 @@ async function translateWithGemini(text, direction, apiKey) {
     }
 }
 
+// 이 함수를 window.translateWithGemini에 할당하여 원본 함수를 덮어씁니다
+window.translateWithGemini = translateWithGemini;
 // 이 함수를 window.translateWithGemini에 할당하여 원본 함수를 덮어씁니다
 window.translateWithGemini = translateWithGemini;
 
