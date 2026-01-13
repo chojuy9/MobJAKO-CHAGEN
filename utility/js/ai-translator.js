@@ -249,7 +249,7 @@ async function translateWithGemini(text, direction, apiKey) {
         const modelParams = getModelParameters();
         console.log('번역 모델 매개변수:', modelParams);
         
-        // 모델 인스턴스 생성 (gemini-2.0-flash-exp와 매개변수 사용)
+        // 모델 인스턴스 생성 (gemini-3-flash-preview와 매개변수 사용)
         const generationConfig = {
             temperature: modelParams.temperature,
             maxOutputTokens: modelParams.maxOutputTokens,
